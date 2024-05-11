@@ -24,7 +24,6 @@
                             </imageView>
                             <slider hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="n6p-Vg-RiL">
                                 <rect key="frame" x="66.999999999999986" y="101" width="139.66666666666663" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzz-lX-rIy" userLabel="Edit Button">
                                 <rect key="frame" x="301.66666666666669" y="98" width="53.333333333333314" height="34.333333333333343"/>
@@ -34,22 +33,38 @@
                                     <action selector="editClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gFu-x6-eJd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-fN-90W">
+                                <rect key="frame" x="219" y="97" width="62" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="qdo-Bs-fVY"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Crop"/>
+                                <connections>
+                                    <action selector="cropClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SCd-mm-IAk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="jzz-lX-rIy" firstAttribute="leading" secondItem="wVb-fN-90W" secondAttribute="trailing" constant="20.666666666666742" id="0TM-e0-6bj"/>
+                            <constraint firstItem="wVb-fN-90W" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="38" id="2JD-9v-ICB"/>
+                            <constraint firstItem="wVb-fN-90W" firstAttribute="leading" secondItem="n6p-Vg-RiL" secondAttribute="trailing" constant="14.333333333333371" id="6qT-y0-gUG"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jzz-lX-rIy" secondAttribute="trailing" constant="38" id="YA4-OT-WEB"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="224" id="Zji-gw-rAk"/>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="39" id="hHz-r4-c4t"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="isi-rZ-eZp"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tCB-qZ-cJh"/>
+                            <constraint firstItem="wVb-fN-90W" firstAttribute="centerY" secondItem="jzz-lX-rIy" secondAttribute="centerY" id="xwl-BH-Bod"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="Gtw-Jq-hwK" appends="YES" id="A5M-mF-Chr"/>
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="cropButton" destination="wVb-fN-90W" id="IoI-4S-TBg"/>
                         <outlet property="editButton" destination="jzz-lX-rIy" id="gmg-gr-gfp"/>
                         <outlet property="imageView" destination="4rB-HK-9vG" id="cuo-aK-nLD"/>
                         <outlet property="panGesture" destination="Gtw-Jq-hwK" id="cNQ-7j-QMT"/>
