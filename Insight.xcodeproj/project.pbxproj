@@ -14,6 +14,8 @@
 		2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB792BF000F600D724A5 /* Insight.xcdatamodeld */; };
 		2080BB7D2BF000F800D724A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2080BB7C2BF000F800D724A5 /* Assets.xcassets */; };
 		2080BB802BF000F800D724A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2080BB7E2BF000F800D724A5 /* LaunchScreen.storyboard */; };
+		2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB8A2BF0017500D724A5 /* Utilities.swift */; };
+		D713D9A6BB45A29865887C42 /* Pods_Insight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,10 @@
 		2080BB7C2BF000F800D724A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2080BB7F2BF000F800D724A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2080BB812BF000F800D724A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2080BB8A2BF0017500D724A5 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Insight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		917F434C81E0A70C4EDCF43D /* Pods-Insight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.debug.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.debug.xcconfig"; sourceTree = "<group>"; };
+		BC44E24BC2D5F53B8D3E1B90 /* Pods-Insight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.release.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +39,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D713D9A6BB45A29865887C42 /* Pods_Insight.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02C51E00CC3DE1CC6B2A3549 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		2080BB642BF000F600D724A5 = {
 			isa = PBXGroup;
 			children = (
 				2080BB6F2BF000F600D724A5 /* Insight */,
 				2080BB6E2BF000F600D724A5 /* Products */,
+				4695BE5F5216BBDF3696ED65 /* Pods */,
+				02C51E00CC3DE1CC6B2A3549 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +75,7 @@
 		2080BB6F2BF000F600D724A5 /* Insight */ = {
 			isa = PBXGroup;
 			children = (
+				2080BB8A2BF0017500D724A5 /* Utilities.swift */,
 				2080BB702BF000F600D724A5 /* AppDelegate.swift */,
 				2080BB722BF000F600D724A5 /* SceneDelegate.swift */,
 				2080BB742BF000F600D724A5 /* ViewController.swift */,
@@ -70,6 +88,15 @@
 			path = Insight;
 			sourceTree = "<group>";
 		};
+		4695BE5F5216BBDF3696ED65 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				917F434C81E0A70C4EDCF43D /* Pods-Insight.debug.xcconfig */,
+				BC44E24BC2D5F53B8D3E1B90 /* Pods-Insight.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -77,15 +104,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2080BB842BF000F800D724A5 /* Build configuration list for PBXNativeTarget "Insight" */;
 			buildPhases = (
+				DA528327FB4E830D63B81F14 /* [CP] Check Pods Manifest.lock */,
 				2080BB692BF000F600D724A5 /* Sources */,
 				2080BB6A2BF000F600D724A5 /* Frameworks */,
 				2080BB6B2BF000F600D724A5 /* Resources */,
+				21F3790C2CE28894AEB566F0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Insight;
+			packageProductDependencies = (
+			);
 			productName = Insight;
 			productReference = 2080BB6D2BF000F600D724A5 /* Insight.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +145,8 @@
 				Base,
 			);
 			mainGroup = 2080BB642BF000F600D724A5;
+			packageReferences = (
+			);
 			productRefGroup = 2080BB6E2BF000F600D724A5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -136,6 +169,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		21F3790C2CE28894AEB566F0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Insight/Pods-Insight-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Insight/Pods-Insight-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Insight/Pods-Insight-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DA528327FB4E830D63B81F14 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Insight-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2080BB692BF000F600D724A5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -144,6 +219,7 @@
 				2080BB752BF000F600D724A5 /* ViewController.swift in Sources */,
 				2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */,
 				2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */,
+				2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */,
 				2080BB732BF000F600D724A5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,12 +367,14 @@
 		};
 		2080BB852BF000F800D724A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 917F434C81E0A70C4EDCF43D /* Pods-Insight.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 67AYJ24F97;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Insight/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -319,12 +397,14 @@
 		};
 		2080BB862BF000F800D724A5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC44E24BC2D5F53B8D3E1B90 /* Pods-Insight.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 67AYJ24F97;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Insight/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

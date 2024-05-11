@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "cropimageview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zhxf2012/CropImageView",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2beb09c5ff13bbb58c9134ecac6c594d91732486"
+      }
+    }
+  ],
+  "version" : 2
+}
