@@ -10,6 +10,9 @@ import UIKit
 import Vision
 import SwiftUI
 import CropViewController
+import PhotosUI
+
+
 
 @available(iOS 13.0, *)
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
@@ -21,6 +24,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var drawingMode = false
     var editMode = false
     var myImage = UIImage()
+    private var selection = [String: PHPickerResult]()
+    private var selectedAssetIdentifiers = [String]()
+    private var selectedAssetIdentifierIterator: IndexingIterator<[String]>?
+    private var currentAssetIdentifier: String?
     
     // Layer into which to draw bounding box paths.
     var pathLayer: CALayer?
@@ -64,6 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             for view in view.subviews {
                 if let button = view as? UIButton {
                     for layer in button.layer.sublayers ?? [] {
+                        print(layer)
                         guard let shapeLayer = layer as? CAShapeLayer else {
                             continue
                         }
@@ -89,6 +97,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         allWhite()
         
     }
+    
+    
 
     //Is called, when the user presses the edit button. Calls saveEdits()
     @IBAction func editClicked(_ sender: Any) {
@@ -148,10 +158,48 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    func handleCompletion(assetIdentifier: String, object: Any?, error: Error? = nil) {
+        if let image = object as? UIImage {
+            show(image)
+            let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
+            
+            // Fire off request based on URL of chosen photo.
+            guard let cgImage = image.cgImage else {
+                return
+            }
+            
+            letUserDraw(image: cgImage, orientation: cgOrientation)
+        }
+    }
+    
+    private func presentPicker(filter: PHPickerFilter?) {
+        var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        
+        // Set the filter type according to the user’s selection.
+        configuration.filter = filter
+        // Set the mode to avoid transcoding, if possible, if your app supports arbitrary image/video encodings.
+        configuration.preferredAssetRepresentationMode = .current
+        // Set the selection behavior to respect the user’s selection order.
+        configuration.selection = .ordered
+        // Set the selection limit to enable multiselection.
+        configuration.selectionLimit = 0
+        // Set the preselected asset identifiers with the identifiers that the app tracks.
+        configuration.preselectedAssetIdentifiers = selectedAssetIdentifiers
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        displayNext()
+    }
+    
     
     //Let the User select a photo of his Library or Take a new one
     @objc
     func promptPhoto() {
+        
         let prompt = UIAlertController(title: "Choose a Photo",
                                        message: "Please choose a photo.",
                                        preferredStyle: .actionSheet)
@@ -169,8 +217,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                          handler: presentCamera)
         
         func presentLibrary(_ _: UIAlertAction) {
-            imagePicker.sourceType = .photoLibrary
-            self.present(imagePicker, animated: true)
+            
+                presentPicker(filter: nil)
+            
         }
         
         let libraryAction = UIAlertAction(title: "Photo Library",
@@ -531,6 +580,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Creates white Boxes above the detected Text Fields
     fileprivate func draw(text: [VNTextObservation], onImageWithBounds bounds: CGRect) {
+        removeAllButtonsFromView()
         CATransaction.begin()
         
         // Array to hold groups of intersecting text observations
@@ -715,3 +765,82 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 }
 
 
+
+extension ViewController: PHPickerViewControllerDelegate {
+    /// - Tag: ParsePickerResults
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        
+        let existingSelection = self.selection
+        var newSelection = [String: PHPickerResult]()
+        for result in results {
+            let identifier = result.assetIdentifier!
+            newSelection[identifier] = existingSelection[identifier] ?? result
+        }
+        
+        // Track the selection in case the user deselects it later.
+        selection = newSelection
+        selectedAssetIdentifiers = results.map(\.assetIdentifier!)
+        selectedAssetIdentifierIterator = selectedAssetIdentifiers.makeIterator()
+        
+        if selection.isEmpty {
+            
+            displayEmptyImage()
+        } else {
+            displayNext()
+        }
+    }
+}
+
+private extension ViewController {
+    
+    /// - Tag: LoadItemProvider
+    func displayNext() {
+        guard let assetIdentifier = selectedAssetIdentifierIterator?.next() else { return }
+        currentAssetIdentifier = assetIdentifier
+        
+        let progress: Progress?
+        let itemProvider = selection[assetIdentifier]!.itemProvider
+        if itemProvider.canLoadObject(ofClass: UIImage.self) {
+            progress = itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    self?.handleCompletion(assetIdentifier: assetIdentifier, object: image, error: error)
+                }
+            }
+        } else {
+            progress = nil
+        }
+        
+    }
+}
+
+private extension ViewController {
+    
+    func displayEmptyImage() {
+        displayImage(UIImage(systemName: "photo.on.rectangle.angled"))
+    }
+    
+    func displayErrorImage() {
+        displayImage(UIImage(systemName: "exclamationmark.circle"))
+    }
+    
+    func displayUnknownImage() {
+        displayImage(UIImage(systemName: "questionmark.circle"))
+    }
+    
+    func displayImage(_ image: UIImage?) {
+        imageView.image = image
+    }
+        
+}
+
+
+extension ViewController {
+    func removeAllButtonsFromView() {
+        for subview in view.subviews {
+            if let button = subview as? UIButton {
+                button.removeFromSuperview()
+            }
+        }
+    }
+}
