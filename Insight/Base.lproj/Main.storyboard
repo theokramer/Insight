@@ -23,7 +23,7 @@
                                 </constraints>
                             </imageView>
                             <slider hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="n6p-Vg-RiL">
-                                <rect key="frame" x="66.999999999999986" y="101" width="139.66666666666663" height="31"/>
+                                <rect key="frame" x="48" y="151" width="139.66666666666666" height="31"/>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzz-lX-rIy" userLabel="Edit Button">
                                 <rect key="frame" x="301.66666666666669" y="98" width="53.333333333333314" height="33"/>
@@ -60,15 +60,24 @@
                                     <action selector="leftClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fzp-cb-DQv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vyv-Z5-1Yi">
+                                <rect key="frame" x="30" y="96" width="84" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Save All"/>
+                                <connections>
+                                    <action selector="saveAll:" destination="BYZ-38-t0r" eventType="touchUpInside" id="U2a-La-f39"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="leading" secondItem="wVb-fN-90W" secondAttribute="trailing" constant="20.666666666666742" id="0TM-e0-6bj"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vyv-Z5-1Yi" secondAttribute="bottom" constant="687" id="0mx-yK-ESh"/>
                             <constraint firstItem="wVb-fN-90W" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="38" id="2JD-9v-ICB"/>
-                            <constraint firstItem="wVb-fN-90W" firstAttribute="leading" secondItem="n6p-Vg-RiL" secondAttribute="trailing" constant="14.333333333333371" id="6qT-y0-gUG"/>
-                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="bottom" secondItem="jzz-lX-rIy" secondAttribute="bottom" id="9OJ-iV-BBd"/>
+                            <constraint firstItem="wVb-fN-90W" firstAttribute="leading" secondItem="n6p-Vg-RiL" secondAttribute="trailing" constant="33.333333333333371" id="6qT-y0-gUG"/>
+                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="bottom" secondItem="jzz-lX-rIy" secondAttribute="bottom" constant="50" id="9OJ-iV-BBd"/>
                             <constraint firstItem="Kym-Mn-vz1" firstAttribute="top" secondItem="jzz-lX-rIy" secondAttribute="bottom" constant="401" id="BCc-fJ-WnR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kym-Mn-vz1" secondAttribute="trailing" constant="7" id="TgR-TD-VwN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jzz-lX-rIy" secondAttribute="trailing" constant="38" id="YA4-OT-WEB"/>
@@ -76,8 +85,10 @@
                             <constraint firstItem="hzM-hy-IMf" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="473" id="d3D-pk-kgg"/>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="39" id="hHz-r4-c4t"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="isi-rZ-eZp"/>
+                            <constraint firstItem="vyv-Z5-1Yi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="jA7-hJ-Hig"/>
+                            <constraint firstItem="vyv-Z5-1Yi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="37" id="mAV-us-MBp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hzM-hy-IMf" secondAttribute="bottom" constant="251" id="mFY-Gn-OfC"/>
-                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="69" id="qlw-08-OxS"/>
+                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="qlw-08-OxS"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tCB-qZ-cJh"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Kym-Mn-vz1" secondAttribute="bottom" constant="251" id="wot-xi-2Xt"/>
                             <constraint firstItem="wVb-fN-90W" firstAttribute="centerY" secondItem="jzz-lX-rIy" secondAttribute="centerY" id="xwl-BH-Bod"/>
@@ -94,6 +105,7 @@
                         <outlet property="leftButton" destination="hzM-hy-IMf" id="NtO-ys-FCM"/>
                         <outlet property="panGesture" destination="Gtw-Jq-hwK" id="cNQ-7j-QMT"/>
                         <outlet property="rightButton" destination="Kym-Mn-vz1" id="joH-05-JPB"/>
+                        <outlet property="saveAll" destination="vyv-Z5-1Yi" id="LKY-i3-nPZ"/>
                         <outlet property="slider" destination="n6p-Vg-RiL" id="cPJ-7p-bM2"/>
                     </connections>
                 </viewController>

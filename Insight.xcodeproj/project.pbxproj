@@ -23,6 +23,7 @@
 		20DD54A32BF0404D00AA5240 /* DrawBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A22BF0404D00AA5240 /* DrawBoxes.swift */; };
 		20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */; };
 		20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */; };
+		20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */; };
 		D713D9A6BB45A29865887C42 /* Pods_Insight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		20DD54A22BF0404D00AA5240 /* DrawBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawBoxes.swift; sourceTree = "<group>"; };
 		20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleBoxClick.swift; sourceTree = "<group>"; };
 		20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindTextBoxes.swift; sourceTree = "<group>"; };
+		20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreProcessImage.swift; sourceTree = "<group>"; };
 		6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Insight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		917F434C81E0A70C4EDCF43D /* Pods-Insight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.debug.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.debug.xcconfig"; sourceTree = "<group>"; };
 		BC44E24BC2D5F53B8D3E1B90 /* Pods-Insight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.release.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.release.xcconfig"; sourceTree = "<group>"; };
@@ -91,14 +93,15 @@
 		2080BB6F2BF000F600D724A5 /* Insight */ = {
 			isa = PBXGroup;
 			children = (
+				20DD54AB2BF048FB00AA5240 /* SavePhoto */,
 				2080BB702BF000F600D724A5 /* AppDelegate.swift */,
 				2080BB722BF000F600D724A5 /* SceneDelegate.swift */,
+				20BD349E2BF01F5A00E0D9CD /* AddPhoto */,
 				2080BB762BF000F600D724A5 /* Main.storyboard */,
 				2080BB7C2BF000F800D724A5 /* Assets.xcassets */,
 				2080BB7E2BF000F800D724A5 /* LaunchScreen.storyboard */,
 				2080BB812BF000F800D724A5 /* Info.plist */,
 				2080BB792BF000F600D724A5 /* Insight.xcdatamodeld */,
-				20BD349E2BF01F5A00E0D9CD /* AddPhoto */,
 			);
 			path = Insight;
 			sourceTree = "<group>";
@@ -135,6 +138,14 @@
 			);
 			name = Boxes;
 			path = Image;
+			sourceTree = "<group>";
+		};
+		20DD54AB2BF048FB00AA5240 /* SavePhoto */ = {
+			isa = PBXGroup;
+			children = (
+				20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */,
+			);
+			path = SavePhoto;
 			sourceTree = "<group>";
 		};
 		4695BE5F5216BBDF3696ED65 /* Pods */ = {
@@ -270,6 +281,7 @@
 				20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */,
 				20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */,
 				2080BB752BF000F600D724A5 /* ViewController.swift in Sources */,
+				20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */,
 				20DD54A12BF03F8700AA5240 /* CropImage.swift in Sources */,
 				2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */,
 				20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */,

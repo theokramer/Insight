@@ -20,13 +20,13 @@ extension ViewController {
     //Let the USer crop the selected image and than show it
     func cropViewController(_ cropViewController: CropViewController, didCropImageToRect cropRect: CGRect, angle: Int) {
         
-        guard let originalImage = cropImage(image: imageView.image!, rect: cropRect, scale: myImage.scale) else {
+        guard let originalImage = cropImage(image: imageView.image!, rect: cropRect, scale: 1) else {
              return
          }
         
         for i in selectedImages.indices {
             if i == imageIndex {
-                selectedImages[i] = originalImage
+                selectedImages[i].image = originalImage
             }
         }
         handleCompletion(object: selectedImages[imageIndex])
