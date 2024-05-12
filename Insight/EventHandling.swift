@@ -51,18 +51,18 @@ extension ViewController {
         
     }
     
-    
+    //Switches between the Images
     @IBAction func rightClicked(_ sender: Any) {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
-            handleCompletion(object: selectedImages[imageIndex])
+            handleCompletion(object: selectedImages[imageIndex].image)
         }
     }
     
     @IBAction func leftClicked(_ sender: Any) {
         if imageIndex > 0 {
             imageIndex -= 1
-            handleCompletion(object: selectedImages[imageIndex])
+            handleCompletion(object: selectedImages[imageIndex].image)
         }
         
     }
@@ -72,6 +72,13 @@ extension ViewController {
             presentCropViewController(image: imageView.image!)
         }
         
+    }
+    
+    
+    @IBAction func saveAll(_ sender: Any) {
+        //Call Database Function
+
+        prepareImageForSaving(images: selectedImages)
     }
     
     

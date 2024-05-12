@@ -73,8 +73,6 @@ extension ViewController: PHPickerViewControllerDelegate {
         configuration.selection = .ordered
         // Set the selection limit to enable multiselection.
         configuration.selectionLimit = 0
-        // Set the preselected asset identifiers with the identifiers that the app tracks.
-        configuration.preselectedAssetIdentifiers = selectedAssetIdentifiers
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
@@ -88,7 +86,7 @@ extension ViewController: PHPickerViewControllerDelegate {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
                             if let image = object as? UIImage {
                                 DispatchQueue.main.async { [weak self] in
-                                    self?.selectedImages.append(image)
+                                    self?.selectedImages.append(selectedImages2.init(image: image, index: UUID()))
                                 }
                             }
                         })

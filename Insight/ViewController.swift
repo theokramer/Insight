@@ -11,6 +11,7 @@ import Vision
 import SwiftUI
 import CropViewController
 import PhotosUI
+import CoreData
 
 
 
@@ -19,18 +20,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var saveAll: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    var drawingMode = false
+
     var editMode = false
-    var myImage = UIImage()
-    var selection = [String: PHPickerResult]()
-    var selectedAssetIdentifiers = [String]()
-    var selectedAssetIdentifierIterator: IndexingIterator<[String]>?
-    var currentAssetIdentifier: String?
-    var selectedImages: [UIImage] = []
+    
+    
+    struct selectedImages2 {
+        var image: UIImage
+        var index: UUID
+    }
+    
+    var selectedImages: [selectedImages2] = []
     var imageIndex = 0
     
     // Layer into which to draw bounding box paths.
@@ -39,6 +43,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Image parameters for reuse throughout app
     var imageWidth: CGFloat = 0
     var imageHeight: CGFloat = 0
+    
     
     lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
         let textDetectRequest = VNDetectTextRectanglesRequest(completionHandler: self.handleDetectedText)
@@ -59,7 +64,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
+        saveAll.tag = 3
         editButton.backgroundColor = UIColor.white
+        
+        ViewController.fetchCoreData {items in
+            if let items = (items ?? []) as [ImageEntity]? {
+                print(items)
+                for item in items {
+                    guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
+                        return
+                    }
+                    self.selectedImages.append(selectedImages2.init(image: thisImage, index: UUID()))
+                }
+                //ViewController.deleteCoreData(indexPath: 0, items: items)
+            } else {
+                print("FEHLER")
+            }
+        }
+    }
+    
+    func handleData() {
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
