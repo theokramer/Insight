@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:ImageEntity+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:Insight.xcodeproj">
    </FileRef>
    <FileRef

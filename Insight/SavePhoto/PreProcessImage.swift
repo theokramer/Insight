@@ -22,19 +22,6 @@ extension ViewController {
         }
     }
     
-    static func addCoreData(images: [Data]) {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        for image in images {
-            let newData = ImageEntity(context: context)
-            newData.imageData = image
-        }
-        do {
-            try context.save()
-            print("YEAH")
-        } catch {
-            print("error-Saving data")
-        }
-    }
     
     static func deleteCoreData(indexPath: Int, items: [ImageEntity]) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -48,8 +35,7 @@ extension ViewController {
     }
 
     func prepareImageForSaving(images:[ViewController.selectedImages2]) {
-        
-        var jpegImages:[Data] = []
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         for image in images {
             found = false
@@ -60,7 +46,6 @@ extension ViewController {
                             found = true
                         }
                     }
-                    //ViewController.deleteCoreData(indexPath: 0, items: items)
                 } else {
                     print("FEHLER")
                 }
@@ -73,7 +58,19 @@ extension ViewController {
                     return
                 }
                 
-                jpegImages.append(jpegImageData)
+                let newData = ImageEntity(context: context)
+                newData.imageData = jpegImageData
+                newData.id = image.index
+                
+                DispatchQueue.main.async {
+                    do {
+                        try context.save()
+                    } catch {
+                        print("error-saving data")
+                    }
+                }
+                
+                
             }
             
         }
@@ -81,12 +78,6 @@ extension ViewController {
         
         
 
-        // dispatch with gcd.
-        DispatchQueue.main.async {
-            
-            ViewController.addCoreData(images: jpegImages)
-
-        }
     }
     
     

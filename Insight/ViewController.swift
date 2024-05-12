@@ -31,7 +31,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     struct selectedImages2 {
         var image: UIImage
-        var index: UUID
+        var index: String
     }
     
     var selectedImages: [selectedImages2] = []
@@ -74,7 +74,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
                         return
                     }
-                    self.selectedImages.append(selectedImages2.init(image: thisImage, index: UUID()))
+                    self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? ""))
                 }
                 //ViewController.deleteCoreData(indexPath: 0, items: items)
             } else {
