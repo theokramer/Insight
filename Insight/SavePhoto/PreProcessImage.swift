@@ -44,6 +44,17 @@ extension ViewController {
                     for item in items {
                         if image.index == item.id {
                             found = true
+                            if image.cropped {
+                                context.delete(item)
+                                do {
+                                    try context.save()
+                                    print("Success")
+                                    found = false
+                                } catch {
+                                    print("error-Deleting data")
+                                }
+                                
+                            }
                         }
                     }
                 } else {
@@ -61,7 +72,7 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = image.index
-                
+                print(cellId)
                 if cellId == "" {
                     newData.topic = Topic(context: context)
                     newData.topic?.id = UUID().uuidString
@@ -82,13 +93,6 @@ extension ViewController {
                         print("error-Fetching data")
                     }
                 }
-                
-                
-                
-                
-                
-                
-                
                 
             }
             

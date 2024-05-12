@@ -27,6 +27,7 @@ extension ViewController {
         for i in selectedImages.indices {
             if i == imageIndex {
                 selectedImages[i].image = originalImage
+                selectedImages[i].cropped = true
             }
         }
         handleCompletion(object: selectedImages[imageIndex].image)
