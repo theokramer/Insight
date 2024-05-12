@@ -62,17 +62,45 @@ extension ViewController {
                 newData.imageData = jpegImageData
                 newData.id = image.index
                 
-                DispatchQueue.main.async {
+                if cellId == "" {
+                    newData.topic = Topic(context: context)
+                    newData.topic?.id = UUID().uuidString
+                    newData.topic?.name = "Physikum"
+                } else {
+                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
                     do {
-                        try context.save()
+                        guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                            return
+                        }
+                        for myTopic in items {
+                            if myTopic.id == cellId {
+                                newData.topic = myTopic
+                            }
+                            
+                        }
                     } catch {
-                        print("error-saving data")
+                        print("error-Fetching data")
                     }
                 }
                 
                 
+                
+                
+                
+                
+                
+                
             }
             
+        }
+        
+        DispatchQueue.main.async {
+            do {
+                try context.save()
+                print("YEAH")
+            } catch {
+                print("error-saving data")
+            }
         }
         
         
