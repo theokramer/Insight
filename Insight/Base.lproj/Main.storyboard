@@ -22,18 +22,18 @@
                                     <constraint firstAttribute="height" constant="569" id="EvL-3Z-jCl"/>
                                 </constraints>
                             </imageView>
-                            <slider hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="n6p-Vg-RiL">
+                            <slider hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="n6p-Vg-RiL">
                                 <rect key="frame" x="66.999999999999986" y="101" width="139.66666666666663" height="31"/>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzz-lX-rIy" userLabel="Edit Button">
-                                <rect key="frame" x="301.66666666666669" y="98" width="53.333333333333314" height="34.333333333333343"/>
+                                <rect key="frame" x="301.66666666666669" y="98" width="53.333333333333314" height="33"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Edit"/>
                                 <connections>
                                     <action selector="editClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gFu-x6-eJd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-fN-90W">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-fN-90W">
                                 <rect key="frame" x="219" y="97" width="62" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="qdo-Bs-fVY"/>
@@ -44,6 +44,22 @@
                                     <action selector="cropClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SCd-mm-IAk"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kym-Mn-vz1">
+                                <rect key="frame" x="326" y="532" width="60" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="right"/>
+                                <connections>
+                                    <action selector="rightClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ojC-dK-RlP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzM-hy-IMf">
+                                <rect key="frame" x="22" y="532" width="49" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="left"/>
+                                <connections>
+                                    <action selector="leftClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fzp-cb-DQv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -52,12 +68,20 @@
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="leading" secondItem="wVb-fN-90W" secondAttribute="trailing" constant="20.666666666666742" id="0TM-e0-6bj"/>
                             <constraint firstItem="wVb-fN-90W" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="38" id="2JD-9v-ICB"/>
                             <constraint firstItem="wVb-fN-90W" firstAttribute="leading" secondItem="n6p-Vg-RiL" secondAttribute="trailing" constant="14.333333333333371" id="6qT-y0-gUG"/>
+                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="bottom" secondItem="jzz-lX-rIy" secondAttribute="bottom" id="9OJ-iV-BBd"/>
+                            <constraint firstItem="Kym-Mn-vz1" firstAttribute="top" secondItem="jzz-lX-rIy" secondAttribute="bottom" constant="401" id="BCc-fJ-WnR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kym-Mn-vz1" secondAttribute="trailing" constant="7" id="TgR-TD-VwN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jzz-lX-rIy" secondAttribute="trailing" constant="38" id="YA4-OT-WEB"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="224" id="Zji-gw-rAk"/>
+                            <constraint firstItem="hzM-hy-IMf" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="473" id="d3D-pk-kgg"/>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="39" id="hHz-r4-c4t"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="isi-rZ-eZp"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hzM-hy-IMf" secondAttribute="bottom" constant="251" id="mFY-Gn-OfC"/>
+                            <constraint firstItem="n6p-Vg-RiL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="69" id="qlw-08-OxS"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tCB-qZ-cJh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Kym-Mn-vz1" secondAttribute="bottom" constant="251" id="wot-xi-2Xt"/>
                             <constraint firstItem="wVb-fN-90W" firstAttribute="centerY" secondItem="jzz-lX-rIy" secondAttribute="centerY" id="xwl-BH-Bod"/>
+                            <constraint firstItem="hzM-hy-IMf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="zng-G6-Djc"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="Gtw-Jq-hwK" appends="YES" id="A5M-mF-Chr"/>
@@ -67,7 +91,9 @@
                         <outlet property="cropButton" destination="wVb-fN-90W" id="IoI-4S-TBg"/>
                         <outlet property="editButton" destination="jzz-lX-rIy" id="gmg-gr-gfp"/>
                         <outlet property="imageView" destination="4rB-HK-9vG" id="cuo-aK-nLD"/>
+                        <outlet property="leftButton" destination="hzM-hy-IMf" id="NtO-ys-FCM"/>
                         <outlet property="panGesture" destination="Gtw-Jq-hwK" id="cNQ-7j-QMT"/>
+                        <outlet property="rightButton" destination="Kym-Mn-vz1" id="joH-05-JPB"/>
                         <outlet property="slider" destination="n6p-Vg-RiL" id="cPJ-7p-bM2"/>
                     </connections>
                 </viewController>

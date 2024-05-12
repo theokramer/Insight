@@ -11,6 +11,7 @@ import UIKit
 
 extension ViewController {
     
+    //Handle user swipe to select multiple Text Boxes in Edit Mode. TODO: Improve the recognition of the swipe
     @IBAction func panRecognized(_ sender: Any) {
         guard let panGesture = sender as? UIPanGestureRecognizer else {
             return
@@ -37,10 +38,30 @@ extension ViewController {
             }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+    //Is called, when the user presses the edit button. Calls saveEdits()
+    @IBAction func editClicked(_ sender: Any) {
         
+        if editMode {
+            saveEdits()
+        }
+        
+        editMode = !editMode
+        editButton.backgroundColor = editMode ? UIColor.red : UIColor.white
+        
+    }
+    
+    
+    @IBAction func rightClicked(_ sender: Any) {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
+            handleCompletion(object: selectedImages[imageIndex])
+        }
+    }
+    
+    @IBAction func leftClicked(_ sender: Any) {
+        if imageIndex > 0 {
+            imageIndex -= 1
             handleCompletion(object: selectedImages[imageIndex])
         }
         
