@@ -9,23 +9,8 @@ import Foundation
 import UIKit
 
 extension TopicModel {
-    static var sampleData = [
-            TopicModel(
-                id: "Submit reimbursement report",
-                name: "Don't forget about taxi receipts"),
-            TopicModel(
-                id: "Code review",
-                name: "Check tech specs in shared folder"),
-            TopicModel(
-                id: "Pick up new contacts",
-                name: "Optometrist closes at 6:00PM"),
-            TopicModel(
-                id: "Add notes to retrospective",
-                name: "Collaborate with project manager"),
-            TopicModel(
-                id: "Interview new project manager candidate",
-                name: "Review portfolio"),
-        ]
+    static var sampleData:[TopicModel] = [
+    ]
 }
 
 
@@ -38,6 +23,7 @@ class StartViewController: UICollectionViewController {
     override func viewDidLoad() {
             super.viewDidLoad()
             // Do any additional setup after loading the view.
+        TopicModel.sampleData.removeAll()
         
         let listLayout = listLayout()
         collectionView.collectionViewLayout = listLayout
@@ -48,7 +34,8 @@ class StartViewController: UICollectionViewController {
                 return
             }
             for myTopic in items {
-                TopicModel.sampleData.append(TopicModel.init(id: myTopic.wrappedId, name: myTopic.wrappedName))
+                let newTopic = TopicModel(id: myTopic.wrappedId, name: myTopic.wrappedName)
+                TopicModel.sampleData.append(newTopic)
             }
         } catch {
             print("error-Fetching data")
@@ -74,13 +61,29 @@ class StartViewController: UICollectionViewController {
         
         var snapshot = Snapshot()
                 snapshot.appendSections([0])
-                snapshot.appendItems(TopicModel.sampleData.map { $0.name })
+        snapshot.appendItems(TopicModel.sampleData.map { $0.id })
             dataSource.apply(snapshot)
             collectionView.dataSource = dataSource
 
         
         
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(TopicModel.sampleData[indexPath.item])
+        performSegue(withIdentifier: "showViewController", sender: TopicModel.sampleData[indexPath.item])
+        
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if (segue.identifier == "showViewController") {
+          let secondView = segue.destination as! ViewController
+          let object = sender as! TopicModel
+           secondView.cellId = object.id
+       }
+    }
+    
         
     private func listLayout() -> UICollectionViewCompositionalLayout {
             var listConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)

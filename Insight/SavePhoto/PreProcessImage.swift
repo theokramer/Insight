@@ -61,9 +61,31 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = image.index
-                newData.topic = Topic(context: context)
-                newData.topic?.id = UUID().uuidString
-                newData.topic?.name = UUID().uuidString
+                
+                if cellId == "" {
+                    newData.topic = Topic(context: context)
+                    newData.topic?.id = UUID().uuidString
+                    newData.topic?.name = "Physikum"
+                } else {
+                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                    do {
+                        guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                            return
+                        }
+                        for myTopic in items {
+                            if myTopic.id == cellId {
+                                newData.topic = myTopic
+                            }
+                            
+                        }
+                    } catch {
+                        print("error-Fetching data")
+                    }
+                }
+                
+                
+                
+                
                 
                 
                 

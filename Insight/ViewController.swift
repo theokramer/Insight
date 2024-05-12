@@ -24,8 +24,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-
+    public var cellId:String = ""
     var editMode = false
     
     struct selectedImages2 {
@@ -69,7 +70,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(cellId)
+        
         editButton.tag = 3
+        backButton.tag = 3
         cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
@@ -85,7 +89,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     guard let myTopic = item.topic else {
                         return
                     }
-                    self.savedImages.append(savedImages2.init(image: thisImage, index: item.id ?? "", topic: myTopic))
+                    if myTopic.id == self.cellId {
+                        self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? ""))
+                        self.savedImages.append(savedImages2.init(image: thisImage, index: item.id ?? "", topic: myTopic))
+                    }
+                    
                 }
                 //ViewController.deleteCoreData(indexPath: 0, items: items)
             } else {
