@@ -28,13 +28,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     var editMode = false
     
-    
     struct selectedImages2 {
         var image: UIImage
         var index: String
     }
     
+    
+    struct savedImages2 {
+        var image: UIImage
+        var index: String
+        var topic: Topic
+    }
+    
     var selectedImages: [selectedImages2] = []
+    var savedImages: [savedImages2] = []
     var imageIndex = 0
     
     // Layer into which to draw bounding box paths.
@@ -43,6 +50,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Image parameters for reuse throughout app
     var imageWidth: CGFloat = 0
     var imageHeight: CGFloat = 0
+    
+    @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
     
     
     lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
@@ -69,12 +78,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
-                print(items)
                 for item in items {
                     guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
                         return
                     }
-                    self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? ""))
+                    guard let myTopic = item.topic else {
+                        return
+                    }
+                    self.savedImages.append(savedImages2.init(image: thisImage, index: item.id ?? "", topic: myTopic))
                 }
                 //ViewController.deleteCoreData(indexPath: 0, items: items)
             } else {
@@ -82,6 +93,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
+    
     
     func handleData() {
         
@@ -96,4 +108,3 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
 }
-

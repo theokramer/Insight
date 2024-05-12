@@ -61,18 +61,24 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = image.index
+                newData.topic = Topic(context: context)
+                newData.topic?.id = UUID().uuidString
+                newData.topic?.name = UUID().uuidString
                 
-                DispatchQueue.main.async {
-                    do {
-                        try context.save()
-                    } catch {
-                        print("error-saving data")
-                    }
-                }
+                
                 
                 
             }
             
+        }
+        
+        DispatchQueue.main.async {
+            do {
+                try context.save()
+                print("YEAH")
+            } catch {
+                print("error-saving data")
+            }
         }
         
         

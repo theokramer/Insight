@@ -24,6 +24,12 @@
 		20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */; };
 		20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */; };
 		20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */; };
+		20EEF9852BF0E9B200CF3295 /* Topic+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9812BF0E9B200CF3295 /* Topic+CoreDataClass.swift */; };
+		20EEF9862BF0E9B200CF3295 /* Topic+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9822BF0E9B200CF3295 /* Topic+CoreDataProperties.swift */; };
+		20EEF9872BF0E9B200CF3295 /* ImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9832BF0E9B200CF3295 /* ImageEntity+CoreDataClass.swift */; };
+		20EEF9882BF0E9B200CF3295 /* ImageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9842BF0E9B200CF3295 /* ImageEntity+CoreDataProperties.swift */; };
+		20EEF98A2BF0F13300CF3295 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9892BF0F13300CF3295 /* StartViewController.swift */; };
+		20EEF98D2BF0F16900CF3295 /* TopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF98C2BF0F16900CF3295 /* TopicModel.swift */; };
 		D713D9A6BB45A29865887C42 /* Pods_Insight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +53,12 @@
 		20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleBoxClick.swift; sourceTree = "<group>"; };
 		20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindTextBoxes.swift; sourceTree = "<group>"; };
 		20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreProcessImage.swift; sourceTree = "<group>"; };
+		20EEF9812BF0E9B200CF3295 /* Topic+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Topic+CoreDataClass.swift"; sourceTree = "<group>"; };
+		20EEF9822BF0E9B200CF3295 /* Topic+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Topic+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		20EEF9832BF0E9B200CF3295 /* ImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		20EEF9842BF0E9B200CF3295 /* ImageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		20EEF9892BF0F13300CF3295 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		20EEF98C2BF0F16900CF3295 /* TopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicModel.swift; sourceTree = "<group>"; };
 		6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Insight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		917F434C81E0A70C4EDCF43D /* Pods-Insight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.debug.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.debug.xcconfig"; sourceTree = "<group>"; };
 		BC44E24BC2D5F53B8D3E1B90 /* Pods-Insight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insight.release.xcconfig"; path = "Target Support Files/Pods-Insight/Pods-Insight.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +105,12 @@
 		2080BB6F2BF000F600D724A5 /* Insight */ = {
 			isa = PBXGroup;
 			children = (
+				20EEF9892BF0F13300CF3295 /* StartViewController.swift */,
+				20EEF98B2BF0F15C00CF3295 /* Models */,
+				20EEF9812BF0E9B200CF3295 /* Topic+CoreDataClass.swift */,
+				20EEF9822BF0E9B200CF3295 /* Topic+CoreDataProperties.swift */,
+				20EEF9832BF0E9B200CF3295 /* ImageEntity+CoreDataClass.swift */,
+				20EEF9842BF0E9B200CF3295 /* ImageEntity+CoreDataProperties.swift */,
 				20DD54AB2BF048FB00AA5240 /* SavePhoto */,
 				2080BB702BF000F600D724A5 /* AppDelegate.swift */,
 				2080BB722BF000F600D724A5 /* SceneDelegate.swift */,
@@ -146,6 +164,14 @@
 				20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */,
 			);
 			path = SavePhoto;
+			sourceTree = "<group>";
+		};
+		20EEF98B2BF0F15C00CF3295 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				20EEF98C2BF0F16900CF3295 /* TopicModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		4695BE5F5216BBDF3696ED65 /* Pods */ = {
@@ -278,14 +304,20 @@
 			files = (
 				20BD34A02BF020B700E0D9CD /* EventHandling.swift in Sources */,
 				20DD54A32BF0404D00AA5240 /* DrawBoxes.swift in Sources */,
+				20EEF9882BF0E9B200CF3295 /* ImageEntity+CoreDataProperties.swift in Sources */,
 				20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */,
+				20EEF9872BF0E9B200CF3295 /* ImageEntity+CoreDataClass.swift in Sources */,
+				20EEF9862BF0E9B200CF3295 /* Topic+CoreDataProperties.swift in Sources */,
 				20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */,
 				2080BB752BF000F600D724A5 /* ViewController.swift in Sources */,
 				20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */,
 				20DD54A12BF03F8700AA5240 /* CropImage.swift in Sources */,
 				2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */,
 				20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */,
+				20EEF9852BF0E9B200CF3295 /* Topic+CoreDataClass.swift in Sources */,
 				20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */,
+				20EEF98A2BF0F13300CF3295 /* StartViewController.swift in Sources */,
+				20EEF98D2BF0F16900CF3295 /* TopicModel.swift in Sources */,
 				2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */,
 				2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */,
 				20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */,
