@@ -29,7 +29,7 @@ extension ViewController {
                 selectedImages[i].image = originalImage
             }
         }
-        handleCompletion(object: selectedImages[imageIndex])
+        handleCompletion(object: selectedImages[imageIndex].image)
         
         // Dismiss the picker to return to original view controller.
         dismiss(animated: true, completion: nil)
