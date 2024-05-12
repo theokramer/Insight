@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     struct selectedImages2 {
         var image: UIImage
         var index: String
+        var cropped: Bool
     }
     
     
@@ -90,7 +91,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         return
                     }
                     if myTopic.id == self.cellId {
-                        self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? ""))
+                        self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? "", cropped: false))
                         self.savedImages.append(savedImages2.init(image: thisImage, index: item.id ?? "", topic: myTopic))
                     }
                     

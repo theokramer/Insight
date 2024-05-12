@@ -10,6 +10,7 @@ import UIKit
 
 extension TopicModel {
     static var sampleData:[TopicModel] = [
+        TopicModel(id: "AddID", name: "Add Topic")
     ]
 }
 
@@ -23,7 +24,9 @@ class StartViewController: UICollectionViewController {
     override func viewDidLoad() {
             super.viewDidLoad()
             // Do any additional setup after loading the view.
-        TopicModel.sampleData.removeAll()
+        TopicModel.sampleData.removeAll {
+            $0.id != "AddID"
+        }
         
         let listLayout = listLayout()
         collectionView.collectionViewLayout = listLayout
@@ -40,7 +43,6 @@ class StartViewController: UICollectionViewController {
         } catch {
             print("error-Fetching data")
         }
-        
         
         
         
@@ -70,8 +72,28 @@ class StartViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         print(TopicModel.sampleData[indexPath.item])
-        performSegue(withIdentifier: "showViewController", sender: TopicModel.sampleData[indexPath.item])
+        if(TopicModel.sampleData[indexPath.item].id == "AddID") {
+            let id = UUID().uuidString
+            let name = UUID().uuidString
+            let newData = Topic(context: context)
+            newData.id = id
+            newData.name = name
+            DispatchQueue.main.async {
+                do {
+                    try context.save()
+                    self.performSegue(withIdentifier: "showViewController", sender: TopicModel.init(id: id, name: name))
+                    print("JO")
+                } catch {
+                    print("error-saving data")
+                }
+            }
+            
+        } else {
+            performSegue(withIdentifier: "showViewController", sender: TopicModel.sampleData[indexPath.item])
+        }
+        
         
         
     }
