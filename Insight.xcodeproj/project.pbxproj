@@ -17,6 +17,7 @@
 		2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB8A2BF0017500D724A5 /* Utilities.swift */; };
 		20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */; };
 		20BD34A02BF020B700E0D9CD /* EventHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349F2BF020B700E0D9CD /* EventHandling.swift */; };
+		20DBA2B12BF23FCB002DCF9D /* OverviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */; };
 		20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD549C2BF03EBC00AA5240 /* EditBoxes.swift */; };
 		20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD549E2BF03F3800AA5240 /* PresentImage.swift */; };
 		20DD54A12BF03F8700AA5240 /* CropImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A02BF03F8700AA5240 /* CropImage.swift */; };
@@ -46,6 +47,7 @@
 		2080BB8A2BF0017500D724A5 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		20BD349F2BF020B700E0D9CD /* EventHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandling.swift; sourceTree = "<group>"; };
+		20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewController.swift; sourceTree = "<group>"; };
 		20DD549C2BF03EBC00AA5240 /* EditBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBoxes.swift; sourceTree = "<group>"; };
 		20DD549E2BF03F3800AA5240 /* PresentImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentImage.swift; sourceTree = "<group>"; };
 		20DD54A02BF03F8700AA5240 /* CropImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImage.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		2080BB6F2BF000F600D724A5 /* Insight */ = {
 			isa = PBXGroup;
 			children = (
+				20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */,
 				20EEF9892BF0F13300CF3295 /* StartViewController.swift */,
 				20EEF98B2BF0F15C00CF3295 /* Models */,
 				20EEF9812BF0E9B200CF3295 /* Topic+CoreDataClass.swift */,
@@ -321,6 +324,7 @@
 				2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */,
 				2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */,
 				20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */,
+				20DBA2B12BF23FCB002DCF9D /* OverviewController.swift in Sources */,
 				2080BB732BF000F600D724A5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -42,6 +42,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         var topic: Topic
     }
     
+    
+    
     var selectedImages: [selectedImages2] = []
     var savedImages: [savedImages2] = []
     var imageIndex = 0
@@ -103,9 +105,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    @IBAction func goBackClicked(_ sender: Any) {
+        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
+    }
     
-    func handleData() {
-        
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if (segue.identifier == "showOverviewController2") {
+           let secondView = segue.destination as! OverviewController
+          let object = sender as! String
+           secondView.cellId = object
+       }
     }
     
     override func viewDidAppear(_ animated: Bool) {
