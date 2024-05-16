@@ -37,9 +37,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate {
                         return
                     }
                     if myTopic.id == self.cellId {
-                        if self.titleLabel.text == "" {
-                            self.titleLabel.text = myTopic.wrappedName
-                        }
+                        self.titleLabel.text = myTopic.wrappedName
                         var imageStruct = selectedImages2.init(image: thisImage, index: item.wrappedId, cropped: false)
                         self.dataSource.append(imageStruct)
                     }
