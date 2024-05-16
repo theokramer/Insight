@@ -24,7 +24,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     public var cellId:String = ""
     var editMode = false
@@ -76,11 +76,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         print(cellId)
         
         editButton.tag = 3
-        backButton.tag = 3
         cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
         saveAll.tag = 3
+        cancelButton.tag = 3
         editButton.backgroundColor = UIColor.white
         
         ViewController.fetchCoreData {items in
@@ -104,19 +104,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    
-    @IBAction func goBackClicked(_ sender: Any) {
-        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
-    }
+
     
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if (segue.identifier == "showOverviewController2") {
-           let secondView = segue.destination as! OverviewController
-          let object = sender as! String
-           secondView.cellId = object
-       }
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

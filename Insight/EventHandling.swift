@@ -75,10 +75,25 @@ extension ViewController {
     }
     
     
+    @IBAction func cancelClicked(_ sender: Any) {
+        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
+    }
+    
+    
     @IBAction func saveAll(_ sender: Any) {
         //Call Database Function
-
+        
         prepareImageForSaving(images: selectedImages)
+        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if (segue.identifier == "showOverviewController2") {
+           let secondView = segue.destination as! OverviewController
+           let object = sender as? String ?? ""
+           print("OBJECT: \(object)")
+           secondView.cellId = object
+       }
     }
     
     
