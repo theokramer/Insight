@@ -83,7 +83,7 @@ class StartViewController: UICollectionViewController {
             DispatchQueue.main.async {
                 do {
                     try context.save()
-                    self.performSegue(withIdentifier: "showViewController", sender: TopicModel.init(id: id, name: name))
+                    self.performSegue(withIdentifier: "showOverviewController", sender: TopicModel.init(id: id, name: name))
                     print("JO")
                 } catch {
                     print("error-saving data")
@@ -91,7 +91,7 @@ class StartViewController: UICollectionViewController {
             }
             
         } else {
-            performSegue(withIdentifier: "showViewController", sender: TopicModel.sampleData[indexPath.item])
+            performSegue(withIdentifier: "showOverviewController", sender: TopicModel.sampleData[indexPath.item])
         }
         
         
@@ -99,8 +99,8 @@ class StartViewController: UICollectionViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if (segue.identifier == "showViewController") {
-          let secondView = segue.destination as! ViewController
+       if (segue.identifier == "showOverviewController") {
+          let secondView = segue.destination as! OverviewController
           let object = sender as! TopicModel
            secondView.cellId = object.id
        }

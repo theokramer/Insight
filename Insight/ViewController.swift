@@ -17,6 +17,8 @@ import CoreData
 
 @available(iOS 13.0, *)
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
+    
+    //All Storyboard Components
     @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var slider: UISlider!
@@ -24,27 +26,38 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
+    
+    //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
+    
+    //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
     
-    struct selectedImages2 {
+    //Tracks the Index of the Image where the Cropped Button was clicked
+    var imageIndex = 0
+    
+    
+    //Object to add and modify new Images
+    struct selectedImage {
         var image: UIImage
         var index: String
         var cropped: Bool
     }
     
-    
-    struct savedImages2 {
+    //Object to modify Images loaded from Core Data
+    struct savedImage {
         var image: UIImage
         var index: String
         var topic: Topic
     }
     
-    var selectedImages: [selectedImages2] = []
-    var savedImages: [savedImages2] = []
-    var imageIndex = 0
+    //Array of selected Images in Photo Picker
+    var selectedImages: [selectedImage] = []
+    
+    //Array of saved Images from Core Data
+    var savedImages: [savedImage] = []
     
     // Layer into which to draw bounding box paths.
     var pathLayer: CALayer?
@@ -53,8 +66,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var imageWidth: CGFloat = 0
     var imageHeight: CGFloat = 0
     
+    //Fetch Request to get all added Topics of the User
     @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
-    
     
     lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
         let textDetectRequest = VNDetectTextRectanglesRequest(completionHandler: self.handleDetectedText)
@@ -71,16 +84,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(cellId)
-        
+        //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
         editButton.tag = 3
-        backButton.tag = 3
         cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
         saveAll.tag = 3
+        cancelButton.tag = 3
+        
+        //Improve readability of Edit Button
         editButton.backgroundColor = UIColor.white
         
+        //Appends the savedImages Array, so the Images can be displayed
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
                 for item in items {
@@ -91,23 +106,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         return
                     }
                     if myTopic.id == self.cellId {
-                        self.selectedImages.append(selectedImages2.init(image: thisImage, index: item.id ?? "", cropped: false))
-                        self.savedImages.append(savedImages2.init(image: thisImage, index: item.id ?? "", topic: myTopic))
+                        //Selected Images should not get appended, this is just for testing the feature and has to be updated
+                        #if DEBUG
+                        self.selectedImages.append(selectedImage.init(image: thisImage, index: item.id ?? "", cropped: false))
+                        #endif
+                        
+                        //Fill the Array with all the Images in this explicit Topic
+                        self.savedImages.append(savedImage.init(image: thisImage, index: item.id ?? "", topic: myTopic))
                     }
                     
                 }
-                //ViewController.deleteCoreData(indexPath: 0, items: items)
-            } else {
-                print("FEHLER")
             }
         }
     }
+
     
-    
-    func handleData() {
-        
-    }
-    
+
+    //Ask the User to select new Photos, when no Image is displayed
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
