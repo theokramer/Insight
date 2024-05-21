@@ -70,12 +70,12 @@
                                     <constraint firstItem="kJw-Bo-xx4" firstAttribute="leading" secondItem="Tn5-3x-5d9" secondAttribute="leading" constant="7" id="qHM-XX-82I"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="6DP-GI-OTU">
-                                <rect key="frame" x="20" y="113" width="369" height="42"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Gb-bK-4Ov">
+                                <rect key="frame" x="20" y="113" width="369" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XZT-QM-MFc">
                                 <rect key="frame" x="10" y="205" width="1174" height="619"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -117,18 +117,16 @@
                             <constraint firstItem="Tn5-3x-5d9" firstAttribute="top" secondItem="9eL-jX-Kf7" secondAttribute="top" id="Ncg-hM-0R9"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="IuL-1H-wYq" secondAttribute="bottom" constant="20" id="Q7u-Zh-CZV"/>
                             <constraint firstItem="XZT-QM-MFc" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="10" id="Su7-9I-ZOg"/>
-                            <constraint firstItem="6DP-GI-OTU" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="20" id="Yt1-Ft-NdD"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="IuL-1H-wYq" secondAttribute="trailing" constant="20" id="fF2-ld-Fuw"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="XZT-QM-MFc" secondAttribute="bottom" constant="10" id="qm8-th-eT6"/>
                             <constraint firstItem="XZT-QM-MFc" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="108" id="rpa-jt-VKb"/>
-                            <constraint firstItem="6DP-GI-OTU" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="16" id="vQI-bg-sew"/>
                             <constraint firstItem="Tn5-3x-5d9" firstAttribute="leading" secondItem="9eL-jX-Kf7" secondAttribute="leading" id="wV0-uK-UaP"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="addChartsButton" destination="IuL-1H-wYq" id="NAC-g2-f6e"/>
                         <outlet property="collectionView" destination="XZT-QM-MFc" id="wux-Uu-Oix"/>
-                        <outlet property="titleLabel" destination="6DP-GI-OTU" id="lNI-R4-cIE"/>
+                        <outlet property="textField" destination="7Gb-bK-4Ov" id="LiA-lX-axP"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="showViewController" modalPresentationStyle="fullScreen" id="VDD-Cr-jZK"/>
                     </connections>
                 </viewController>
@@ -286,7 +284,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VDD-Cr-jZK"/>
         <segue reference="P6j-wl-aMZ"/>
     </inferredMetricsTieBreakers>
     <resources>

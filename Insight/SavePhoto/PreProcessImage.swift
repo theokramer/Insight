@@ -34,7 +34,7 @@ extension ViewController {
         }
     }
 
-    func prepareImageForSaving(images:[ViewController.selectedImages2]) {
+    func prepareImageForSaving(images:[ViewController.selectedImage]) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         for image in images {

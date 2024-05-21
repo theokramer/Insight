@@ -7,10 +7,11 @@
 
 import Foundation
 import UIKit
+import CoreData
 
-class OverviewController: UIViewController, UICollectionViewDelegate {
+class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate {
     
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var textField: UITextField!
     var cellId: String = ""
     @IBOutlet weak var addChartsButton: UIButton!
     var dataSource:[selectedImages2] = []
@@ -27,6 +28,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.textField.delegate = self
+        textField.returnKeyType = UIReturnKeyType.done
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
                 for item in items {
@@ -37,8 +40,12 @@ class OverviewController: UIViewController, UICollectionViewDelegate {
                         return
                     }
                     if myTopic.id == self.cellId {
-                        self.titleLabel.text = myTopic.wrappedName
-                        var imageStruct = selectedImages2.init(image: thisImage, index: item.wrappedId, cropped: false)
+                        if self.cellId == "" {
+                            self.textField.text = ""
+                        } else {
+                            self.textField.text = myTopic.wrappedName
+                        }
+                        let imageStruct = selectedImages2.init(image: thisImage, index: item.wrappedId, cropped: false)
                         self.dataSource.append(imageStruct)
                     }
                     
@@ -59,8 +66,66 @@ class OverviewController: UIViewController, UICollectionViewDelegate {
         flow.minimumLineSpacing = CGFloat(self.cellMarginSize)
     }
     
+    
     @IBAction func addChartsClicked(_ sender: Any) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        if let text = textField.text {
+            print(text)
+        }
+        
+        /*
+         
+         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+         do {
+             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                 return
+             }
+             for myTopic in items {
+                 if myTopic.id == cellId {
+                     newData.topic = myTopic
+                 }
+                 
+             }
+         } catch {
+             print("error-Fetching data")
+         }
+         
+         */
+        
+        /*let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
+        
+        fetchRequest.predicate = NSPredicate(format: "id = %@", cellId)
+        
+        do {
+            let fetchResults = try fetchRequest.execute()
+            print(fetchResults)
+            /*if fetchResults.count != 0{
+                        let managedObject = fetchResults[0]
+                        managedObject.setValue(textField.text, forKey: "name")*/
+
+                    //}
+        }
+            
+        catch {
+            print("NOPE")
+        }
+        
+        DispatchQueue.main.async {
+            do {
+                try context.save()
+                print("YEAH")
+            } catch {
+                print("error-saving data")
+            }
+        }*/
+        
+        
         performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
