@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VQN-u8-K0l">
     <device id="ipad11_0rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -58,6 +59,7 @@
                                             <imageReference key="image" image="arrow.backward" catalog="system" symbolScale="large"/>
                                         </buttonConfiguration>
                                         <connections>
+                                            <action selector="backClicked:" destination="ua2-a8-Tae" eventType="touchUpInside" id="faC-gi-hql"/>
                                             <segue destination="VQN-u8-K0l" kind="presentation" modalPresentationStyle="fullScreen" id="Zih-z9-V7k"/>
                                         </connections>
                                     </button>
@@ -284,6 +286,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="VDD-Cr-jZK"/>
         <segue reference="P6j-wl-aMZ"/>
     </inferredMetricsTieBreakers>
     <resources>
