@@ -42,7 +42,7 @@ class itemCell: UICollectionViewCell {
         let originX = (bounds.width - imageView.frame.width) / 2
         
         // Keep the original Y origin calculation
-        let originY = (bounds.height - imageView.frame.height) / 2  
+        let originY = (bounds.height - imageView.frame.height) / 2
         
         imageView.frame.origin = CGPoint(x: originX, y: originY)
         

@@ -41,6 +41,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewDidLoad() {
+        
+        
         if(UIScreen.main.bounds.width > 500) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
         } else {
@@ -55,7 +57,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
         textField.borderStyle = .none
-        
+
         //Load Topic Data from Core Data and apply it to textField
         do {
             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
@@ -63,7 +65,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             }
             for myTopic in items {
                 if myTopic.id == self.cellId {
-                    if self.cellId == "" {
+                    if myTopic.name == "" {
+                        self.textField.placeholder = "Ohne Titel"
                         self.textField.text = ""
                     } else {
                         self.textField.text = myTopic.wrappedName
