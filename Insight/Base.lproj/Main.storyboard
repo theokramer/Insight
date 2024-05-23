@@ -79,7 +79,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XZT-QM-MFc">
-                                <rect key="frame" x="10" y="205" width="1174" height="619"/>
+                                <rect key="frame" x="10" y="256" width="1174" height="568"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8FW-3s-FpZ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -110,6 +110,14 @@
                                     <action selector="addChartsClicked:" destination="ua2-a8-Tae" eventType="touchUpInside" id="W16-wg-aFd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cY5-fC-vgu">
+                                <rect key="frame" x="536" y="172" width="124" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Study Charts"/>
+                                <connections>
+                                    <action selector="studyClicked:" destination="ua2-a8-Tae" eventType="touchUpInside" id="Ith-8h-dVP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Lj1-BD-MBN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -117,17 +125,19 @@
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="XZT-QM-MFc" secondAttribute="trailing" constant="10" id="53y-gw-QN4"/>
                             <constraint firstItem="Tn5-3x-5d9" firstAttribute="trailing" secondItem="9eL-jX-Kf7" secondAttribute="trailing" id="GSQ-iZ-K9s"/>
                             <constraint firstItem="Tn5-3x-5d9" firstAttribute="top" secondItem="9eL-jX-Kf7" secondAttribute="top" id="Ncg-hM-0R9"/>
+                            <constraint firstItem="cY5-fC-vgu" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="75" id="Put-9b-7UY"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="IuL-1H-wYq" secondAttribute="bottom" constant="20" id="Q7u-Zh-CZV"/>
                             <constraint firstItem="XZT-QM-MFc" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="10" id="Su7-9I-ZOg"/>
+                            <constraint firstItem="XZT-QM-MFc" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="159" id="abl-39-JNW"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="IuL-1H-wYq" secondAttribute="trailing" constant="20" id="fF2-ld-Fuw"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="XZT-QM-MFc" secondAttribute="bottom" constant="10" id="qm8-th-eT6"/>
-                            <constraint firstItem="XZT-QM-MFc" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="108" id="rpa-jt-VKb"/>
                             <constraint firstItem="Tn5-3x-5d9" firstAttribute="leading" secondItem="9eL-jX-Kf7" secondAttribute="leading" id="wV0-uK-UaP"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="addChartsButton" destination="IuL-1H-wYq" id="NAC-g2-f6e"/>
                         <outlet property="collectionView" destination="XZT-QM-MFc" id="wux-Uu-Oix"/>
+                        <outlet property="studyChartsButton" destination="cY5-fC-vgu" id="zPp-tK-04A"/>
                         <outlet property="textField" destination="7Gb-bK-4Ov" id="LiA-lX-axP"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="showViewController" modalPresentationStyle="fullScreen" id="VDD-Cr-jZK"/>
                     </connections>
@@ -213,6 +223,14 @@
                                     <action selector="rightClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ojC-dK-RlP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D4-JJ-SJr">
+                                <rect key="frame" x="938" y="39" width="73" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="toggle"/>
+                                <connections>
+                                    <action selector="toggleClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lgh-0D-uE9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -224,10 +242,12 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kym-Mn-vz1" secondAttribute="trailing" constant="26" id="TgR-TD-VwN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jzz-lX-rIy" secondAttribute="trailing" constant="23" id="YA4-OT-WEB"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="224" id="Zji-gw-rAk"/>
+                            <constraint firstItem="4D4-JJ-SJr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="39" id="dNg-A3-339"/>
                             <constraint firstItem="vyv-Z5-1Yi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="dW2-hy-CE1"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="1IT-2H-8vJ" secondAttribute="bottom" constant="97" id="eud-10-Obw"/>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="leading" secondItem="wVb-fN-90W" secondAttribute="trailing" constant="35.5" id="fDx-ci-XGG"/>
                             <constraint firstItem="jzz-lX-rIy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="39" id="hHz-r4-c4t"/>
+                            <constraint firstItem="wVb-fN-90W" firstAttribute="leading" secondItem="4D4-JJ-SJr" secondAttribute="trailing" constant="9" id="heN-l5-8Ob"/>
                             <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="isi-rZ-eZp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hzM-hy-IMf" secondAttribute="bottom" constant="291" id="mFY-Gn-OfC"/>
                             <constraint firstItem="vyv-Z5-1Yi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49.670000000000002" id="qQG-Oq-syv"/>
@@ -254,6 +274,7 @@
                         <outlet property="rightButton" destination="Kym-Mn-vz1" id="joH-05-JPB"/>
                         <outlet property="saveAll" destination="vyv-Z5-1Yi" id="LKY-i3-nPZ"/>
                         <outlet property="slider" destination="n6p-Vg-RiL" id="cPJ-7p-bM2"/>
+                        <outlet property="toggleButton" destination="4D4-JJ-SJr" id="9re-a0-1GM"/>
                         <segue destination="ua2-a8-Tae" kind="presentation" identifier="showOverviewController2" modalPresentationStyle="fullScreen" id="P6j-wl-aMZ"/>
                     </connections>
                 </viewController>
