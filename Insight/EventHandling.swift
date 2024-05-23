@@ -79,6 +79,29 @@ extension ViewController {
         performSegue(withIdentifier: "showOverviewController2", sender: cellId)
     }
     
+    @IBAction func toggleClicked(_ sender: Any) {
+        for view in view.subviews {
+                            if let button = view as? UIButton {
+                                if button.tag != 3 {
+                                    for layer2 in button.layer.sublayers ?? [] {
+                                        guard let shapeLayer2 = layer2 as? CAShapeLayer else {
+                                            continue
+                                        }
+                                        if shapeLayer2.fillColor == UIColor.white.cgColor {
+                                            shapeLayer2.fillColor = UIColor.clear.cgColor
+                                            
+                                        } else {
+                                            shapeLayer2.fillColor = UIColor.white.cgColor
+                                        }
+
+                                    }
+                                }
+                                
+                            
+                            }
+                        }
+    }
+    
     
     @IBAction func saveAll(_ sender: Any) {
         //Call Database Function

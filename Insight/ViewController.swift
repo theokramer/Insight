@@ -28,6 +28,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
+    @IBOutlet weak var toggleButton: UIButton!
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
@@ -91,6 +92,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         rightButton.tag = 3
         saveAll.tag = 3
         cancelButton.tag = 3
+        toggleButton.tag = 3
         
         //Improve readability of Edit Button
         editButton.backgroundColor = UIColor.white
@@ -107,9 +109,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                     if myTopic.id == self.cellId {
                         //Selected Images should not get appended, this is just for testing the feature and has to be updated
-                        #if DEBUG
+                        /*#if DEBUG
                         self.selectedImages.append(selectedImage.init(image: thisImage, index: item.id ?? "", cropped: false))
-                        #endif
+                        #endif*/
                         
                         //Fill the Array with all the Images in this explicit Topic
                         self.savedImages.append(savedImage.init(image: thisImage, index: item.id ?? "", topic: myTopic))
@@ -119,8 +121,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-
-    
 
     //Ask the User to select new Photos, when no Image is displayed
     override func viewDidAppear(_ animated: Bool) {

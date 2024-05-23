@@ -12,6 +12,7 @@ import SwiftUI
 
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate {
     
+    @IBOutlet weak var studyChartsButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var addChartsButton: UIButton!
     @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
@@ -23,8 +24,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     var dataSource:[selectedImage] = []
     
     //Configure Image Cell
-    var estimateWidth = 160.0
-    var cellMarginSize = 16.0
+    var estimateWidth = 200
+    var cellMarginSize = 12
     
     //Object to add and modify new Images
     struct selectedImage {
@@ -40,10 +41,20 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewDidLoad() {
+        if(UIScreen.main.bounds.width > 500) {
+            estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
+        } else {
+            estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
+        }
+        studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
+        
+        
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         super.viewDidLoad()
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
+        textField.borderStyle = .none
         
         //Load Topic Data from Core Data and apply it to textField
         do {
@@ -113,33 +124,15 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         saveText()
     }
     
+    @IBAction func studyClicked(_ sender: Any) {
+        
+    }
+    
+    
+    
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
-        
-         
          saveText()
-        
-        
-        //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        
-        /*let fetchRequest =
-        NSFetchRequest<NSManagedObject>(entityName: "Topic")
-        fetchRequest.returnsObjectsAsFaults = false
-        fetchRequest.predicate = NSPredicate(format:"id == %@",cellId)
-        let result = try? context.fetch(fetchRequest)
-        if result?.count == 1 {
-                  let dic = result![0]
-                  dic.setValue(textField.text, forKey: "name")
-                  do {
-                     try context.save()
-                     print("saved!")
-                    } catch {
-                  print(error.localizedDescription)
-              }
-           }*/
-        
-        
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
@@ -211,4 +204,5 @@ extension OverviewController: UICollectionViewDelegateFlowLayout {
         let width = (CGFloat(self.view.frame.size.width) - CGFloat(cellMarginSize) * (cellCount - 1) - margin) / cellCount
         return width
     }
+
 }
