@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 import CoreData
+import SwiftUI
 
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var addChartsButton: UIButton!
+    @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
     
     //Clicked Cell with Topic ID
     var cellId: String = ""
@@ -33,21 +35,49 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Topic> {
+        return NSFetchRequest<Topic>(entityName: "Topic")
+    }
+    
     override func viewDidLoad() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         super.viewDidLoad()
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
+        
+        //Load Topic Data from Core Data and apply it to textField
+        do {
+            guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                return
+            }
+            for myTopic in items {
+                if myTopic.id == self.cellId {
+                    if self.cellId == "" {
+                        self.textField.text = ""
+                    } else {
+                        self.textField.text = myTopic.wrappedName
+                    }
+                }
+                
+            }
+        } catch {
+            print("Fehler")
+        }
+        
         
         //Add all Images to the Data Array with previously selected Topic ID
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
                 for item in items {
+                    
                     guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
                         return
                     }
                     guard let myTopic = item.topic else {
                         return
                     }
+                    
+                    
                     if myTopic.id == self.cellId {
                         if self.cellId == "" {
                             self.textField.text = ""
@@ -78,62 +108,65 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         flow.minimumLineSpacing = CGFloat(self.cellMarginSize)
     }
     
+
+    @IBAction func backClicked(_ sender: Any) {
+        saveText()
+    }
     
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
+        
+         
+         saveText()
+        
+        
         //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        if let text = textField.text {
-            print(text)
-        }
         
-        /*
-         
-         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-         do {
-             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
-                 return
-             }
-             for myTopic in items {
-                 if myTopic.id == cellId {
-                     newData.topic = myTopic
-                 }
-                 
-             }
-         } catch {
-             print("error-Fetching data")
-         }
-         
-         */
         
-        /*let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
-        
-        fetchRequest.predicate = NSPredicate(format: "id = %@", cellId)
-        
-        do {
-            let fetchResults = try fetchRequest.execute()
-            print(fetchResults)
-            /*if fetchResults.count != 0{
-                        let managedObject = fetchResults[0]
-                        managedObject.setValue(textField.text, forKey: "name")*/
-
-                    //}
-        }
-            
-        catch {
-            print("NOPE")
-        }
-        
-        DispatchQueue.main.async {
-            do {
-                try context.save()
-                print("YEAH")
-            } catch {
-                print("error-saving data")
-            }
-        }*/
+        /*let fetchRequest =
+        NSFetchRequest<NSManagedObject>(entityName: "Topic")
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.predicate = NSPredicate(format:"id == %@",cellId)
+        let result = try? context.fetch(fetchRequest)
+        if result?.count == 1 {
+                  let dic = result![0]
+                  dic.setValue(textField.text, forKey: "name")
+                  do {
+                     try context.save()
+                     print("saved!")
+                    } catch {
+                  print(error.localizedDescription)
+              }
+           }*/
         
         
         performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
+    func saveText() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                return
+            }
+            for myTopic in items {
+                if myTopic.id == cellId {
+                    myTopic.setValue(textField.text, forKey: "name")
+                }
+                
+            }
+        } catch {
+            print("error-Fetching data")
+        }
+        
+       DispatchQueue.main.async {
+           do {
+               try context.save()
+               print("YEAH")
+           } catch {
+               print("error-saving data")
+           }
+       }
     }
     
     //Dismisses Keyboard when Done button is clicked
