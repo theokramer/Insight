@@ -48,10 +48,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         } else {
             estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
         }
-        studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
-        
-        
-        
+        studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         super.viewDidLoad()
         self.textField.delegate = self
@@ -124,18 +122,15 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
 
     @IBAction func backClicked(_ sender: Any) {
-        saveText()
     }
     
     @IBAction func studyClicked(_ sender: Any) {
-        
     }
     
     
     
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
-         saveText()
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
@@ -168,6 +163,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Dismisses Keyboard when Done button is clicked
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
+        saveText()
         return false
     }
     
