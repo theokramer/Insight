@@ -48,7 +48,10 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                     guard let myTopic = item.topic else {
                         return
                     }
+                    
+                    
                     if myTopic.id == self.cellId {
+                        print("NAME: \(myTopic.wrappedName)")
                         if self.cellId == "" {
                             self.textField.text = ""
                         } else {
@@ -82,11 +85,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
         //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        if let text = textField.text {
-            print(text)
-        }
-        
-        /*
          
          let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
          do {
@@ -95,7 +93,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
              }
              for myTopic in items {
                  if myTopic.id == cellId {
-                     newData.topic = myTopic
+                     myTopic.setValue(textField.text, forKey: "name")
                  }
                  
              }
@@ -103,26 +101,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
              print("error-Fetching data")
          }
          
-         */
-        
-        /*let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
-        
-        fetchRequest.predicate = NSPredicate(format: "id = %@", cellId)
-        
-        do {
-            let fetchResults = try fetchRequest.execute()
-            print(fetchResults)
-            /*if fetchResults.count != 0{
-                        let managedObject = fetchResults[0]
-                        managedObject.setValue(textField.text, forKey: "name")*/
-
-                    //}
-        }
-            
-        catch {
-            print("NOPE")
-        }
-        
         DispatchQueue.main.async {
             do {
                 try context.save()
@@ -130,7 +108,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             } catch {
                 print("error-saving data")
             }
-        }*/
+        }
         
         
         performSegue(withIdentifier: "showViewController", sender: cellId)
