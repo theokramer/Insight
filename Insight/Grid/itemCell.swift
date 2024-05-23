@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+//Displays a Image inside the Cell
 class itemCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!

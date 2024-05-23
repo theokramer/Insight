@@ -12,13 +12,20 @@ import CoreData
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var textField: UITextField!
-    var cellId: String = ""
     @IBOutlet weak var addChartsButton: UIButton!
-    var dataSource:[selectedImages2] = []
+    
+    //Clicked Cell with Topic ID
+    var cellId: String = ""
+    
+    //Array with Images -> Gets fetched of Core Data
+    var dataSource:[selectedImage] = []
+    
+    //Configure Image Cell
     var estimateWidth = 160.0
     var cellMarginSize = 16.0
     
-    struct selectedImages2 {
+    //Object to add and modify new Images
+    struct selectedImage {
         var image: UIImage
         var index: String
         var cropped: Bool
@@ -30,6 +37,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         super.viewDidLoad()
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
+        
+        //Add all Images to the Data Array with previously selected Topic ID
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
                 for item in items {
@@ -45,7 +54,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                         } else {
                             self.textField.text = myTopic.wrappedName
                         }
-                        let imageStruct = selectedImages2.init(image: thisImage, index: item.wrappedId, cropped: false)
+                        let imageStruct = selectedImage.init(image: thisImage, index: item.wrappedId, cropped: false)
                         self.dataSource.append(imageStruct)
                     }
                     
@@ -54,12 +63,15 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                 print("FEHLER")
             }
         }
+        
+        //Configure Image List
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
         self.setUpGridView()
     }
     
+    //Make the Image List adaptable
     func setUpGridView() {
         let flow = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flow.minimumInteritemSpacing = CGFloat(self.cellMarginSize)
@@ -67,8 +79,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     
+    //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         if let text = textField.text {
             print(text)
         }
@@ -123,11 +136,13 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
+    //Dismisses Keyboard when Done button is clicked
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
     
+    //Transfers the Topic ID to the next Page
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if (segue.identifier == "showViewController") {
           let secondView = segue.destination as! ViewController
@@ -137,6 +152,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
 }
 
+//Configures the UI List
 extension OverviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.dataSource.count
@@ -149,6 +165,7 @@ extension OverviewController: UICollectionViewDataSource {
     }
 }
 
+//Configures the List Cells
 extension OverviewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = self.calculateWidth()
