@@ -12,6 +12,7 @@ import CoreData
 
 extension ViewController {
     
+    //Fetches the Images of Core Data and returns it as an Array
     static func fetchCoreData(onSuccess: @escaping ([ImageEntity]?) -> Void) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
@@ -22,7 +23,7 @@ extension ViewController {
         }
     }
     
-    
+    //Removes Image of Core Data at specific index
     static func deleteCoreData(indexPath: Int, items: [ImageEntity]) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let dataToRemove = items[indexPath]
@@ -33,17 +34,21 @@ extension ViewController {
             print("error-Deleting data")
         }
     }
-
+    
+    //Saves the added Images in Core Data
     func prepareImageForSaving(images:[ViewController.selectedImage]) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         for image in images {
             found = false
+            
+            //Removes all Images in Core Data that got cropped, so it gets updated.
+            //TODO: Instead change the UIImage when cropped?
             ViewController.fetchCoreData {items in
                 if let items = (items ?? []) as [ImageEntity]? {
                     for item in items {
                         if image.index == item.id {
-                            found = true
+                            
                             if image.cropped {
                                 context.delete(item)
                                 do {
@@ -54,6 +59,8 @@ extension ViewController {
                                     print("error-Deleting data")
                                 }
                                 
+                            } else {
+                                found = true
                             }
                         }
                     }
@@ -61,6 +68,8 @@ extension ViewController {
                     print("FEHLER")
                 }
             }
+            
+            //If image is not in Core Data, upload it
             if !found {
                 // create NSData from UIImage
                 guard let jpegImageData = image.image.jpegData(compressionQuality: 1) else {
@@ -72,7 +81,6 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = image.index
-                print(cellId)
                 if cellId == "" {
                     newData.topic = Topic(context: context)
                     newData.topic?.id = UUID().uuidString
