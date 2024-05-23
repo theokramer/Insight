@@ -82,7 +82,7 @@ class StartViewController: UICollectionViewController {
         //Let the User add new Topic. TODO: Move this functionality to a button on the bottom right
         if(TopicModel.topicData[indexPath.item].id == "AddID") {
             let id = UUID().uuidString
-            let name = UUID().uuidString
+            let name = ""
             let newData = Topic(context: context)
             newData.id = id
             newData.name = name
