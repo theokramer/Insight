@@ -37,8 +37,14 @@
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v1F-07-9KB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="FEU-6O-DEu">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="u6f-Y8-sG6"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
             </objects>
-            <point key="canvasLocation" x="-3749.7487437185928" y="7.913669064748202"/>
+            <point key="canvasLocation" x="-3602" y="181"/>
         </scene>
         <!--Overview Controller-->
         <scene sceneID="06T-sh-mSX">
@@ -124,7 +130,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Study Charts" cornerStyle="large">
                                     <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
-                                    <color key="baseBackgroundColor" red="0.30403392800000001" green="0.6339412176" blue="0.76871567959999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="baseBackgroundColor" red="0.30588235294117649" green="0.63529411764705879" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="studyClicked:" destination="ua2-a8-Tae" eventType="touchUpInside" id="Ith-8h-dVP"/>
@@ -156,7 +162,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8md-ah-ost" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1880.9045226130654" y="234.53237410071944"/>
+            <point key="canvasLocation" x="-2783" y="181"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -297,7 +303,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="466.83417085427135" y="-74.82014388489209"/>
+            <point key="canvasLocation" x="-1961" y="504"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UVf-DR-d6E">
@@ -315,12 +321,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cGk-92-3oM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4457.286432160804" y="7.913669064748202"/>
+            <point key="canvasLocation" x="-3602" y="1140"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VDD-Cr-jZK"/>
-        <segue reference="P6j-wl-aMZ"/>
+        <segue reference="XNv-WP-maT"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="95"/>
