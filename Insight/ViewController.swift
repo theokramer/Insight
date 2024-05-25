@@ -72,6 +72,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        promptPhoto()
         /*UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)*/
         
@@ -95,10 +96,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //Ask the User to select new Photos, when no Image is displayed
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if imageView.image == nil {
-            promptPhoto()
-        }
     }
     
 }

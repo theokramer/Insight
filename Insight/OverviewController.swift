@@ -40,8 +40,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         return NSFetchRequest<Topic>(entityName: "Topic")
     }
     
+
     override func viewDidLoad() {
-        
+        self.navigationController!.navigationBar.tintColor = UIColor.label
         hideKeyboardWhenTappedAround()
         
         if(UIScreen.main.bounds.width > 500) {
@@ -144,7 +145,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
-    func saveText() {
+    @objc func saveText() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
