@@ -110,7 +110,6 @@ extension ViewController {
     
     //Shows the selected and cropped Image
     func show(_ image: UIImage) {
-        
         // Remove previous paths & image
         pathLayer?.removeFromSuperlayer()
         pathLayer = nil

@@ -163,7 +163,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
        DispatchQueue.main.async {
            do {
                try context.save()
-               print("YEAH")
            } catch {
                print("error-saving data")
            }

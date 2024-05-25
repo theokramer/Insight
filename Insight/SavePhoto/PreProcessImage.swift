@@ -36,7 +36,7 @@ extension ViewController {
     }
     
     //Saves the added Images in Core Data
-    func prepareImageForSaving(images:[ViewController.selectedImage]) {
+    func prepareImageForSaving(images:[selectedImage]) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         for image in images {
@@ -109,7 +109,6 @@ extension ViewController {
         DispatchQueue.main.async {
             do {
                 try context.save()
-                print("YEAH")
             } catch {
                 print("error-saving data")
             }

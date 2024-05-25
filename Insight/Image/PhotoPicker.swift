@@ -86,7 +86,7 @@ extension ViewController: PHPickerViewControllerDelegate {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
                             if let image = object as? UIImage {
                                 DispatchQueue.main.async { [weak self] in
-                                    self?.selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
+                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
                                 }
                             }
                         })
