@@ -20,58 +20,40 @@ class StartViewController: UICollectionViewController {
     
     var dataSource: DataSource!
     
-    //Let the User add new Topic
-    @objc func buttonTapped() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let id = UUID().uuidString
-        let name = ""
-        let newData = Topic(context: context)
-        newData.id = id
-        newData.name = name
-        DispatchQueue.main.async {
-            do {
-                try context.save()
-                self.performSegue(withIdentifier: "showOverviewController", sender: TopicModel.init(id: id, name: name))
-            } catch {
-                print("error-saving data")
-            }
-        }
-        }
-    
     override func viewDidLoad() {
             super.viewDidLoad()
         
         // Button erstellen
-                let addTopicButton = UIButton(type: .system)
-                addTopicButton.setTitle("Add Topic", for: .normal)
-        
-                if #available(iOS 15.0, *) {
-                    var configuration = UIButton.Configuration.filled()
-                    configuration.baseBackgroundColor = UIColor(red: 78 / 255, green: 162 / 255, blue: 196 / 255, alpha: 1.0)
-                    configuration.cornerStyle = .large
-                    configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-                    addTopicButton.configuration = configuration
-                    
-                } else {
-                    addTopicButton.backgroundColor = .systemBlue
-                    addTopicButton.layer.cornerRadius = 12 // Large corner style
-                    addTopicButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-                    addTopicButton.backgroundColor = UIColor(red: 78 / 255, green: 162 / 255, blue: 196 / 255, alpha: 1.0) // RGB for a custom color
-                }
-                addTopicButton.setTitleColor(.white, for: .normal)
-                addTopicButton.titleLabel?.lineBreakMode = .byTruncatingMiddle
+        let addTopicButton = UIButton(type: .system)
+        addTopicButton.setTitle("Add Topic", for: .normal)
+
+        if #available(iOS 15.0, *) {
+            var configuration = UIButton.Configuration.filled()
+            configuration.baseBackgroundColor = UIColor(red: 78 / 255, green: 162 / 255, blue: 196 / 255, alpha: 1.0)
+            configuration.cornerStyle = .large
+            configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+            addTopicButton.configuration = configuration
             
-                addTopicButton.translatesAutoresizingMaskIntoConstraints = false
-                addTopicButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-                
-                // Button zur Ansicht hinzufügen
-                self.view.addSubview(addTopicButton)
-                
-                // Layout für den Button festlegen
-                NSLayoutConstraint.activate([
-                    addTopicButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                    addTopicButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
-                ])
+        } else {
+                   addTopicButton.backgroundColor = .systemBlue
+                   addTopicButton.layer.cornerRadius = 12 // Large corner style
+                   addTopicButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+                   addTopicButton.backgroundColor = UIColor(red: 78 / 255, green: 162 / 255, blue: 196 / 255, alpha: 1.0) // RGB for a custom color
+               }
+               addTopicButton.setTitleColor(.white, for: .normal)
+               addTopicButton.titleLabel?.lineBreakMode = .byTruncatingMiddle
+
+               addTopicButton.translatesAutoresizingMaskIntoConstraints = false
+               addTopicButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+
+               // Button zur Ansicht hinzufügen
+               self.view.addSubview(addTopicButton)
+
+               // Layout für den Button festlegen
+               NSLayoutConstraint.activate([
+                   addTopicButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                   addTopicButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+               ])
         
         
         TopicModel.topicData.removeAll()
@@ -86,9 +68,10 @@ class StartViewController: UICollectionViewController {
             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
                 return
             }
+            //TODO: Update this, so we don't need the removeAll() anymore -> Improve Runtime
             for myTopic in items {
                 //Add all Topics to the Array
-                let newTopic = TopicModel(id: myTopic.wrappedId, name: myTopic.wrappedName)
+                let newTopic = TopicModel(id: myTopic.wrappedId, name: myTopic.wrappedName == "" ? "Ohne Titel" : myTopic.wrappedName)
                 TopicModel.topicData.append(newTopic)
             }
         } catch {
@@ -138,6 +121,24 @@ class StartViewController: UICollectionViewController {
           let object = sender as! TopicModel
            secondView.cellId = object.id
        }
+    }
+    
+    //Let the User add new Topic
+    @objc func buttonTapped() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let id = UUID().uuidString
+        let name = ""
+        let newData = Topic(context: context)
+        newData.id = id
+        newData.name = name
+        DispatchQueue.main.async {
+            do {
+                try context.save()
+                self.performSegue(withIdentifier: "showOverviewController", sender: TopicModel.init(id: id, name: name))
+            } catch {
+                print("error-saving data")
+            }
+        }
     }
     
     //Configure styling of the UI List

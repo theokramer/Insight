@@ -47,18 +47,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         var cropped: Bool
     }
     
-    //Object to modify Images loaded from Core Data
-    struct savedImage {
-        var image: UIImage
-        var index: String
-        var topic: Topic
-    }
-    
     //Array of selected Images in Photo Picker
     var selectedImages: [selectedImage] = []
-    
-    //Array of saved Images from Core Data
-    var savedImages: [savedImage] = []
     
     // Layer into which to draw bounding box paths.
     var pathLayer: CALayer?
@@ -96,30 +86,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         //Improve readability of Edit Button
         editButton.backgroundColor = UIColor.white
-        
-        //Appends the savedImages Array, so the Images can be displayed
-        ViewController.fetchCoreData {items in
-            if let items = (items ?? []) as [ImageEntity]? {
-                for item in items {
-                    guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
-                        return
-                    }
-                    guard let myTopic = item.topic else {
-                        return
-                    }
-                    if myTopic.id == self.cellId {
-                        //Selected Images should not get appended, this is just for testing the feature and has to be updated
-                        /*#if DEBUG
-                        self.selectedImages.append(selectedImage.init(image: thisImage, index: item.id ?? "", cropped: false))
-                        #endif*/
-                        
-                        //Fill the Array with all the Images in this explicit Topic
-                        self.savedImages.append(savedImage.init(image: thisImage, index: item.id ?? "", topic: myTopic))
-                    }
-                    
-                }
-            }
-        }
     }
 
     //Ask the User to select new Photos, when no Image is displayed
