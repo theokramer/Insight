@@ -42,6 +42,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     override func viewDidLoad() {
         
+        hideKeyboardWhenTappedAround()
         
         if(UIScreen.main.bounds.width > 500) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
@@ -75,6 +76,12 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         } catch {
             print("Fehler")
         }
+        
+        if textField.text == "" {
+                   textField.becomeFirstResponder()
+               } else {
+                   textField.resignFirstResponder()
+               }
         
         
         //Add all Images to the Data Array with previously selected Topic ID
@@ -122,15 +129,18 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
 
     @IBAction func backClicked(_ sender: Any) {
+        saveText()
     }
     
     @IBAction func studyClicked(_ sender: Any) {
+        saveText()
     }
     
     
     
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
+        saveText()
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
@@ -158,6 +168,12 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                print("error-saving data")
            }
        }
+    }
+    
+    func hideKeyboardWhenTappedAround() {
+           let tapGesture = UITapGestureRecognizer(target: self,
+                            action: #selector(textFieldShouldReturn))
+           view.addGestureRecognizer(tapGesture)
     }
     
     //Dismisses Keyboard when Done button is clicked
