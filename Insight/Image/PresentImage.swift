@@ -95,22 +95,27 @@ extension ViewController {
     }
     
     func handleCompletion(object: Any?) {
+        
         if let image = object as? UIImage {
-            show(image)
-            let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
-            
-            // Fire off request based on URL of chosen photo.
-            guard let cgImage = image.cgImage else {
-                return
+            //TODO: Not the best Approach. Display after view is loaded!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.show(image)
+                let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
+                
+                // Fire off request based on URL of chosen photo.
+                guard let cgImage = image.cgImage else {
+                    return
+                }
+                //Calls the vision request
+                
+                self.performVisionRequest(image: cgImage, orientation: cgOrientation)
             }
-            //Calls the vision request
-            performVisionRequest(image: cgImage, orientation: cgOrientation)
+            
         }
     }
     
     //Shows the selected and cropped Image
     func show(_ image: UIImage) {
-        
         // Remove previous paths & image
         pathLayer?.removeFromSuperlayer()
         pathLayer = nil

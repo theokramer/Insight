@@ -36,10 +36,10 @@ extension ViewController {
     }
     
     //Saves the added Images in Core Data
-    func prepareImageForSaving(images:[ViewController.selectedImage]) {
+    @objc func prepareImageForSaving() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
-        for image in images {
+        for image in selectedImages {
             found = false
             
             //Removes all Images in Core Data that got cropped, so it gets updated.
@@ -109,15 +109,13 @@ extension ViewController {
         DispatchQueue.main.async {
             do {
                 try context.save()
-                print("YEAH")
             } catch {
                 print("error-saving data")
             }
         }
         
         
-        
-
+        self.navigationController?.popViewController(animated: true)
     }
     
     

@@ -10,7 +10,18 @@ import UIKit
 import CoreData
 import SwiftUI
 
-class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate {
+//Object to add and modify new Images
+struct selectedImage {
+    var image: UIImage
+    var index: String
+    var cropped: Bool
+}
+
+//Array of selected Images in Photo Picker
+var selectedImages: [selectedImage] = []
+
+@available(iOS 13.0, *)
+class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var studyChartsButton: UIButton!
     @IBOutlet weak var textField: UITextField!
@@ -27,21 +38,14 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     var estimateWidth = 200
     var cellMarginSize = 12
     
-    //Object to add and modify new Images
-    struct selectedImage {
-        var image: UIImage
-        var index: String
-        var cropped: Bool
-    }
-    
     @IBOutlet weak var collectionView: UICollectionView!
     
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Topic> {
         return NSFetchRequest<Topic>(entityName: "Topic")
     }
     
-    override func viewDidLoad() {
-        
+    func onShow() {
+        self.navigationController!.navigationBar.tintColor = UIColor.label
         hideKeyboardWhenTappedAround()
         
         if(UIScreen.main.bounds.width > 500) {
@@ -120,16 +124,16 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         self.setUpGridView()
     }
     
+    override func viewDidLoad() {
+        imageIndex = 0
+        onShow()
+    }
+    
     //Make the Image List adaptable
     func setUpGridView() {
         let flow = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flow.minimumInteritemSpacing = CGFloat(self.cellMarginSize)
         flow.minimumLineSpacing = CGFloat(self.cellMarginSize)
-    }
-    
-
-    @IBAction func backClicked(_ sender: Any) {
-        saveText()
     }
     
     @IBAction func studyClicked(_ sender: Any) {
@@ -141,10 +145,10 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Is called when the User clicks the add Button -> Shows AddImage Page
     @IBAction func addChartsClicked(_ sender: Any) {
         saveText()
-        performSegue(withIdentifier: "showViewController", sender: cellId)
+        promptPhoto()
     }
     
-    func saveText() {
+    @objc func saveText() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
             guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
@@ -163,7 +167,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
        DispatchQueue.main.async {
            do {
                try context.save()
-               print("YEAH")
            } catch {
                print("error-saving data")
            }

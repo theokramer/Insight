@@ -74,11 +74,6 @@ extension ViewController {
         
     }
     
-    
-    @IBAction func cancelClicked(_ sender: Any) {
-        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
-    }
-    
     @IBAction func toggleClicked(_ sender: Any) {
         for view in view.subviews {
                             if let button = view as? UIButton {
@@ -101,14 +96,7 @@ extension ViewController {
                             }
                         }
     }
-    
-    
-    @IBAction func saveAll(_ sender: Any) {
-        //Call Database Function
-        
-        prepareImageForSaving(images: selectedImages)
-        performSegue(withIdentifier: "showOverviewController2", sender: cellId)
-    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if (segue.identifier == "showOverviewController2") {

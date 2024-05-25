@@ -13,6 +13,22 @@ import Vision
 extension ViewController {
     // MARK: - Vision
     
+    func presentAlert(_ title: String, error: NSError) {
+        // Always present alert on main thread.
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: title,
+                                                    message: error.localizedDescription,
+                                                    preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK",
+                                         style: .default) { _ in
+                // Do nothing -- simply dismiss alert.
+            }
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    
     /// - Tag: PerformRequests
     func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
         

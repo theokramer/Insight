@@ -44,7 +44,7 @@ extension ViewController {
         return rect
     }
     
-    fileprivate func removeAllButtonsFromView() {
+    func removeAllButtonsFromView() {
         for subview in view.subviews {
             if let button = subview as? UIButton {
                 if button.tag != 3 {

@@ -13,6 +13,10 @@ import CropViewController
 import PhotosUI
 import CoreData
 
+//Tracks the Index of the current Image
+var imageIndex = 0
+
+
 
 
 @available(iOS 13.0, *)
@@ -26,7 +30,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var toggleButton: UIButton!
     
@@ -35,20 +38,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
-    
-    //Tracks the Index of the Image where the Cropped Button was clicked
-    var imageIndex = 0
-    
-    
-    //Object to add and modify new Images
-    struct selectedImage {
-        var image: UIImage
-        var index: String
-        var cropped: Bool
-    }
-    
-    //Array of selected Images in Photo Picker
-    var selectedImages: [selectedImage] = []
     
     // Layer into which to draw bounding box paths.
     var pathLayer: CALayer?
@@ -72,29 +61,39 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return .lightContent
     }
     
+    @objc func onOrientationChange() {
+        handleCompletion(object: selectedImages[imageIndex].image)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
+        self.navigationItem.leftBarButtonItem = backButton
+        self.handleCompletion(object: selectedImages[imageIndex].image)
+        /*UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)*/
         
         //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
         editButton.tag = 3
         cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
-        saveAll.tag = 3
-        cancelButton.tag = 3
+
         toggleButton.tag = 3
         
         //Improve readability of Edit Button
         editButton.backgroundColor = UIColor.white
     }
+    
+    /*@objc func onOrientationChange() {
+        self.updateBoxPositions()
+    }*/
 
     //Ask the User to select new Photos, when no Image is displayed
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if imageView.image == nil {
-            promptPhoto()
-        }
     }
     
 }

@@ -9,7 +9,7 @@ import Foundation
 import PhotosUI
 import UIKit
 
-extension ViewController: PHPickerViewControllerDelegate {
+extension OverviewController: PHPickerViewControllerDelegate {
     
     //Let the User select a photo of his Library or Take a new one
         @objc
@@ -47,7 +47,7 @@ extension ViewController: PHPickerViewControllerDelegate {
             // Angabe der Ortungsinformationen für den Popover
             if let popoverController = prompt.popoverPresentationController {
                 popoverController.sourceView = self.view
-                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popoverController.sourceRect = CGRect(x: self.view.bounds.width * 0.83, y: self.view.bounds.height * 0.83, width: 0, height: 0)
                 popoverController.permittedArrowDirections = []
             }
             
@@ -82,37 +82,22 @@ extension ViewController: PHPickerViewControllerDelegate {
     /// - Tag: ParsePickerResults
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
+        selectedImages.removeAll()
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
                             if let image = object as? UIImage {
                                 DispatchQueue.main.async { [weak self] in
-                                    self?.selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
+                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
                                 }
                             }
                         })
         }
         
-        if selectedImages.isEmpty {
-            displayEmptyImage()
-        } else {
-            self.handleCompletion(object: selectedImages[imageIndex])
-        }
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+        
     }
     
-    func presentAlert(_ title: String, error: NSError) {
-        // Always present alert on main thread.
-        DispatchQueue.main.async {
-            let alertController = UIAlertController(title: title,
-                                                    message: error.localizedDescription,
-                                                    preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK",
-                                         style: .default) { _ in
-                // Do nothing -- simply dismiss alert.
-            }
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-        }
-    }
+
     
     // MARK: - UIImagePickerControllerDelegate
     
