@@ -23,7 +23,10 @@ extension OverviewController: PHPickerViewControllerDelegate {
             
             func presentCamera(_ _: UIAlertAction) {
                 imagePicker.sourceType = .camera
+                imagePicker.allowsEditing = true
+                imagePicker.delegate = self
                 self.present(imagePicker, animated: true)
+                
             }
             
             let cameraAction = UIAlertAction(title: "Camera",
@@ -79,14 +82,26 @@ extension OverviewController: PHPickerViewControllerDelegate {
         present(picker, animated: true)
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        guard let image = info[.editedImage] as? UIImage else {
+            print("No image found")
+            return
+        }
+        
+        selectedImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false))
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
     /// - Tag: ParsePickerResults
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
         selectedImages.removeAll()
         for result in results {
-            result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
+            result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [] (object, error) in
                             if let image = object as? UIImage {
-                                DispatchQueue.main.async { [weak self] in
+                                DispatchQueue.main.async { [] in
                                     selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
                                 }
                             }

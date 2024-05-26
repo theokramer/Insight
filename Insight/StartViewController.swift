@@ -20,9 +20,7 @@ class StartViewController: UICollectionViewController {
     
     var dataSource: DataSource!
     
-    override func viewDidLoad() {
-            super.viewDidLoad()
-        
+    override func viewWillAppear(_ animated: Bool) {
         // Button erstellen
         let addTopicButton = UIButton(type: .system)
         addTopicButton.setTitle("Add Topic", for: .normal)
@@ -101,17 +99,15 @@ class StartViewController: UICollectionViewController {
         snapshot.appendItems(TopicModel.topicData.map { $0.id })
             dataSource.apply(snapshot)
             collectionView.dataSource = dataSource
+    }
+    
+    override func viewDidLoad() {
+            super.viewDidLoad()
         
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        print(TopicModel.topicData[indexPath.item])
-        
         performSegue(withIdentifier: "showOverviewController", sender: TopicModel.topicData[indexPath.item])
-        
-        
-        
     }
     
     //Transfer ID of tapped Cell

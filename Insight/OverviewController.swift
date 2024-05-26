@@ -20,6 +20,8 @@ struct selectedImage {
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
+
+
 @available(iOS 13.0, *)
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -44,11 +46,30 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         return NSFetchRequest<Topic>(entityName: "Topic")
     }
     
-    func onShow() {
-        self.navigationController!.navigationBar.tintColor = UIColor.label
-        hideKeyboardWhenTappedAround()
+    @objc func editAll() {
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         
-        if(UIScreen.main.bounds.width > 500) {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
+        button.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        button.addTarget(self, action: #selector(editAll), for: .touchUpInside)
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        
+        // Layout für den Button festlegen
+        NSLayoutConstraint.activate([
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 280),
+        ])
+        self.navigationController!.navigationBar.tintColor = UIColor.label
+        
+        hideKeyboardWhenTappedAround()
+        if(UIScreen.main.bounds.width > 600) {
+            estimateWidth = Int(UIScreen.main.bounds.width / 5.5)
+        } 
+        else if(UIScreen.main.bounds.width > 400) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
         } else {
             estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
@@ -56,7 +77,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        super.viewDidLoad()
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
         textField.borderStyle = .none
@@ -86,8 +106,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                } else {
                    textField.resignFirstResponder()
                }
-        
-        
+        dataSource.removeAll()
         //Add all Images to the Data Array with previously selected Topic ID
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
@@ -116,18 +135,26 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                 print("FEHLER")
             }
         }
+        if self.collectionView.dataSource != nil {
+            self.collectionView.reloadData()
+        } else {
+            //Configure Image List
+            self.collectionView.delegate = self
+            self.collectionView.dataSource = self
+            self.collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
+            self.collectionView.allowsSelection = true
+            self.setUpGridView()
+        }
         
-        //Configure Image List
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
-        self.setUpGridView()
+        
     }
+
+
     
     override func viewDidLoad() {
         imageIndex = 0
-        onShow()
     }
+    
     
     //Make the Image List adaptable
     func setUpGridView() {
@@ -171,6 +198,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                print("error-saving data")
            }
        }
+        if textField.text == "" {
+            textField.placeholder = "Ohne Titel"
+        }
     }
     
     func hideKeyboardWhenTappedAround() {
@@ -207,6 +237,8 @@ extension OverviewController: UICollectionViewDataSource {
         cell.setImage(image: self.dataSource[indexPath.row].image)
         return cell
     }
+    
+    
 }
 
 //Configures the List Cells
