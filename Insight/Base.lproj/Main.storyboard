@@ -46,7 +46,7 @@
             </objects>
             <point key="canvasLocation" x="-3602" y="181"/>
         </scene>
-        <!--Overview Controller-->
+        <!--Overview-->
         <scene sceneID="06T-sh-mSX">
             <objects>
                 <viewController id="ua2-a8-Tae" customClass="OverviewController" customModule="Insight" customModuleProvider="target" sceneMemberID="viewController">
@@ -54,21 +54,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="704" height="794"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Tn5-3x-5d9">
-                                <rect key="frame" x="0.0" y="0.0" width="704" height="78"/>
-                                <color key="backgroundColor" red="0.30403392799057383" green="0.6339412175925333" blue="0.76871567964553833" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="78" id="R8h-Z4-num"/>
-                                </constraints>
-                            </view>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Gb-bK-4Ov">
-                                <rect key="frame" x="20" y="113" width="369" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Gb-bK-4Ov">
+                                <rect key="frame" x="20" y="25" width="664" height="52"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XZT-QM-MFc">
-                                <rect key="frame" x="10" y="256" width="684" height="528"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XZT-QM-MFc">
+                                <rect key="frame" x="0.0" y="272" width="704" height="522"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="tintColor" red="0.30403392800000001" green="0.6339412176" blue="0.76871567959999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8FW-3s-FpZ">
@@ -107,12 +99,12 @@
                                     <action selector="addChartsClicked:" destination="ua2-a8-Tae" eventType="touchUpInside" id="W16-wg-aFd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="center" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cY5-fC-vgu">
-                                <rect key="frame" x="458" y="175" width="279" height="47.5"/>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cY5-fC-vgu">
+                                <rect key="frame" x="277.5" y="102" width="149" height="40.5"/>
                                 <color key="tintColor" red="0.30403392800000001" green="0.6339412176" blue="0.76871567959999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Study Charts" cornerStyle="large">
-                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle2"/>
                                     <color key="baseBackgroundColor" red="0.30588235294117649" green="0.63529411764705879" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </buttonConfiguration>
                                 <connections>
@@ -123,19 +115,19 @@
                         <viewLayoutGuide key="safeArea" id="Lj1-BD-MBN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="XZT-QM-MFc" secondAttribute="trailing" constant="10" id="53y-gw-QN4"/>
-                            <constraint firstItem="Tn5-3x-5d9" firstAttribute="trailing" secondItem="9eL-jX-Kf7" secondAttribute="trailing" id="GSQ-iZ-K9s"/>
-                            <constraint firstItem="Tn5-3x-5d9" firstAttribute="top" secondItem="9eL-jX-Kf7" secondAttribute="top" id="Ncg-hM-0R9"/>
+                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="XZT-QM-MFc" secondAttribute="trailing" id="53y-gw-QN4"/>
+                            <constraint firstItem="cY5-fC-vgu" firstAttribute="top" secondItem="7Gb-bK-4Ov" secondAttribute="bottom" constant="25" id="7VO-pX-KWh"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="IuL-1H-wYq" secondAttribute="bottom" constant="20" id="Q7u-Zh-CZV"/>
-                            <constraint firstItem="XZT-QM-MFc" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="10" id="Su7-9I-ZOg"/>
-                            <constraint firstItem="XZT-QM-MFc" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="178" id="abl-39-JNW"/>
+                            <constraint firstItem="XZT-QM-MFc" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" id="Su7-9I-ZOg"/>
+                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="7Gb-bK-4Ov" secondAttribute="trailing" constant="20" id="Yws-kP-JyE"/>
+                            <constraint firstItem="cY5-fC-vgu" firstAttribute="centerX" secondItem="9eL-jX-Kf7" secondAttribute="centerX" id="eRg-CZ-unr"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="IuL-1H-wYq" secondAttribute="trailing" constant="20" id="fF2-ld-Fuw"/>
-                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="XZT-QM-MFc" secondAttribute="bottom" constant="10" id="qm8-th-eT6"/>
-                            <constraint firstItem="Tn5-3x-5d9" firstAttribute="leading" secondItem="9eL-jX-Kf7" secondAttribute="leading" id="wV0-uK-UaP"/>
-                            <constraint firstItem="cY5-fC-vgu" firstAttribute="top" secondItem="Tn5-3x-5d9" secondAttribute="bottom" constant="97" id="ySO-XO-FtD"/>
+                            <constraint firstItem="7Gb-bK-4Ov" firstAttribute="top" secondItem="Lj1-BD-MBN" secondAttribute="top" constant="25" id="nzf-1E-R9x"/>
+                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="XZT-QM-MFc" secondAttribute="bottom" id="qm8-th-eT6"/>
+                            <constraint firstItem="7Gb-bK-4Ov" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="20" id="zse-um-pLn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="y0E-5T-1DD"/>
+                    <navigationItem key="navigationItem" title="Overview" id="y0E-5T-1DD"/>
                     <connections>
                         <outlet property="addChartsButton" destination="IuL-1H-wYq" id="NAC-g2-f6e"/>
                         <outlet property="collectionView" destination="XZT-QM-MFc" id="wux-Uu-Oix"/>
@@ -146,7 +138,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8md-ah-ost" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2783" y="181"/>
+            <point key="canvasLocation" x="-2783.4170854271356" y="180.57553956834533"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">

@@ -45,10 +45,16 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        // Layout für den Button festlegen
+        NSLayoutConstraint.activate([
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 280),
+        ])
         self.navigationController!.navigationBar.tintColor = UIColor.label
         hideKeyboardWhenTappedAround()
-        
-        if(UIScreen.main.bounds.width > 500) {
+        if(UIScreen.main.bounds.width > 600) {
+            estimateWidth = Int(UIScreen.main.bounds.width / 5.5)
+        } 
+        else if(UIScreen.main.bounds.width > 400) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
         } else {
             estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
@@ -175,6 +181,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                print("error-saving data")
            }
        }
+        if textField.text == "" {
+            textField.placeholder = "Ohne Titel"
+        }
     }
     
     func hideKeyboardWhenTappedAround() {
