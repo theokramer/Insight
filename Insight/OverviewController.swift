@@ -20,6 +20,8 @@ struct selectedImage {
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
+
+
 @available(iOS 13.0, *)
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -44,12 +46,25 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         return NSFetchRequest<Topic>(entityName: "Topic")
     }
     
+    @objc func editAll() {
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
+        button.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        button.addTarget(self, action: #selector(editAll), for: .touchUpInside)
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        
         // Layout für den Button festlegen
         NSLayoutConstraint.activate([
             collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 280),
         ])
         self.navigationController!.navigationBar.tintColor = UIColor.label
+        
         hideKeyboardWhenTappedAround()
         if(UIScreen.main.bounds.width > 600) {
             estimateWidth = Int(UIScreen.main.bounds.width / 5.5)
@@ -127,17 +142,19 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             self.collectionView.delegate = self
             self.collectionView.dataSource = self
             self.collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
+            self.collectionView.allowsSelection = true
             self.setUpGridView()
         }
         
         
     }
-    
+
 
     
     override func viewDidLoad() {
         imageIndex = 0
     }
+    
     
     //Make the Image List adaptable
     func setUpGridView() {
@@ -220,6 +237,8 @@ extension OverviewController: UICollectionViewDataSource {
         cell.setImage(image: self.dataSource[indexPath.row].image)
         return cell
     }
+    
+    
 }
 
 //Configures the List Cells

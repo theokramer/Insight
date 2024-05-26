@@ -107,13 +107,7 @@ class StartViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        print(TopicModel.topicData[indexPath.item])
-        
         performSegue(withIdentifier: "showOverviewController", sender: TopicModel.topicData[indexPath.item])
-        
-        
-        
     }
     
     //Transfer ID of tapped Cell

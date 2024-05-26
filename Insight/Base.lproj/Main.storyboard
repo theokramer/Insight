@@ -55,7 +55,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Gb-bK-4Ov">
-                                <rect key="frame" x="20" y="25" width="664" height="52"/>
+                                <rect key="frame" x="40" y="25" width="624" height="52"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -119,12 +119,12 @@
                             <constraint firstItem="cY5-fC-vgu" firstAttribute="top" secondItem="7Gb-bK-4Ov" secondAttribute="bottom" constant="25" id="7VO-pX-KWh"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="IuL-1H-wYq" secondAttribute="bottom" constant="20" id="Q7u-Zh-CZV"/>
                             <constraint firstItem="XZT-QM-MFc" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" id="Su7-9I-ZOg"/>
-                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="7Gb-bK-4Ov" secondAttribute="trailing" constant="20" id="Yws-kP-JyE"/>
+                            <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="7Gb-bK-4Ov" secondAttribute="trailing" constant="40" id="Yws-kP-JyE"/>
                             <constraint firstItem="cY5-fC-vgu" firstAttribute="centerX" secondItem="9eL-jX-Kf7" secondAttribute="centerX" id="eRg-CZ-unr"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="trailing" secondItem="IuL-1H-wYq" secondAttribute="trailing" constant="20" id="fF2-ld-Fuw"/>
                             <constraint firstItem="7Gb-bK-4Ov" firstAttribute="top" secondItem="Lj1-BD-MBN" secondAttribute="top" constant="25" id="nzf-1E-R9x"/>
                             <constraint firstItem="Lj1-BD-MBN" firstAttribute="bottom" secondItem="XZT-QM-MFc" secondAttribute="bottom" id="qm8-th-eT6"/>
-                            <constraint firstItem="7Gb-bK-4Ov" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="20" id="zse-um-pLn"/>
+                            <constraint firstItem="7Gb-bK-4Ov" firstAttribute="leading" secondItem="Lj1-BD-MBN" secondAttribute="leading" constant="40" id="zse-um-pLn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Overview" id="y0E-5T-1DD"/>
@@ -276,6 +276,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="VDD-Cr-jZK"/>
         <segue reference="P6j-wl-aMZ"/>
     </inferredMetricsTieBreakers>
     <resources>
