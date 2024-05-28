@@ -38,43 +38,62 @@ extension ViewController {
             }
     }
     
-    
     //Is called, when the user presses the edit button. Calls saveEdits()
-    @IBAction func editClicked(_ sender: Any) {
+    @objc func editBoxes() {
         
         if editMode {
             saveEdits()
         }
         
         editMode = !editMode
-        editButton.backgroundColor = editMode ? UIColor.red : UIColor.white
-        
     }
     
     //Switches between the Images
     @IBAction func rightClicked(_ sender: Any) {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
-            handleCompletion(object: selectedImages[imageIndex].image)
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
+        if imageIndex == selectedImages.count - 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+        
+        if imageIndex == 0 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
         }
     }
     
     @IBAction func leftClicked(_ sender: Any) {
         if imageIndex > 0 {
             imageIndex -= 1
-            handleCompletion(object: selectedImages[imageIndex].image)
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
+        
+        if imageIndex == selectedImages.count - 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+        
+        if imageIndex == 0 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
         }
         
     }
     
-    @IBAction func cropClicked(_ sender: Any) {
+    @objc func cropBoxes() {
         if imageView.image != nil {
             presentCropViewController(image: imageView.image!)
         }
-        
     }
     
-    @IBAction func toggleClicked(_ sender: Any) {
+    @objc func toggleBoxes() {
         for view in view.subviews {
                             if let button = view as? UIButton {
                                 if button.tag != 3 {
@@ -95,6 +114,12 @@ extension ViewController {
                             
                             }
                         }
+        if toggleButton.imageView?.image == UIImage(systemName: "lightswitch.off") {
+            toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal)
+        } else {
+            toggleButton.setImage(UIImage(systemName: "lightswitch.off"), for: .normal)
+        }
+        
     }
 
     

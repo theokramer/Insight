@@ -37,8 +37,13 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     var dataSource:[selectedImage] = []
     
     //Configure Image Cell
-    var estimateWidth = 200
-    var cellMarginSize = 12
+    var estimateWidth = 250
+    var cellMarginSize = 15
+    
+    
+    @IBAction func studyChartsClicked(_ sender: Any) {
+        performSegue(withIdentifier: "studyChartsClicked", sender: nil)
+    }
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -51,7 +56,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        imageIndex = 0
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
         button.setTitleColor(.white, for: .normal) // You can change the TitleColor
@@ -107,6 +112,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                    textField.resignFirstResponder()
                }
         dataSource.removeAll()
+        selectedImages.removeAll()
         //Add all Images to the Data Array with previously selected Topic ID
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
@@ -128,6 +134,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                         }
                         let imageStruct = selectedImage.init(image: thisImage, index: item.wrappedId, cropped: false)
                         self.dataSource.append(imageStruct)
+                        selectedImages.append(imageStruct)
                     }
                     
                 }

@@ -58,6 +58,7 @@ extension ViewController {
     //Creates white Boxes above the detected Text Fields
     func draw(text: [VNTextObservation], onImageWithBounds bounds: CGRect) {
         removeAllButtonsFromView()
+        var sliderValue = 0.5
         CATransaction.begin()
         
         // Array to hold groups of intersecting text observations
@@ -76,7 +77,7 @@ extension ViewController {
                      let distanceY = abs(wordBox.midY - groupBox.midY)
                      let minXDistance = (wordBox.width + groupBox.width) / 2
                      let minYDistance = (wordBox.height + groupBox.height) / 2
-                    if wordBox.intersects(groupBox) || distanceX <= CGFloat(slider.value) + minXDistance && distanceY <=  CGFloat(slider.value) + minYDistance {
+                    if wordBox.intersects(groupBox) || distanceX <= CGFloat(sliderValue) + minXDistance && distanceY <=  CGFloat(sliderValue) + minYDistance {
                         // Add the current observation to the existing group
                         textGroups[index].append(wordObservation)
                         grouped = true
