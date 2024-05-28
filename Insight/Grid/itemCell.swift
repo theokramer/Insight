@@ -18,7 +18,6 @@ class itemCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
     }
     
 
@@ -47,7 +46,7 @@ class itemCell: UICollectionViewCell {
         imageView.frame.origin = CGPoint(x: originX, y: originY)
         
         // Set content mode to scaleAspectFit
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
     }
 
 

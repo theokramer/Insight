@@ -21,9 +21,12 @@
                         <rect key="frame" x="-16" y="-14" width="324" height="324"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFJ-TR-nbw">
-                                <rect key="frame" x="0.0" y="0.0" width="324" height="324"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFJ-TR-nbw">
+                                <rect key="frame" x="0.0" y="0.0" width="296" height="296"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="296" id="height-constraint"/>
+                                    <constraint firstAttribute="width" constant="296" id="width-constraint"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.90421633376288657" green="0.90421633376288657" blue="0.90421633376288657" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
