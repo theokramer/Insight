@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     public var editAllClicked = false
     
     let toggleButton = UIButton(type: .custom)
+    let nButton = UIButton(type: .custom)
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
@@ -90,6 +91,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         
         navigationItem.rightBarButtonItems = [toggle, edit, crop]
+        
+        
+        
+        nButton.frame = CGRect.init(x: self.view.frame.width/3.5, y: self.view.frame.height/2, width: 180, height: 50)
+        nButton.setTitle("Next", for: .normal)
+        nButton.backgroundColor = .systemTeal
+        nButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        nButton.addTarget(self, action: #selector(editBoxes), for: .touchUpInside)
+        self.view.addSubview(nButton)
+        
         
         
         if imageIndex == 0 {
