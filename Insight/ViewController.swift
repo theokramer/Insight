@@ -23,15 +23,15 @@ var imageIndex = 0
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
     
     //All Storyboard Components
-    @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var saveAll: UIButton!
-    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    @IBOutlet weak var toggleButton: UIButton!
+    
+    public var editAllClicked = false
+    
+    let toggleButton = UIButton(type: .custom)
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
@@ -62,34 +62,59 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @objc func onOrientationChange() {
-        handleCompletion(object: selectedImages[imageIndex].image)
+        handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let editButton = UIButton(type: .custom)
+        
+        editButton.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
+        editButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        editButton.addTarget(self, action: #selector(editBoxes), for: .touchUpInside)
+        
+        toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal) // Image can be downloaded from here below link
+        toggleButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        toggleButton.addTarget(self, action: #selector(toggleBoxes), for: .touchUpInside)
+        
+        let cropButton = UIButton(type: .custom)
+        cropButton.setImage(UIImage(systemName: "crop"), for: .normal) // Image can be downloaded from here below link
+        cropButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        cropButton.addTarget(self, action: #selector(cropBoxes), for: .touchUpInside)
+        
+        
+        let toggle = UIBarButtonItem(customView: toggleButton)
+        let edit = UIBarButtonItem(customView: editButton)
+        let crop = UIBarButtonItem(customView: cropButton)
+        
+        
+        navigationItem.rightBarButtonItems = [toggle, edit, crop]
+        
+        
+        if imageIndex == 0 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
+        if imageIndex == selectedImages.count - 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
         self.navigationItem.leftBarButtonItem = backButton
-        self.handleCompletion(object: selectedImages[imageIndex].image)
-        /*UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)*/
+        if selectedImages.count != 0 {  
+            self.handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
+        
         
         //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
-        editButton.tag = 3
-        cropButton.tag = 3
         leftButton.tag = 3
         rightButton.tag = 3
-
-        toggleButton.tag = 3
-        
-        //Improve readability of Edit Button
-        editButton.backgroundColor = UIColor.white
     }
-    
-    /*@objc func onOrientationChange() {
-        self.updateBoxPositions()
-    }*/
 
     //Ask the User to select new Photos, when no Image is displayed
     override func viewDidAppear(_ animated: Bool) {

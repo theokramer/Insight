@@ -94,12 +94,12 @@ extension ViewController {
         }
     }
     
-    func handleCompletion(object: Any?) {
+    func handleCompletion(object: Any?, thisImageView: UIImageView) {
         
         if let image = object as? UIImage {
             //TODO: Not the best Approach. Display after view is loaded!
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.show(image)
+                self.show(image, thisImageView: thisImageView)
                 let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
                 
                 // Fire off request based on URL of chosen photo.
@@ -115,17 +115,17 @@ extension ViewController {
     }
     
     //Shows the selected and cropped Image
-    func show(_ image: UIImage) {
+    func show(_ image: UIImage, thisImageView: UIImageView) {
         // Remove previous paths & image
         pathLayer?.removeFromSuperlayer()
         pathLayer = nil
-        imageView.image = nil
+        thisImageView.image = nil
         
         // Account for image orientation by transforming view.
         let correctedImage = scaleAndOrient(image: image)
         
         // Place photo inside imageView.
-        imageView.image = correctedImage
+        thisImageView.image = correctedImage
         
         // Transform image to fit screen.
         guard let cgImage = correctedImage.cgImage else {
@@ -136,7 +136,7 @@ extension ViewController {
         let fullImageWidth = CGFloat(cgImage.width)
         let fullImageHeight = CGFloat(cgImage.height)
         
-        let imageFrame = imageView.frame
+        let imageFrame = thisImageView.frame
         let widthRatio = fullImageWidth / imageFrame.width
         let heightRatio = fullImageHeight / imageFrame.height
         
@@ -149,7 +149,7 @@ extension ViewController {
         
         // Prepare pathLayer to hold Vision results.
         let xLayer = (imageFrame.width - imageWidth) / 2
-        let yLayer = imageView.frame.minY + (imageFrame.height - imageHeight) / 2
+        let yLayer = thisImageView.frame.minY + (imageFrame.height - imageHeight) / 2
         let drawingLayer = CALayer()
         drawingLayer.bounds = CGRect(x: xLayer, y: yLayer, width: imageWidth, height: imageHeight)
         drawingLayer.anchorPoint = CGPoint.zero

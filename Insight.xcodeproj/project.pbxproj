@@ -19,6 +19,7 @@
 		2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB8A2BF0017500D724A5 /* Utilities.swift */; };
 		20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */; };
 		20BD34A02BF020B700E0D9CD /* EventHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349F2BF020B700E0D9CD /* EventHandling.swift */; };
+		20CCAB0B2C04BA6A00262034 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CCAB0A2C04BA6A00262034 /* StudyViewController.swift */; };
 		20DBA2B12BF23FCB002DCF9D /* OverviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */; };
 		20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD549C2BF03EBC00AA5240 /* EditBoxes.swift */; };
 		20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD549E2BF03F3800AA5240 /* PresentImage.swift */; };
@@ -51,6 +52,7 @@
 		2080BB8A2BF0017500D724A5 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		20BD349F2BF020B700E0D9CD /* EventHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandling.swift; sourceTree = "<group>"; };
+		20CCAB0A2C04BA6A00262034 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
 		20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewController.swift; sourceTree = "<group>"; };
 		20DD549C2BF03EBC00AA5240 /* EditBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBoxes.swift; sourceTree = "<group>"; };
 		20DD549E2BF03F3800AA5240 /* PresentImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentImage.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 		20262CD62BF6074E00DF066F /* Overview */ = {
 			isa = PBXGroup;
 			children = (
+				20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */,
 				20262CD72BF6076800DF066F /* Grid */,
 			);
 			name = Overview;
@@ -152,6 +155,7 @@
 				2080BB742BF000F600D724A5 /* ViewController.swift */,
 				20EEF9892BF0F13300CF3295 /* StartViewController.swift */,
 				20DBA2B02BF23FCB002DCF9D /* OverviewController.swift */,
+				20CCAB0A2C04BA6A00262034 /* StudyViewController.swift */,
 				205F8F7D2BFCF3C0004EB775 /* Delegates */,
 				20262CD62BF6074E00DF066F /* Overview */,
 				20DD54AB2BF048FB00AA5240 /* SavePhoto */,
@@ -180,7 +184,6 @@
 		20DD54A92BF0423600AA5240 /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */,
 				20DD549E2BF03F3800AA5240 /* PresentImage.swift */,
 				20DD54A02BF03F8700AA5240 /* CropImage.swift */,
 			);
@@ -357,6 +360,7 @@
 				2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */,
 				20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */,
 				20EEF9852BF0E9B200CF3295 /* Topic+CoreDataClass.swift in Sources */,
+				20CCAB0B2C04BA6A00262034 /* StudyViewController.swift in Sources */,
 				20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */,
 				20EEF98A2BF0F13300CF3295 /* StartViewController.swift in Sources */,
 				20EEF98D2BF0F16900CF3295 /* TopicModel.swift in Sources */,
@@ -522,6 +526,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Insight/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -531,7 +536,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = de.tk.Insight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -552,6 +557,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Insight/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -561,7 +567,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = de.tk.Insight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

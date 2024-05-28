@@ -30,7 +30,7 @@ extension ViewController {
                 selectedImages[i].cropped = true
             }
         }
-        handleCompletion(object: selectedImages[imageIndex].image)
+        handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
         
         // Dismiss the picker to return to original view controller.
         dismiss(animated: true, completion: nil)
