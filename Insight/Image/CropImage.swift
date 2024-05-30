@@ -21,13 +21,32 @@ extension ViewController {
     //Let the USer crop the selected image and than show it
     func cropViewController(_ cropViewController: CropViewController, didCropImageToRect cropRect: CGRect, angle: Int) {
         
+        
+        
         guard let originalImage = cropImage(image: imageView.image!, rect: cropRect, scale: 1) else {
              return
          }
         
+        
+        let CGImage = originalImage.cgImage
+        var portraitImage: UIImage = originalImage
+        if angle == 90 {
+            portraitImage = UIImage(cgImage: CGImage!, scale: originalImage.scale, orientation: .right)
+        }
+        
+        if angle == 180 {
+            portraitImage = UIImage(cgImage: CGImage!, scale: originalImage.scale, orientation: .down)
+        }
+        
+        if angle == -90 {
+            portraitImage = UIImage(cgImage: CGImage!, scale: originalImage.scale, orientation: .left)
+        }
+        
+        
+        
         for i in selectedImages.indices {
             if i == imageIndex {
-                selectedImages[i].image = originalImage
+                selectedImages[i].image = portraitImage
                 selectedImages[i].cropped = true
             }
         }

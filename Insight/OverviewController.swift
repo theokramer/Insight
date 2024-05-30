@@ -150,6 +150,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             self.collectionView.dataSource = self
             self.collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
             self.collectionView.allowsSelection = true
+            
             self.setUpGridView()
         }
         
@@ -244,7 +245,6 @@ extension OverviewController: UICollectionViewDataSource {
         cell.setImage(image: self.dataSource[indexPath.row].image)
         return cell
     }
-    
     
 }
 

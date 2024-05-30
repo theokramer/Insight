@@ -23,6 +23,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFJ-TR-nbw">
                                 <rect key="frame" x="0.0" y="0.0" width="296" height="296"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="296" id="height-constraint"/>
                                     <constraint firstAttribute="width" constant="296" id="width-constraint"/>

@@ -58,9 +58,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="704" height="794"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7XO-Gj-uZl">
-                                <rect key="frame" x="624" y="739" width="60" height="35"/>
+                                <rect key="frame" x="609" y="380" width="60" height="34.5"/>
+                                <color key="tintColor" red="0.011465831920000001" green="0.63529411759999999" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Next"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Next">
+                                    <color key="baseBackgroundColor" red="0.011465831920000001" green="0.63529411759999999" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="nextClicked:" destination="YbL-Wy-MMs" eventType="touchUpInside" id="3bB-4u-kBf"/>
                                 </connections>
@@ -69,12 +72,12 @@
                         <viewLayoutGuide key="safeArea" id="qbH-Dt-6NP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="7XO-Gj-uZl" firstAttribute="centerY" secondItem="ydK-pV-Trm" secondAttribute="centerY" id="3jM-do-yTY"/>
                             <constraint firstItem="ILK-3M-8uu" firstAttribute="top" secondItem="qbH-Dt-6NP" secondAttribute="top" id="4ef-ac-DIU"/>
                             <constraint firstItem="ILK-3M-8uu" firstAttribute="leading" secondItem="qbH-Dt-6NP" secondAttribute="leading" id="4w6-VT-OoK"/>
                             <constraint firstItem="ILK-3M-8uu" firstAttribute="bottom" secondItem="qbH-Dt-6NP" secondAttribute="bottom" id="OOM-vB-DD9"/>
-                            <constraint firstItem="qbH-Dt-6NP" firstAttribute="bottom" secondItem="7XO-Gj-uZl" secondAttribute="bottom" constant="20" id="UYh-4z-Au7"/>
                             <constraint firstItem="ILK-3M-8uu" firstAttribute="trailing" secondItem="qbH-Dt-6NP" secondAttribute="trailing" id="fB0-SV-URK"/>
-                            <constraint firstItem="qbH-Dt-6NP" firstAttribute="trailing" secondItem="7XO-Gj-uZl" secondAttribute="trailing" constant="20" id="wiC-Tz-kXE"/>
+                            <constraint firstItem="qbH-Dt-6NP" firstAttribute="trailing" secondItem="7XO-Gj-uZl" secondAttribute="trailing" constant="35" id="wiC-Tz-kXE"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Study Charts" id="pCH-dg-qaY"/>
@@ -282,6 +285,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="Tky-gt-f10"/>
         <segue reference="Hw4-Gg-KMM"/>
     </inferredMetricsTieBreakers>
     <resources>
