@@ -285,8 +285,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Tky-gt-f10"/>
-        <segue reference="Hw4-Gg-KMM"/>
+        <segue reference="P6j-wl-aMZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>
