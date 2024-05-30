@@ -108,7 +108,7 @@ extension ViewController {
                 
                 observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
                 let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
-                view.addSubview(shapeButton)
+                view.insertSubview(shapeButton, at: 1)
                 
             }
             
@@ -131,12 +131,14 @@ extension ViewController {
         
         shapeLayer.fillColor = fillColor.cgColor
         
+        
         let button = UIButton()
         button.frame = frame
         button.tag = tag
         
         // Add shape layer to button's layer
         button.layer.addSublayer(shapeLayer)
+        
         
         
         // Add action to button

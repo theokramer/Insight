@@ -501,6 +501,15 @@ open class CropViewController: UIViewController, TOCropViewControllerDelegate {
         setUpCropController()
     }
     
+    public init(croppingStyle: CropViewCroppingStyle, image: UIImage, aspectRatio: CropViewControllerAspectRatioPreset) {
+        self.toCropViewController = TOCropViewController(croppingStyle: croppingStyle, image: image)
+        toCropViewController.aspectRatioPreset = aspectRatio
+        toCropViewController.aspectRatioLockEnabled = true
+        toCropViewController.setAspectRatioPreset(aspectRatio, animated: true)
+        super.init(nibName: nil, bundle: nil)
+        setUpCropController()
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

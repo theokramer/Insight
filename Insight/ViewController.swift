@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     public var editAllClicked = false
     
     let toggleButton = UIButton(type: .custom)
+    let nButton = UIButton(type: .custom)
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
@@ -90,6 +91,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         
         navigationItem.rightBarButtonItems = [toggle, edit, crop]
+        
+        
         
         
         if imageIndex == 0 {
