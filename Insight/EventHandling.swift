@@ -50,40 +50,11 @@ extension ViewController {
     
     //Switches between the Images
     @IBAction func rightClicked(_ sender: Any) {
-        if selectedImages.count > imageIndex + 1 {
-            imageIndex += 1
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-        }
-        if imageIndex == selectedImages.count - 1 {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        
-        if imageIndex == 0 {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
+        handleNextClick()
     }
     
     @IBAction func leftClicked(_ sender: Any) {
-        if imageIndex > 0 {
-            imageIndex -= 1
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-        }
-        
-        if imageIndex == selectedImages.count - 1 {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        
-        if imageIndex == 0 {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
+        handlePrevClick()
         
     }
     
