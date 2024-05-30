@@ -89,7 +89,8 @@ extension ViewController {
     
     @objc func cropBoxes() {
         if imageView.image != nil {
-            presentCropViewController(image: imageView.image!)
+            presentCropViewControllerSquare(image: imageView.image!)
+            
         }
     }
     

@@ -10,9 +10,10 @@ import UIKit
 import CropViewController
 
 extension ViewController {
+    
     //Show CropViewController, to Crop the Image
-    func presentCropViewController(image: UIImage) {
-        let cropViewController = CropViewController(croppingStyle: .default, image: image)
+    func presentCropViewControllerSquare(image: UIImage) {
+        let cropViewController = CropViewController(croppingStyle: .default, image: image, aspectRatio: .presetSquare)
         cropViewController.delegate = self
         self.present(cropViewController, animated: true, completion: nil)
     }
