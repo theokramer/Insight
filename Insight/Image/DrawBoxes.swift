@@ -112,11 +112,6 @@ extension ViewController {
                 
             }
             
-            
-            
-            
-            
-            
         }
         
         CATransaction.commit()

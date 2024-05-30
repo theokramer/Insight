@@ -92,7 +92,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         navigationItem.rightBarButtonItems = [toggle, edit, crop]
         
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
+            edgePan.edges = .right
+
+        view.addGestureRecognizer(edgePan)
         
+        
+        let edgePanL = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedL))
+            edgePanL.edges = .left
+
+        view.addGestureRecognizer(edgePanL)
         
         
         if imageIndex == 0 {
@@ -117,6 +126,57 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
         leftButton.tag = 3
         rightButton.tag = 3
+    }
+    
+    @objc func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        if recognizer.state == .recognized {
+            handleNextClick()
+        }
+    }
+    
+    @objc func screenEdgeSwipedL(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        if recognizer.state == .recognized {
+            handlePrevClick()
+        }
+    }
+    
+    
+    
+    func handleNextClick() {
+        if selectedImages.count > imageIndex + 1 {
+            imageIndex += 1
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
+        if imageIndex == selectedImages.count - 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+        
+        if imageIndex == 0 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
+    }
+    
+    func handlePrevClick() {
+        if imageIndex > 0 {
+            imageIndex -= 1
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
+        
+        if imageIndex == selectedImages.count - 1 {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+        
+        if imageIndex == 0 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
     }
 
     //Ask the User to select new Photos, when no Image is displayed

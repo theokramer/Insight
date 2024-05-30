@@ -25,13 +25,20 @@ class StudyViewController: ViewController {
         } else {
             nextButton.isHidden = false
         }
+        
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
+            edgePan.edges = .right
+
+        view.addGestureRecognizer(edgePan)
+        
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         if selectedImages.count != 0 {
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageViewStudy)
         }
     }
-    @IBAction func nextClicked(_ sender: Any) {
+    
+    override func handleNextClick() {
         if imageIndex < selectedImages.count - 1 {
             imageIndex += 1
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageViewStudy)
@@ -41,5 +48,9 @@ class StudyViewController: ViewController {
         } else {
             nextButton.isHidden = false
         }
+    }
+    
+    @IBAction func nextClicked(_ sender: Any) {
+        handleNextClick()
     }
 }
