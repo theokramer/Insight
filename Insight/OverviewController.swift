@@ -71,10 +71,10 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         self.navigationController!.navigationBar.tintColor = UIColor.label
         
         hideKeyboardWhenTappedAround()
-        if(UIScreen.main.bounds.width > 600) {
+        if(UIScreen.main.bounds.width > 900) {
             estimateWidth = Int(UIScreen.main.bounds.width / 5.5)
         } 
-        else if(UIScreen.main.bounds.width > 400) {
+        else if(UIScreen.main.bounds.width > 600) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
         } else {
             estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
@@ -153,23 +153,30 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             
             self.setUpGridView()
         }
-        
+        self.collectionView.reloadData()
         
     }
 
 
     
     override func viewDidLoad() {
-        imageIndex = 0
-    }
+            super.viewDidLoad()
+            imageIndex = 0
+            collectionView.delegate = self
+            collectionView.dataSource = self
+            collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
+            setUpGridView()
+        }
     
     
     //Make the Image List adaptable
-    func setUpGridView() {
-        let flow = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flow.minimumInteritemSpacing = CGFloat(self.cellMarginSize)
-        flow.minimumLineSpacing = CGFloat(self.cellMarginSize)
-    }
+        func setUpGridView() {
+            let flowLayout = UICollectionViewFlowLayout()
+            flowLayout.minimumInteritemSpacing = CGFloat(self.cellMarginSize)
+            flowLayout.minimumLineSpacing = CGFloat(self.cellMarginSize)
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: CGFloat(self.cellMarginSize), bottom: 0, right: CGFloat(self.cellMarginSize))
+            collectionView.collectionViewLayout = flowLayout
+        }
     
     @IBAction func studyClicked(_ sender: Any) {
         saveText()
@@ -241,25 +248,38 @@ extension OverviewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! itemCell
-        cell.setImage(image: self.dataSource[indexPath.row].image)
-        return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! itemCell
+            let thisImage = self.dataSource[indexPath.row].image
+            cell.setImage(image: thisImage)
+            return cell
+        }
+    
+    // Funktion, um die Größe eines UIImage zu ändern
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let newImage = renderer.image { (context) in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+        return newImage
     }
     
 }
 
-//Configures the List Cells
 extension OverviewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = self.calculateWidth()
-        return CGSize(width: width, height: width)
+        return calculateCellSize()
     }
+
     func calculateWidth() -> CGFloat {
-        let estimateWidth = CGFloat(estimateWidth)
+        let estimateWidth = CGFloat(self.estimateWidth)
         let cellCount = floor(CGFloat(self.view.frame.size.width / estimateWidth))
         let margin = CGFloat(cellMarginSize * 2)
         let width = (CGFloat(self.view.frame.size.width) - CGFloat(cellMarginSize) * (cellCount - 1) - margin) / cellCount
         return width
     }
-
+    
+    func calculateCellSize() -> CGSize {
+        let width = self.calculateWidth()
+        return CGSize(width: width, height: width)
+    }
 }

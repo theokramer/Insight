@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,24 +17,33 @@
                 <rect key="frame" x="0.0" y="0.0" width="296" height="296"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yi4-fe-xwX">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yi4-fe-xwX">
                         <rect key="frame" x="-16" y="-14" width="324" height="324"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFJ-TR-nbw">
-                                <rect key="frame" x="0.0" y="0.0" width="296" height="296"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aFJ-TR-nbw">
+                                <rect key="frame" x="12" y="12" width="300" height="300"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="296" id="height-constraint"/>
-                                    <constraint firstAttribute="width" constant="296" id="width-constraint"/>
+                                    <constraint firstAttribute="width" constant="300" id="HJs-TD-CA3"/>
+                                    <constraint firstAttribute="height" constant="300" id="Top-dF-3k4"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.90421633376288657" green="0.90421633376288657" blue="0.90421633376288657" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="aFJ-TR-nbw" firstAttribute="centerX" secondItem="yi4-fe-xwX" secondAttribute="centerX" id="4iZ-b3-HeE"/>
+                            <constraint firstItem="aFJ-TR-nbw" firstAttribute="centerY" secondItem="yi4-fe-xwX" secondAttribute="centerY" id="LmO-Hd-mCA"/>
+                        </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="yi4-fe-xwX" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="D0q-22-caD"/>
+                <constraint firstItem="yi4-fe-xwX" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="-16" id="E4h-ju-z6t"/>
+                <constraint firstItem="yi4-fe-xwX" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="-14" id="hzj-qp-Wjc"/>
+                <constraint firstAttribute="trailing" secondItem="yi4-fe-xwX" secondAttribute="trailing" constant="-12" id="qqR-GH-5Rk"/>
+            </constraints>
             <size key="customSize" width="296" height="296"/>
             <connections>
                 <outlet property="imageView" destination="aFJ-TR-nbw" id="vlh-X1-rz1"/>
