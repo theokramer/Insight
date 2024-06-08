@@ -11,6 +11,7 @@ import UIKit
 
 extension ViewController {
     
+    //Handle user swipe to select multiple Text Boxes in Edit Mode. TODO: Improve the recognition of the swipe
     @IBAction func panRecognized(_ sender: Any) {
         guard let panGesture = sender as? UIPanGestureRecognizer else {
             return
@@ -37,20 +38,70 @@ extension ViewController {
             }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //Is called, when the user presses the edit button. Calls saveEdits()
+    @objc func editBoxes() {
         
-        if selectedImages.count > imageIndex + 1 {
-            imageIndex += 1
-            handleCompletion(object: selectedImages[imageIndex])
+        if editMode {
+            saveEdits()
         }
+        
+        editMode = !editMode
+    }
+    
+    //Switches between the Images
+    @IBAction func rightClicked(_ sender: Any) {
+        handleNextClick()
+    }
+    
+    @IBAction func leftClicked(_ sender: Any) {
+        handlePrevClick()
         
     }
     
-    @IBAction func cropClicked(_ sender: Any) {
+    @objc func cropBoxes() {
         if imageView.image != nil {
-            presentCropViewController(image: imageView.image!)
+            presentCropViewControllerSquare(image: imageView.image!)
+            
+        }
+    }
+    
+    @objc func toggleBoxes() {
+        for view in view.subviews {
+                            if let button = view as? UIButton {
+                                if button.tag != 3 {
+                                    for layer2 in button.layer.sublayers ?? [] {
+                                        guard let shapeLayer2 = layer2 as? CAShapeLayer else {
+                                            continue
+                                        }
+                                        if shapeLayer2.fillColor == UIColor.white.cgColor {
+                                            shapeLayer2.fillColor = UIColor.clear.cgColor
+                                            
+                                        } else {
+                                            shapeLayer2.fillColor = UIColor.white.cgColor
+                                        }
+
+                                    }
+                                }
+                                
+                            
+                            }
+                        }
+        if toggleButton.imageView?.image == UIImage(systemName: "lightswitch.off") {
+            toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal)
+        } else {
+            toggleButton.setImage(UIImage(systemName: "lightswitch.off"), for: .normal)
         }
         
+    }
+
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if (segue.identifier == "showOverviewController2") {
+           let secondView = segue.destination as! OverviewController
+           let object = sender as? String ?? ""
+           print("OBJECT: \(object)")
+           secondView.cellId = object
+       }
     }
     
     

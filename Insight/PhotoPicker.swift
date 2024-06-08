@@ -9,7 +9,7 @@ import Foundation
 import PhotosUI
 import UIKit
 
-extension ViewController: PHPickerViewControllerDelegate {
+extension OverviewController: PHPickerViewControllerDelegate {
     
     //Let the User select a photo of his Library or Take a new one
         @objc
@@ -23,7 +23,10 @@ extension ViewController: PHPickerViewControllerDelegate {
             
             func presentCamera(_ _: UIAlertAction) {
                 imagePicker.sourceType = .camera
+                imagePicker.allowsEditing = true
+                imagePicker.delegate = self
                 self.present(imagePicker, animated: true)
+                
             }
             
             let cameraAction = UIAlertAction(title: "Camera",
@@ -47,7 +50,7 @@ extension ViewController: PHPickerViewControllerDelegate {
             // Angabe der Ortungsinformationen für den Popover
             if let popoverController = prompt.popoverPresentationController {
                 popoverController.sourceView = self.view
-                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popoverController.sourceRect = CGRect(x: self.view.bounds.width * 0.83, y: self.view.bounds.height * 0.83, width: 0, height: 0)
                 popoverController.permittedArrowDirections = []
             }
             
@@ -73,32 +76,49 @@ extension ViewController: PHPickerViewControllerDelegate {
         configuration.selection = .ordered
         // Set the selection limit to enable multiselection.
         configuration.selectionLimit = 0
-        // Set the preselected asset identifiers with the identifiers that the app tracks.
-        configuration.preselectedAssetIdentifiers = selectedAssetIdentifiers
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+
+        guard let image = info[.editedImage] as? UIImage else {
+            print("No image found")
+            return
+        }
+        
+        selectedImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false))
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+    }
+    
     /// - Tag: ParsePickerResults
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
+        selectedImages.removeAll()
         for result in results {
-            result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
+            result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [] (object, error) in
                             if let image = object as? UIImage {
-                                DispatchQueue.main.async { [weak self] in
-                                    self?.selectedImages.append(image)
+                                DispatchQueue.main.async { [] in
+                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
                                 }
                             }
                         })
         }
         
-        if selectedImages.isEmpty {
-            displayEmptyImage()
-        } else {
-            self.handleCompletion(object: selectedImages[imageIndex])
-        }
+        performSegue(withIdentifier: "showViewController", sender: cellId)
+        
+    }
+    
+
+    
+    // MARK: - UIImagePickerControllerDelegate
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        // Dismiss picker, returning to original root viewController.
+        dismiss(animated: true, completion: nil)
     }
 }
 
