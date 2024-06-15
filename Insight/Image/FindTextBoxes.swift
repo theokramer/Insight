@@ -31,7 +31,6 @@ extension ViewController {
     
     /// - Tag: PerformRequests
     func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
-        
         // Fetch desired requests based on switch status.
         let requests = createVisionRequests()
         // Create a request handler.

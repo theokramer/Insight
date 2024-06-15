@@ -10,6 +10,8 @@ import UIKit
 import SwiftUI
 import Vision
 
+var toggleColor: UIColor = .systemTeal
+
 
 extension ViewController {
     @available(iOS 13.0, *)
@@ -98,7 +100,7 @@ extension ViewController {
         // Create buttons for each group of intersecting text observations
         for group in textGroups {
             let id = Int.random(in: 1..<100000000)
-            let fillColor = UIColor.white // You may want to change the fill color as needed
+            let fillColor = toggleColor // You may want to change the fill color as needed
             
             // Calculate the bounding box for the group
             
@@ -108,7 +110,7 @@ extension ViewController {
                 
                 observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
                 let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
-                view.insertSubview(shapeButton, at: 1)
+                view.insertSubview(shapeButton, at: 2)
                 
             }
             

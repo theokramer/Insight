@@ -1,8 +1,8 @@
 //
 //  ImageEntity+CoreDataProperties.swift
-//  Insight
+//  
 //
-//  Created by Theo Kramer on 12.05.24.
+//  Created by Theo Kramer on 15.06.24.
 //
 //
 
@@ -19,13 +19,10 @@ extension ImageEntity {
     @NSManaged public var id: String?
     @NSManaged public var imageData: Data?
     @NSManaged public var topic: Topic?
+    @NSManaged public var review: ImageReview?
     
     public var wrappedId: String {
-            id ?? "Unknown Id"
-        }
-
-}
-
-extension ImageEntity : Identifiable {
+        id ?? "Unknown Name"
+    }
 
 }

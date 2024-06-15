@@ -18,7 +18,7 @@ extension ViewController {
             }
             if editMode {
                 //Wenn der User einen weißen Button anklickt werden alle weißen Buttons mit dem gleichen Tag rot. Wenn der User einen roten Button anklickt wird nur dieser blau. Wenn der User einen blauen Button anklickt wird dieser weiß. Alle roten Buttons bekommen bei Klick auf den Save Button den gleichen Tag, alle blauen bekommen ebenfalls den gleichen Tag, aber einen anderen als die roten und alle weißen Buttons bekommen einen einzigartigen Tag
-                if shapeLayer.fillColor == UIColor.white.cgColor {
+                if shapeLayer.fillColor == toggleColor.cgColor {
                     shapeLayer.fillColor = UIColor.red.cgColor
                     
                 }
@@ -44,7 +44,7 @@ extension ViewController {
                                                 guard let shapeLayer2 = layer2 as? CAShapeLayer else {
                                                     continue
                                                 }
-                                                if shapeLayer2.fillColor == UIColor.white.cgColor {
+                                                if shapeLayer2.fillColor == toggleColor.cgColor {
                                                     shapeLayer2.fillColor = UIColor.red.cgColor
                                                     
                                                 }
@@ -76,7 +76,7 @@ extension ViewController {
                                                     continue
                                                 }
                                                 if shapeLayer2.fillColor == UIColor.clear.cgColor {
-                                                    shapeLayer2.fillColor = UIColor.white.cgColor
+                                                    shapeLayer2.fillColor = toggleColor.cgColor
                                                     
                                                 } else {
                                                     shapeLayer2.fillColor = UIColor.clear.cgColor
@@ -91,7 +91,7 @@ extension ViewController {
                                 }
                 
                 if shapeLayer.fillColor == UIColor.clear.cgColor {
-                    shapeLayer.fillColor = UIColor.white.cgColor
+                    shapeLayer.fillColor = toggleColor.cgColor
                     
                 } else {
                     shapeLayer.fillColor = UIColor.clear.cgColor

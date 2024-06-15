@@ -2,6 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/theokramer/Documents/Insight/Insight/ImageReview+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/theokramer/Documents/Insight/Insight/ImageReview+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:Insight.xcodeproj">
    </FileRef>
    <FileRef
