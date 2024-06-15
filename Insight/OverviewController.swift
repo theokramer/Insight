@@ -17,6 +17,21 @@ struct selectedImage {
     var cropped: Bool
 }
 
+struct studyImage {
+    var image: UIImage
+    var index: String
+    var review: Review
+}
+
+struct Review {
+    var index: String
+    var review_date: Date?
+    var rating: Int16
+    var interval: Int64
+    var ease_factor: Float
+    var repetitions: Int16
+}
+
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
@@ -42,7 +57,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     
     @IBAction func studyChartsClicked(_ sender: Any) {
-        performSegue(withIdentifier: "studyChartsClicked", sender: nil)
+        performSegue(withIdentifier: "studyChartsClicked", sender: cellId)
     }
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -55,7 +70,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
+        
         imageIndex = 0
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)), for: .normal) // Image can be downloaded from here below link
@@ -244,6 +261,11 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
           let object = sender as! String
            secondView.cellId = object
        }
+        if (segue.identifier == "studyChartsClicked") {
+           let secondView = segue.destination as! StudyViewController
+           let object = sender as! String
+            secondView.cellId = object
+        }
     }
 }
 
