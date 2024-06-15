@@ -37,8 +37,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     var dataSource:[selectedImage] = []
     
     //Configure Image Cell
-    var estimateWidth = 250
-    var cellMarginSize = 15
+    var estimateWidth = 300
+    var cellMarginSize = UIScreen.main.bounds.width > 500 ? 50 : 30
     
     
     @IBAction func studyChartsClicked(_ sender: Any) {
@@ -58,26 +58,32 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     override func viewWillAppear(_ animated: Bool) {
         imageIndex = 0
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
+        button.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)), for: .normal) // Image can be downloaded from here below link
+        button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2.0)
         button.setTitleColor(.white, for: .normal) // You can change the TitleColor
         button.addTarget(self, action: #selector(editAll), for: .touchUpInside)
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
         
+        
+
+        
         // Layout für den Button festlegen
         NSLayoutConstraint.activate([
             collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 280),
         ])
-        self.navigationController!.navigationBar.tintColor = UIColor.label
+        
+        self.navigationController?.navigationBar.tintColor = .black
         
         hideKeyboardWhenTappedAround()
-        if(UIScreen.main.bounds.width > 900) {
-            estimateWidth = Int(UIScreen.main.bounds.width / 5.5)
-        } 
-        else if(UIScreen.main.bounds.width > 600) {
+        
+        if(UIScreen.main.bounds.width > 700) {
             estimateWidth = Int(UIScreen.main.bounds.width / 4.5)
-        } else {
+        } 
+        else if(UIScreen.main.bounds.width > 400) {
             estimateWidth = Int(UIScreen.main.bounds.width / 3.5)
+        } else {
+            estimateWidth = Int(UIScreen.main.bounds.width / 2.5)
         }
         studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
@@ -251,6 +257,7 @@ extension OverviewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! itemCell
             let thisImage = self.dataSource[indexPath.row].image
             cell.setImage(image: thisImage)
+            cell.layer.cornerRadius = 15
             return cell
         }
     

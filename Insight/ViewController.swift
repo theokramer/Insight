@@ -164,6 +164,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if imageIndex > 0 {
             imageIndex -= 1
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            
         }
         
         if imageIndex == selectedImages.count - 1 {

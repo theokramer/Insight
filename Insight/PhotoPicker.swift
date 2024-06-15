@@ -37,13 +37,23 @@ extension OverviewController: PHPickerViewControllerDelegate {
                 presentPicker(filter: nil)
             }
             
+            func presentFilePicker(_ _: UIAlertAction) {
+                presentPicker(filter: nil)
+            }
+            
             let libraryAction = UIAlertAction(title: "Photo Library",
                                               style: .default,
                                               handler: presentLibrary)
             
+            let fileAction = UIAlertAction(title: "Files",
+                                           style: .default,
+                                           handler: presentFilePicker)
+            
             let cancelAction = UIAlertAction(title: "Cancel",
                                              style: .cancel,
                                              handler: nil)
+            
+           
             
             // Implementierung der anderen Aktionen ...
             
@@ -57,6 +67,7 @@ extension OverviewController: PHPickerViewControllerDelegate {
             // Hinzufügen der Aktionen zum Alert Controller
             prompt.addAction(cameraAction)
             prompt.addAction(libraryAction)
+            prompt.addAction(fileAction)
             prompt.addAction(cancelAction)
             // Weitere Aktionen hinzufügen...
             
