@@ -70,6 +70,65 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
+    var timeUntilNewCharts = -1
+    
+    func learnableImagesCount() -> Int {
+        
+        var learnableImages:[studyImage] = []
+        
+        ViewController.fetchCoreData {items in
+            if let items = (items ?? []) as [ImageEntity]? {
+                for item in items {
+                    
+                    guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
+                        return
+                    }
+                    guard let myTopic = item.topic else {
+                        return
+                    }
+                    
+                    
+                    if myTopic.id == self.cellId {
+                        
+                            if item.review != nil {
+                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                                    return
+                                }
+                                
+                                let newReviewDate = review_date.addingTimeInterval((Double(interval) * 60))
+                                
+                               
+                                
+                                if newReviewDate < Date.now {
+                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                    learnableImages.append(myStudyImage)
+                                } else {
+                                    if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
+                                        self.timeUntilNewCharts = Int(newReviewDate.timeIntervalSince(Date.now))
+                                    }
+                                }
+                            
+                                
+                            } else {
+                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                learnableImages.append(myStudyImage)
+                            }
+                            
+                            
+                        
+                        
+                        
+                    }
+                    
+                }
+            } else {
+                print("FEHLER")
+            }
+        }
+        
+        return learnableImages.count
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -87,7 +146,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         
         // Layout für den Button festlegen
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 280),
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 400),
         ])
         
         self.navigationController?.navigationBar.tintColor = .black
@@ -189,6 +248,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             collectionView.dataSource = self
             collectionView.register(UINib(nibName: "itemCell", bundle: nil), forCellWithReuseIdentifier: "itemCell")
             setUpGridView()
+            print(learnableImagesCount())
+            print(timeUntilNewCharts)
         }
     
     

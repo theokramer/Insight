@@ -42,7 +42,6 @@ class StudyViewController: ViewController {
                     
                     
                     if myTopic.id == self.cellId {
-                        
                             if item.review != nil {
                                 guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
                                     return
@@ -51,7 +50,7 @@ class StudyViewController: ViewController {
                                 let newReviewDate = review_date.addingTimeInterval((Double(interval) * 60))
                                 
                                 let currentNextReviewDate =
-                                nextImage.review.review_date != nil ? nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60)) : nil
+                                 nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
                                 
                                 if newReviewDate < Date.now {
                                     
@@ -60,7 +59,8 @@ class StudyViewController: ViewController {
                                             nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
                                         
                                     } else {
-                                        if currentNextReviewDate == nil {
+                                        if nextImage.review.index == "" {
+                                            
                                             let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
                                             nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
                                         }
@@ -73,8 +73,10 @@ class StudyViewController: ViewController {
                             
                                 
                             } else {
+                                if nextImage.index == "" {
+                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                }
                                 
-                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
                             }
                             
                             
@@ -102,14 +104,6 @@ class StudyViewController: ViewController {
         
         findNextImage()
         
-        
-        
-        
-        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
-            edgePan.edges = .right
-
-        view.addGestureRecognizer(edgePan)
-        
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
@@ -130,7 +124,7 @@ class StudyViewController: ViewController {
     func setupButtons() {
             // Configure buttons
             
-        configureButton(button: forgotButton, title: "Again\n <1 min", color: .systemRed, action: #selector(feedbackButtonClicked(_:)), tag: 0)
+        configureButton(button: forgotButton, title: "Forgot\n <1 min", color: .systemRed, action: #selector(feedbackButtonClicked(_:)), tag: 0)
         configureButton(button: partiallyRecalledButton, title: "Hard\n4d", color: .systemOrange, action: #selector(feedbackButtonClicked(_:)), tag: 1)
         configureButton(button: recalledWithEffortButton, title: "Good\n10d", color: .systemGreen, action: #selector(feedbackButtonClicked(_:)), tag: 2)
         configureButton(button: easyButton, title: "Easy\n13d", color: .systemBlue, action: #selector(feedbackButtonClicked(_:)), tag: 3)
