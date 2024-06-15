@@ -66,18 +66,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
         
         
-        if #available(iOS 13.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.white // Customize the background color
-            appearance.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.boldSystemFont(ofSize: 24)]
-            
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        } else {
-            navigationController?.navigationBar.barTintColor = UIColor.white
-            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.boldSystemFont(ofSize: 24)]
-        }
 
         
         // Layout für den Button festlegen

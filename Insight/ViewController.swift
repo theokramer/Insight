@@ -146,7 +146,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-            
         }
         if imageIndex == selectedImages.count - 1 {
             rightButton.isHidden = true
