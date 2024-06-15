@@ -65,7 +65,7 @@ extension ViewController {
         }
     }
     
-    @objc func toggleBoxes() {
+    @objc func  toggleBoxes() {
         for view in view.subviews {
                             if let button = view as? UIButton {
                                 if button.tag != 3 {
