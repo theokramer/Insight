@@ -67,6 +67,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func viewDidLoad() {
+        navigationController?.navigationBar.isHidden = false
         super.viewDidLoad()
         
         let editButton = UIButton(type: .custom)

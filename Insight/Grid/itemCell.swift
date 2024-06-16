@@ -2,7 +2,9 @@ import UIKit
 
 class itemCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
+    var mySelImage = selectedImage(image: UIImage(), index: "", cropped: false)
     
+    @IBOutlet weak var cellMoreButton: UIButton!
     func setImage(image: UIImage) {
         // Set the content mode to scaleAspectFit
         imageView.contentMode = .scaleAspectFit
@@ -13,6 +15,10 @@ class itemCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupImageViewConstraints()
+        
+    }
+    @IBAction func cellMoreClicked(_ sender: Any) {
+        print(mySelImage.index)
     }
     
     private func setupImageViewConstraints() {
@@ -24,4 +30,11 @@ class itemCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
+    
+    
+
 }
+
+
+
+
