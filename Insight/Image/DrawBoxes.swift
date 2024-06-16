@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import Vision
 
-var toggleColor: UIColor = .systemTeal
+var toggleColor: UIColor = .systemGray
 
 
 extension ViewController {

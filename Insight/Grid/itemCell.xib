@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,11 +29,30 @@
                                     <constraint firstAttribute="height" constant="300" id="Top-dF-3k4"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R0A-OT-vfg">
+                                <rect key="frame" x="273" y="12" width="39" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27" id="knd-Rp-Lla"/>
+                                    <constraint firstAttribute="width" constant="39" id="rgA-kw-Stm"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled">
+                                    <imageReference key="image" image="ellipsis.circle" catalog="system" symbolScale="medium"/>
+                                    <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="cellMoreClicked:" destination="gTV-IL-0wX" eventType="touchUpInside" id="K7i-bK-izX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="aFJ-TR-nbw" firstAttribute="centerX" secondItem="yi4-fe-xwX" secondAttribute="centerX" id="4iZ-b3-HeE"/>
+                            <constraint firstAttribute="trailing" secondItem="R0A-OT-vfg" secondAttribute="trailing" constant="12" id="EWC-Rc-axh"/>
                             <constraint firstItem="aFJ-TR-nbw" firstAttribute="centerY" secondItem="yi4-fe-xwX" secondAttribute="centerY" id="LmO-Hd-mCA"/>
+                            <constraint firstItem="R0A-OT-vfg" firstAttribute="top" secondItem="yi4-fe-xwX" secondAttribute="top" constant="12" id="q1G-63-QWe"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -46,9 +66,13 @@
             </constraints>
             <size key="customSize" width="296" height="296"/>
             <connections>
+                <outlet property="cellMoreButton" destination="R0A-OT-vfg" id="oN2-UQ-qUM"/>
                 <outlet property="imageView" destination="aFJ-TR-nbw" id="vlh-X1-rz1"/>
             </connections>
             <point key="canvasLocation" x="-120.61068702290076" y="105.63380281690141"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="ellipsis.circle" catalog="system" width="128" height="123"/>
+    </resources>
 </document>
