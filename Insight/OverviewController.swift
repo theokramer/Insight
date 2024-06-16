@@ -40,9 +40,16 @@ var selectedImages: [selectedImage] = []
 @available(iOS 13.0, *)
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    
     @IBOutlet weak var studyChartsButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var addChartsButton: UIButton!
+    @IBOutlet weak var tempStatusLabel: UILabel!
+    
+    @IBOutlet weak var tempDescrLabel: UILabel!
+    
+    
+    @IBOutlet weak var cardInDeck: UILabel!
     @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
     
     //Clicked Cell with Topic ID
@@ -163,6 +170,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         }
         studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         studyChartsButton.isEnabled = learnableImagesCount() > 0 ? true : false
+        
         //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.textField.delegate = self
@@ -238,6 +246,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         }
         self.collectionView.reloadData()
         
+        tempStatusLabel.text = "\(learnableImagesCount())"
+        cardInDeck.text = "Total Charts (\(selectedImages.count))"
+        tempDescrLabel.text = "Charts left"
     }
 
 
@@ -251,6 +262,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             setUpGridView()
             print(learnableImagesCount())
             print(timeUntilNewCharts)
+        
+            
         }
     
     
