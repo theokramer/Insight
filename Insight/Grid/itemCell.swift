@@ -24,4 +24,11 @@ class itemCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
+    
+    
+
 }
+
+
+
+

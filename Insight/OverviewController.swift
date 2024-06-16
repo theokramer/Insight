@@ -45,8 +45,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var addChartsButton: UIButton!
     @IBOutlet weak var tempStatusLabel: UILabel!
-    
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tempDescrLabel: UILabel!
+    @IBOutlet weak var topView: UIView!
     
     
     @IBOutlet weak var cardInDeck: UILabel!
@@ -54,6 +55,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     //Clicked Cell with Topic ID
     var cellId: String = ""
+    
+    var timer = Timer()
     
     //Array with Images -> Gets fetched of Core Data
     var dataSource:[selectedImage] = []
@@ -67,7 +70,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         performSegue(withIdentifier: "studyChartsClicked", sender: cellId)
     }
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    
     
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Topic> {
         return NSFetchRequest<Topic>(entityName: "Topic")
@@ -136,8 +139,13 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         return learnableImages.count
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        timer.invalidate()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
+        topView.layer.cornerRadius = 15
+        
         
         imageIndex = 0
         let button = UIButton(type: .custom)
@@ -153,10 +161,11 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         
         // Layout für den Button festlegen
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 400),
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 430),
         ])
         
         self.navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.isHidden = true
         
         hideKeyboardWhenTappedAround()
         
@@ -170,6 +179,15 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         }
         studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         studyChartsButton.isEnabled = learnableImagesCount() > 0 ? true : false
+        studyChartsButton.layer.shadowColor = UIColor.black.cgColor
+        studyChartsButton.layer.shadowOpacity = 0.2
+        studyChartsButton.layer.shadowOffset = .zero
+        studyChartsButton.layer.shadowRadius = 10
+        
+        addChartsButton.layer.shadowColor = UIColor.black.cgColor
+        addChartsButton.layer.shadowOpacity = 0.2
+        addChartsButton.layer.shadowOffset = .zero
+        addChartsButton.layer.shadowRadius = 10
         
         //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -246,10 +264,55 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         }
         self.collectionView.reloadData()
         
-        tempStatusLabel.text = "\(learnableImagesCount())"
+        
         cardInDeck.text = "Total Charts (\(selectedImages.count))"
-        tempDescrLabel.text = "Charts left"
+        self.updateText()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            self.updateText()
+            })
     }
+    
+    
+    func updateText() {
+        if learnableImagesCount() == 0 {
+            tempStatusLabel.text = "\(formatDuration(seconds: timeUntilNewCharts))"
+            tempStatusLabel.font = .boldSystemFont(ofSize: 30)
+            tempDescrLabel.text = "until next Chart"
+        } else {
+            tempStatusLabel.text = "\(learnableImagesCount())"
+            tempStatusLabel.font = .boldSystemFont(ofSize: 60)
+            tempDescrLabel.text = "Charts left"
+        }
+    }
+    
+    func formatDuration(seconds: Int) -> String {
+        let weeks = seconds / 604800 // 7 * 24 * 3600
+        let days = (seconds % 604800) / 86400 // 24 * 3600
+        let hours = (seconds % 86400) / 3600
+        let minutes = (seconds % 3600) / 60
+        let remainingSeconds = seconds % 60
+        
+        var parts: [String] = []
+        if weeks > 0 {
+            parts.append("\(weeks)w")
+        }
+        if days > 0 {
+            parts.append("\(days)d" )
+        }
+        if hours > 0 {
+            parts.append("\(hours)h")
+        }
+        if minutes > 0 {
+            parts.append("\(minutes)m" )
+        }
+        if remainingSeconds > 0 {
+            parts.append("\(remainingSeconds)s")
+        }
+        
+        return parts.joined(separator: " : ")
+    }
+
+
 
 
     
@@ -386,4 +449,27 @@ extension OverviewController: UICollectionViewDelegateFlowLayout {
         let width = self.calculateWidth()
         return CGSize(width: width, height: width)
     }
+}
+
+public extension UIView {
+    
+    func roundCornerWithShadow(cornerRadius: CGFloat, shadowRadius: CGFloat, offsetX: CGFloat, offsetY: CGFloat, colour: UIColor, opacity: Float) {
+        
+        self.clipsToBounds = false
+
+        let layer = self.layer
+        layer.masksToBounds = false
+        layer.cornerRadius = cornerRadius
+        layer.shadowOffset = CGSize(width: offsetX, height: offsetY);
+        layer.shadowColor = colour.cgColor
+        layer.shadowRadius = shadowRadius
+        layer.shadowOpacity = opacity
+        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).cgPath
+        
+        let bColour = self.backgroundColor
+        self.backgroundColor = nil
+        layer.backgroundColor = bColour?.cgColor
+        
+    }
+    
 }
