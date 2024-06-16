@@ -23,7 +23,11 @@ class StudyViewController: ViewController {
     let buttonsStackView = UIStackView()
     
     @objc override func onOrientationChange() {
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+        if singleMode {
+            handleCompletion(object: singleImage.image, thisImageView: imageView)
+        } else {
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
     }
     
     func findNextImage() -> Bool {
@@ -106,7 +110,11 @@ class StudyViewController: ViewController {
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+        if singleMode {
+            handleCompletion(object: singleImage.image, thisImageView: imageView)
+        } else {
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
         setupButtons()
     }
     
@@ -114,7 +122,11 @@ class StudyViewController: ViewController {
         if !findNextImage() {
             showCompletionAlert()
         } else {
-            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+            if singleMode {
+                handleCompletion(object: singleImage.image, thisImageView: imageView)
+            } else {
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            }
             buttonsStackView.isHidden = true
             nextButton.isHidden = false
         }

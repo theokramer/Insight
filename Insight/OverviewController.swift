@@ -35,8 +35,6 @@ struct Review {
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
-
-
 @available(iOS 13.0, *)
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -153,8 +151,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        
         topView.layer.cornerRadius = 15
         
         
@@ -453,6 +449,7 @@ extension OverviewController: UICollectionViewDataSource {
             let bottomSheetVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BottomSheetViewController") as! BottomSheetViewController
             bottomSheetVC.configure(with: data)
             bottomSheetVC.info = data
+            bottomSheetVC.cellID = cellId
             
             bottomSheetVC.modalPresentationStyle = .custom
             bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
@@ -517,6 +514,7 @@ class BottomSheetViewController: UIViewController {
     let presentationManager = HalfScreenPresentationManager()
     private var dimmingView: UIView?
     var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false)
+    var cellID: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -595,7 +593,15 @@ class BottomSheetViewController: UIViewController {
             // Handle Select action
         case 1:
             print("Edit tapped")
-            // Handle Edit action
+            if let editViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+                editViewController.singleImage = info
+                editViewController.cellId = cellID
+                editViewController.singleMode = true
+                let navigationController = UINavigationController(rootViewController: editViewController)
+                navigationController.modalPresentationStyle = .overFullScreen
+                present(navigationController, animated: true, completion: nil)
+            }
+            
         case 2:
             print("Freeze tapped")
             // Handle Freeze action
@@ -608,6 +614,16 @@ class BottomSheetViewController: UIViewController {
         default:
             break
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if (segue.identifier == "showViewController2") {
+          let secondView = segue.destination as! ViewController
+          let object = sender as! selectedImage
+           secondView.cellId = ""
+           secondView.singleImage = object
+       }
+        
     }
     
     @IBAction func dismissViewController() {
