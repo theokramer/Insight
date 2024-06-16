@@ -26,7 +26,7 @@ class StudyViewController: ViewController {
         handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
     }
     
-    func findNextImage() {
+    func findNextImage() -> Bool {
         
         var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
         ViewController.fetchCoreData {items in
@@ -92,17 +92,17 @@ class StudyViewController: ViewController {
         }
         
         if nextImage.index == "" {
-            
+            return false
         } else {
             self.activeImage = nextImage
         }
-        
+        return true
     }
     
     override func viewDidLoad() {
         nextButton.tag = 3
         
-        findNextImage()
+        print(findNextImage())
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -111,10 +111,31 @@ class StudyViewController: ViewController {
     }
     
     override func handleNextClick() {
-        findNextImage()
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
-        buttonsStackView.isHidden = true
+        if !findNextImage() {
+            showCompletionAlert()
+        } else {
+            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+            buttonsStackView.isHidden = true
+            nextButton.isHidden = false
+        }
+        
     }
+    
+
+    
+
+    
+    
+    func goBack(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    func showCompletionAlert() {
+            let alert = UIAlertController(title: "Charts Fertig", message: "Jetzt sind alle Charts fertig.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: goBack(_:)))
+            present(alert, animated: true, completion: nil)
+        }
     
     @IBAction func nextClicked(_ sender: Any) {
         nextButton.isHidden = true
@@ -208,9 +229,14 @@ class StudyViewController: ViewController {
     }
     
     
-        
+    func generateHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+        }
         
     @IBAction func feedbackButtonClicked(_ sender: UIButton) {
+        
+        generateHapticFeedback()
             
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {

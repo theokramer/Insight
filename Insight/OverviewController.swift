@@ -162,6 +162,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             estimateWidth = Int(UIScreen.main.bounds.width / 2.5)
         }
         studyChartsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        studyChartsButton.isEnabled = learnableImagesCount() > 0 ? true : false
         //studyChartsButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: (UIScreen.main.bounds.width / 2) - (studyChartsButton.frame.width / 2), bottom: 0, trailing: 0)
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.textField.delegate = self
