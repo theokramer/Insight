@@ -46,11 +46,21 @@ extension ViewController {
         
         for i in selectedImages.indices {
             if i == imageIndex {
-                selectedImages[i].image = portraitImage
-                selectedImages[i].cropped = true
+                if singleMode {
+                    singleImage.image = portraitImage
+                    singleImage.cropped = true
+                } else {
+                    selectedImages[i].image = portraitImage
+                    selectedImages[i].cropped = true
+                }
+                
             }
         }
-        handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        if singleMode {
+            handleCompletion(object: singleImage.image, thisImageView: imageView)
+        } else {
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
         
         // Dismiss the picker to return to original view controller.
         dismiss(animated: true, completion: nil)

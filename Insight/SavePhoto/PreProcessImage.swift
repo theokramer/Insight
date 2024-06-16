@@ -39,21 +39,18 @@ extension ViewController {
     @objc func prepareImageForSaving() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
-        for image in selectedImages {
-            found = false
-            
-            //Removes all Images in Core Data that got cropped, so it gets updated.
-            //TODO: Instead change the UIImage when cropped?
+        
+        if singleMode {
             ViewController.fetchCoreData {items in
                 if let items = (items ?? []) as [ImageEntity]? {
                     for item in items {
-                        if image.index == item.id {
+                        if self.singleImage.index == item.id {
                             
-                            if image.cropped {
+                            if self.singleImage.cropped {
                                 context.delete(item)
                                 do {
                                     try context.save()
-                                    print("Success")
+                                    print("Single Success")
                                     found = false
                                 } catch {
                                     print("error-Deleting data")
@@ -68,11 +65,9 @@ extension ViewController {
                     print("FEHLER")
                 }
             }
-            
-            //If image is not in Core Data, upload it
             if !found {
                 // create NSData from UIImage
-                guard let jpegImageData = image.image.jpegData(compressionQuality: 1) else {
+                guard let jpegImageData = singleImage.image.jpegData(compressionQuality: 1) else {
                     // handle failed conversion
                     print("jpg error")
                     return
@@ -80,7 +75,7 @@ extension ViewController {
                 
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
-                newData.id = image.index
+                newData.id = singleImage.index
                 if cellId == "" {
                     newData.topic = Topic(context: context)
                     newData.topic?.id = UUID().uuidString
@@ -103,19 +98,92 @@ extension ViewController {
                 }
                 
             }
-            
+
+        } else {
+            for image in selectedImages {
+                found = false
+                
+                //Removes all Images in Core Data that got cropped, so it gets updated.
+                //TODO: Instead change the UIImage when cropped?
+                ViewController.fetchCoreData {items in
+                    if let items = (items ?? []) as [ImageEntity]? {
+                        for item in items {
+                            if image.index == item.id {
+                                
+                                if image.cropped {
+                                    context.delete(item)
+                                    do {
+                                        try context.save()
+                                        print("Success")
+                                        found = false
+                                    } catch {
+                                        print("error-Deleting data")
+                                    }
+                                    
+                                } else {
+                                    found = true
+                                }
+                            }
+                        }
+                    } else {
+                        print("FEHLER")
+                    }
+                }
+                
+                //If image is not in Core Data, upload it
+                if !found {
+                    // create NSData from UIImage
+                    guard let jpegImageData = image.image.jpegData(compressionQuality: 1) else {
+                        // handle failed conversion
+                        print("jpg error")
+                        return
+                    }
+                    
+                    let newData = ImageEntity(context: context)
+                    newData.imageData = jpegImageData
+                    newData.id = image.index
+                    if cellId == "" {
+                        newData.topic = Topic(context: context)
+                        newData.topic?.id = UUID().uuidString
+                        newData.topic?.name = "Physikum"
+                    } else {
+                        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                        do {
+                            guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
+                                return
+                            }
+                            for myTopic in items {
+                                if myTopic.id == cellId {
+                                    newData.topic = myTopic
+                                }
+                                
+                            }
+                        } catch {
+                            print("error-Fetching data")
+                        }
+                    }
+                    
+                }
+                
+            }
         }
+        
+        
         
         DispatchQueue.main.async {
             do {
                 try context.save()
+                print("YEAH")
             } catch {
                 print("error-saving data")
             }
         }
         
-        
-        self.navigationController?.popViewController(animated: true)
+        if singleMode {
+            self.dismiss(animated: true)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     

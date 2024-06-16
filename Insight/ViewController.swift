@@ -34,8 +34,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let toggleButton = UIButton(type: .custom)
     let nButton = UIButton(type: .custom)
     
+    var singleMode = false
+    
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
+    public var singleImage = selectedImage(image: UIImage(), index: "", cropped: false)
     
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
@@ -63,7 +66,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @objc func onOrientationChange() {
-        handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        if singleMode {
+            handleCompletion(object: singleImage.image, thisImageView: imageView)
+        } else {
+            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+        }
     }
     
     override func viewDidLoad() {
@@ -105,12 +112,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         view.addGestureRecognizer(edgePanL)
         
         
-        if imageIndex == 0 {
+        if imageIndex == 0 || singleMode {
             leftButton.isHidden = true
         } else {
             leftButton.isHidden = false
         }
-        if imageIndex == selectedImages.count - 1 {
+        if imageIndex == selectedImages.count - 1 || singleMode {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false
@@ -120,7 +127,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
         self.navigationItem.leftBarButtonItem = backButton
         if selectedImages.count != 0 {  
-            self.handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            if singleMode {
+                handleCompletion(object: singleImage.image, thisImageView: imageView)
+            } else {
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            }
         }
         
         
@@ -146,15 +157,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handleNextClick() {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            if singleMode {
+                handleCompletion(object: singleImage.image, thisImageView: imageView)
+            } else {
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            }
         }
-        if imageIndex == selectedImages.count - 1 {
+        if imageIndex == selectedImages.count - 1 || singleMode {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false
         }
         
-        if imageIndex == 0 {
+        if imageIndex == 0 || singleMode {
             leftButton.isHidden = true
         } else {
             leftButton.isHidden = false
@@ -164,7 +179,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handlePrevClick() {
         if imageIndex > 0 {
             imageIndex -= 1
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            if singleMode {
+                handleCompletion(object: singleImage.image, thisImageView: imageView)
+            } else {
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            }
             
         }
         
