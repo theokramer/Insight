@@ -409,11 +409,14 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
           let secondView = segue.destination as! ViewController
           let object = sender as! String
            secondView.cellId = object
+           secondView.singleMode = false
        }
         if (segue.identifier == "studyChartsClicked") {
            let secondView = segue.destination as! StudyViewController
            let object = sender as! String
             secondView.cellId = object
+            secondView.singleMode = false
+            
         }
     }
 }

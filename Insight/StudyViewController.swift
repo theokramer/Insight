@@ -23,11 +23,7 @@ class StudyViewController: ViewController {
     let buttonsStackView = UIStackView()
     
     @objc override func onOrientationChange() {
-        if singleMode {
-            handleCompletion(object: singleImage.image, thisImageView: imageView)
-        } else {
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-        }
+        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
     }
     
     func findNextImage() -> Bool {
@@ -103,18 +99,61 @@ class StudyViewController: ViewController {
         return true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
+    }
+    
+    @objc func moreClicked(_ sender: Any) {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let editAction = UIAlertAction(title: "Edit", style: .default) { _ in
+                print("Edit tapped")
+                // Handle edit action
+            }
+            
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                print("Delete tapped")
+                // Handle delete action
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alertController.addAction(editAction)
+            alertController.addAction(deleteAction)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+    
     override func viewDidLoad() {
         nextButton.tag = 3
+        
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.topItem?.title = ""
+        
+        let customButtonWithImage = UIButton(type: .system) // declare your button
+        
+        let image = UIImage(systemName: "ellipsis")?.withRenderingMode(.alwaysTemplate)
+            
+        customButtonWithImage.setImage(image, for: .normal)
+        customButtonWithImage.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
+        customButtonWithImage.setTitleColor(.white, for: .normal) // set text color
+        customButtonWithImage.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2.0)
+        customButtonWithImage.addTarget(self, action: #selector(moreClicked(_:)), for: .touchUpInside)
+        
+        let customNavBarButton = UIBarButtonItem(customView: customButtonWithImage)
+        
+        navigationItem.rightBarButtonItems = [
+            customNavBarButton
+            ]
+        
+
         
         print(findNextImage())
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-        if singleMode {
-            handleCompletion(object: singleImage.image, thisImageView: imageView)
-        } else {
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-        }
+        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
         setupButtons()
     }
     
@@ -122,11 +161,7 @@ class StudyViewController: ViewController {
         if !findNextImage() {
             showCompletionAlert()
         } else {
-            if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView)
-            } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-            }
+            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
             buttonsStackView.isHidden = true
             nextButton.isHidden = false
         }

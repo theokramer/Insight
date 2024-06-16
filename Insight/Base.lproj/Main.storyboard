@@ -51,10 +51,10 @@
             </objects>
             <point key="canvasLocation" x="-3602" y="181"/>
         </scene>
-        <!--Study Charts-->
+        <!--Study View Controller-->
         <scene sceneID="kHf-e6-Shc">
             <objects>
-                <viewController storyboardIdentifier="studyChartsStoryboard" title="Study Charts" id="YbL-Wy-MMs" customClass="StudyViewController" customModule="Insight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="studyChartsStoryboard" id="YbL-Wy-MMs" customClass="StudyViewController" customModule="Insight" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ydK-pV-Trm">
                         <rect key="frame" x="0.0" y="0.0" width="704" height="794"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -96,7 +96,7 @@
                             <constraint firstItem="sbP-02-ihk" firstAttribute="top" secondItem="ydK-pV-Trm" secondAttribute="top" id="tQM-zv-7is"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Study Charts" id="pCH-dg-qaY"/>
+                    <navigationItem key="navigationItem" id="pCH-dg-qaY"/>
                     <connections>
                         <outlet property="imageViewStudy" destination="ILK-3M-8uu" id="s6M-iQ-9rd"/>
                         <outlet property="nextButton" destination="7XO-Gj-uZl" id="NBf-hw-NLm"/>
@@ -410,8 +410,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="A6g-Az-68j"/>
-        <segue reference="P6j-wl-aMZ"/>
+        <segue reference="VDD-Cr-jZK"/>
+        <segue reference="Hw4-Gg-KMM"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="95"/>
