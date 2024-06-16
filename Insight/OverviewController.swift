@@ -48,7 +48,17 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tempDescrLabel: UILabel!
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var moreButton: UIButton!
     
+    
+    @IBAction func moreButtonClicked(_ sender: Any) {
+        editAll()
+    }
+    
+    @IBAction func backButtonClicked(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
     
     @IBOutlet weak var cardInDeck: UILabel!
     @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
@@ -148,23 +158,23 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         
         
         imageIndex = 0
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)), for: .normal) // Image can be downloaded from here below link
-        button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2.0)
-        button.setTitleColor(.white, for: .normal) // You can change the TitleColor
-        button.addTarget(self, action: #selector(editAll), for: .touchUpInside)
-
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)
         
+        var configuration = UIButton.Configuration.filled()
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        configuration.cornerStyle = .capsule
+        moreButton.configuration = configuration
+        let moreImage = UIImage(systemName: "ellipsis", withConfiguration: config)?.withTintColor(.darkGray, renderingMode: .alwaysOriginal)
+        moreButton.setImage(moreImage, for: .normal)
+        moreButton.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2.0)
         
 
         
         // Layout für den Button festlegen
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 430),
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 480),
         ])
         
-        self.navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.isHidden = true
         
         hideKeyboardWhenTappedAround()
@@ -282,6 +292,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             tempStatusLabel.text = "\(learnableImagesCount())"
             tempStatusLabel.font = .boldSystemFont(ofSize: 60)
             tempDescrLabel.text = "Charts left"
+            studyChartsButton.isEnabled = true
         }
     }
     
