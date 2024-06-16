@@ -26,7 +26,7 @@ class StudyViewController: ViewController {
         handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
     }
     
-    func findNextImage() {
+    func findNextImage() -> Bool {
         
         var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
         ViewController.fetchCoreData {items in
@@ -42,7 +42,6 @@ class StudyViewController: ViewController {
                     
                     
                     if myTopic.id == self.cellId {
-                        
                             if item.review != nil {
                                 guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
                                     return
@@ -51,7 +50,7 @@ class StudyViewController: ViewController {
                                 let newReviewDate = review_date.addingTimeInterval((Double(interval) * 60))
                                 
                                 let currentNextReviewDate =
-                                nextImage.review.review_date != nil ? nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60)) : nil
+                                 nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
                                 
                                 if newReviewDate < Date.now {
                                     
@@ -60,7 +59,8 @@ class StudyViewController: ViewController {
                                             nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
                                         
                                     } else {
-                                        if currentNextReviewDate == nil {
+                                        if nextImage.review.index == "" {
+                                            
                                             let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
                                             nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
                                         }
@@ -73,8 +73,10 @@ class StudyViewController: ViewController {
                             
                                 
                             } else {
+                                if nextImage.index == "" {
+                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                }
                                 
-                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
                             }
                             
                             
@@ -90,25 +92,17 @@ class StudyViewController: ViewController {
         }
         
         if nextImage.index == "" {
-            
+            return false
         } else {
             self.activeImage = nextImage
         }
-        
+        return true
     }
     
     override func viewDidLoad() {
         nextButton.tag = 3
         
-        findNextImage()
-        
-        
-        
-        
-        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
-            edgePan.edges = .right
-
-        view.addGestureRecognizer(edgePan)
+        print(findNextImage())
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -117,10 +111,31 @@ class StudyViewController: ViewController {
     }
     
     override func handleNextClick() {
-        findNextImage()
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
-        buttonsStackView.isHidden = true
+        if !findNextImage() {
+            showCompletionAlert()
+        } else {
+            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+            buttonsStackView.isHidden = true
+            nextButton.isHidden = false
+        }
+        
     }
+    
+
+    
+
+    
+    
+    func goBack(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    func showCompletionAlert() {
+            let alert = UIAlertController(title: "Charts Fertig", message: "Jetzt sind alle Charts fertig.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: goBack(_:)))
+            present(alert, animated: true, completion: nil)
+        }
     
     @IBAction func nextClicked(_ sender: Any) {
         nextButton.isHidden = true
@@ -130,7 +145,7 @@ class StudyViewController: ViewController {
     func setupButtons() {
             // Configure buttons
             
-        configureButton(button: forgotButton, title: "Again\n <1 min", color: .systemRed, action: #selector(feedbackButtonClicked(_:)), tag: 0)
+        configureButton(button: forgotButton, title: "Forgot\n <1 min", color: .systemRed, action: #selector(feedbackButtonClicked(_:)), tag: 0)
         configureButton(button: partiallyRecalledButton, title: "Hard\n4d", color: .systemOrange, action: #selector(feedbackButtonClicked(_:)), tag: 1)
         configureButton(button: recalledWithEffortButton, title: "Good\n10d", color: .systemGreen, action: #selector(feedbackButtonClicked(_:)), tag: 2)
         configureButton(button: easyButton, title: "Easy\n13d", color: .systemBlue, action: #selector(feedbackButtonClicked(_:)), tag: 3)
@@ -214,9 +229,14 @@ class StudyViewController: ViewController {
     }
     
     
-        
+    func generateHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+        }
         
     @IBAction func feedbackButtonClicked(_ sender: UIButton) {
+        
+        generateHapticFeedback()
             
         ViewController.fetchCoreData {items in
             if let items = (items ?? []) as [ImageEntity]? {
