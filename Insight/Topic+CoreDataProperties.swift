@@ -1,8 +1,8 @@
 //
 //  Topic+CoreDataProperties.swift
-//  Insight
+//  
 //
-//  Created by Theo Kramer on 12.05.24.
+//  Created by Theo Kramer on 17.06.24.
 //
 //
 
@@ -51,9 +51,7 @@ extension Topic {
 
     @objc(removeImageEntity:)
     @NSManaged public func removeFromImageEntity(_ values: NSSet)
-
-}
-
-extension Topic : Identifiable {
+    
+    
 
 }

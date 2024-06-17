@@ -8,6 +8,79 @@
 import Foundation
 import UIKit
 
+func findNextImage(cellId: String) -> studyImage? {
+    var activeImage: studyImage
+    var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+    ViewController.fetchCoreData {items in
+        if let items = (items ?? []) as [ImageEntity]? {
+            for item in items {
+                
+                guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
+                    return
+                }
+                guard let myTopic = item.topic else {
+                    return
+                }
+                
+                
+                if myTopic.id == cellId {
+                        if item.review != nil {
+                            guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                                return
+                            }
+                            
+                            let newReviewDate = review_date.addingTimeInterval((Double(interval) * 60))
+                            
+                            let currentNextReviewDate =
+                             nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
+                            
+                            if newReviewDate < Date.now {
+                                
+                                if nextImage.index == "" {
+                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
+                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
+                                    
+                                } else {
+                                    if nextImage.review.index == "" {
+                                        
+                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
+                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
+                                    }
+                                    else if newReviewDate < currentNextReviewDate! {
+                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
+                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
+                                    }
+                                }
+                            }
+                        
+                            
+                        } else {
+                            if nextImage.index == "" {
+                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                            }
+                            
+                        }
+                        
+                        
+                    
+                    
+                    
+                }
+                
+            }
+        } else {
+            print("FEHLER")
+        }
+    }
+    
+    if nextImage.index == "" {
+        return nil
+    } else {
+        activeImage = nextImage
+    }
+    return activeImage
+}
+
 class StudyViewController: ViewController {
     
     @IBOutlet weak var nextButton: UIButton!
@@ -26,78 +99,7 @@ class StudyViewController: ViewController {
         handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
     }
     
-    func findNextImage() -> Bool {
-        
-        var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
-        ViewController.fetchCoreData {items in
-            if let items = (items ?? []) as [ImageEntity]? {
-                for item in items {
-                    
-                    guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
-                        return
-                    }
-                    guard let myTopic = item.topic else {
-                        return
-                    }
-                    
-                    
-                    if myTopic.id == self.cellId {
-                            if item.review != nil {
-                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
-                                    return
-                                }
-                                
-                                let newReviewDate = review_date.addingTimeInterval((Double(interval) * 60))
-                                
-                                let currentNextReviewDate =
-                                 nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
-                                
-                                if newReviewDate < Date.now {
-                                    
-                                    if nextImage.index == "" {
-                                            let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                            nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
-                                        
-                                    } else {
-                                        if nextImage.review.index == "" {
-                                            
-                                            let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                            nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
-                                        }
-                                        else if newReviewDate < currentNextReviewDate! {
-                                            let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                            nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
-                                        }
-                                    }
-                                }
-                            
-                                
-                            } else {
-                                if nextImage.index == "" {
-                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
-                                }
-                                
-                            }
-                            
-                            
-                        
-                        
-                        
-                    }
-                    
-                }
-            } else {
-                print("FEHLER")
-            }
-        }
-        
-        if nextImage.index == "" {
-            return false
-        } else {
-            self.activeImage = nextImage
-        }
-        return true
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = false
@@ -149,7 +151,7 @@ class StudyViewController: ViewController {
         
 
         
-        print(findNextImage())
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -158,7 +160,8 @@ class StudyViewController: ViewController {
     }
     
     override func handleNextClick() {
-        if !findNextImage() {
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+        if (activeImage.index == "") {
             showCompletionAlert()
         } else {
             handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)

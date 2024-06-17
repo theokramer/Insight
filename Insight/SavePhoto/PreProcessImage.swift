@@ -9,6 +9,14 @@ import Foundation
 import UIKit
 import CoreData
 
+struct TextBox {
+    var minX: Float
+    var minY: Float
+    var width: Float
+    var height: Float
+    var id: String
+}
+
 
 extension ViewController {
     
@@ -22,6 +30,9 @@ extension ViewController {
             print("error-Fetching data")
         }
     }
+    
+    
+
     
     //Removes Image of Core Data at specific index
     static func deleteCoreData(indexPath: Int, items: [ImageEntity]) {
@@ -41,6 +52,7 @@ extension ViewController {
         var found = false
         
         if singleMode {
+            
             ViewController.fetchCoreData {items in
                 if let items = (items ?? []) as [ImageEntity]? {
                     for item in items {
@@ -76,6 +88,17 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = singleImage.index
+                
+                for i in singleImage.boxes {
+                    let singleBox = ImageBoxes(context: context)
+                    singleBox.id = i.id
+                    singleBox.height = i.height
+                    singleBox.width = i.width
+                    singleBox.minX = i.minX
+                    singleBox.minY = i.minX
+                    singleBox.imageEntity2 = newData
+                }
+                
                 if cellId == "" {
                     newData.topic = Topic(context: context)
                     newData.topic?.id = UUID().uuidString
@@ -142,6 +165,18 @@ extension ViewController {
                     let newData = ImageEntity(context: context)
                     newData.imageData = jpegImageData
                     newData.id = image.index
+                    
+                    
+                    for i in image.boxes {
+                        let singleBox = ImageBoxes(context: context)
+                        singleBox.id = i.id
+                        singleBox.height = i.height
+                        singleBox.width = i.width
+                        singleBox.minX = i.minX
+                        singleBox.minY = i.minX
+                        singleBox.imageEntity2 = newData
+                    }
+                    
                     if cellId == "" {
                         newData.topic = Topic(context: context)
                         newData.topic?.id = UUID().uuidString

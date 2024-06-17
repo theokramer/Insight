@@ -2,7 +2,7 @@
 //  ImageEntity+CoreDataProperties.swift
 //  
 //
-//  Created by Theo Kramer on 15.06.24.
+//  Created by Theo Kramer on 18.06.24.
 //
 //
 
@@ -18,11 +18,29 @@ extension ImageEntity {
 
     @NSManaged public var id: String?
     @NSManaged public var imageData: Data?
-    @NSManaged public var topic: Topic?
     @NSManaged public var review: ImageReview?
+    @NSManaged public var topic: Topic?
+    @NSManaged public var boxes: NSSet?
     
     public var wrappedId: String {
         id ?? "Unknown Name"
     }
+
+}
+
+// MARK: Generated accessors for boxes
+extension ImageEntity {
+
+    @objc(addBoxesObject:)
+    @NSManaged public func addToBoxes(_ value: ImageBoxes)
+
+    @objc(removeBoxesObject:)
+    @NSManaged public func removeFromBoxes(_ value: ImageBoxes)
+
+    @objc(addBoxes:)
+    @NSManaged public func addToBoxes(_ values: NSSet)
+
+    @objc(removeBoxes:)
+    @NSManaged public func removeFromBoxes(_ values: NSSet)
 
 }
