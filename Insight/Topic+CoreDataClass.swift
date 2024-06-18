@@ -1,8 +1,8 @@
 //
 //  Topic+CoreDataClass.swift
-//  Insight
+//  
 //
-//  Created by Theo Kramer on 12.05.24.
+//  Created by Theo Kramer on 17.06.24.
 //
 //
 

@@ -11,6 +11,7 @@ import Vision
 
 
 extension ViewController {
+    
     // MARK: - Vision
     
     func presentAlert(_ title: String, error: NSError) {
@@ -31,6 +32,7 @@ extension ViewController {
     
     /// - Tag: PerformRequests
     func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
+        print("Executed Vision Request")
         // Fetch desired requests based on switch status.
         let requests = createVisionRequests()
         // Create a request handler.
@@ -84,11 +86,22 @@ extension ViewController {
                 return
             }
             
+            self.saveBoxes(results: results)
+            
+            
             //Display Rectangles above the text
             self.draw(text: results, onImageWithBounds: drawLayer.frame)
             
             
             drawLayer.setNeedsDisplay()
+        }
+    }
+    
+    func saveBoxes(results: [VNTextObservation]) {
+        if self.singleMode {
+            self.singleImage.boxes = results
+        } else {
+            selectedImages[imageIndex].boxes = results
         }
     }
 }

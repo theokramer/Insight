@@ -9,6 +9,14 @@ import Foundation
 import UIKit
 import CoreData
 
+struct TextBox {
+    var minX: Float
+    var minY: Float
+    var width: Float
+    var height: Float
+    var id: String
+}
+
 
 extension ViewController {
     
@@ -22,6 +30,19 @@ extension ViewController {
             print("error-Fetching data")
         }
     }
+    
+    static func fetchCoreDataImageBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageBoxes.fetchRequest()) as? [ImageBoxes]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
+    
+
     
     //Removes Image of Core Data at specific index
     static func deleteCoreData(indexPath: Int, items: [ImageEntity]) {
@@ -37,10 +58,12 @@ extension ViewController {
     
     //Saves the added Images in Core Data
     @objc func prepareImageForSaving() {
+        var count = 0
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         
         if singleMode {
+            
             ViewController.fetchCoreData {items in
                 if let items = (items ?? []) as [ImageEntity]? {
                     for item in items {
@@ -76,6 +99,18 @@ extension ViewController {
                 let newData = ImageEntity(context: context)
                 newData.imageData = jpegImageData
                 newData.id = singleImage.index
+                
+                for i in singleImage.boxes {
+                    
+                    let singleBox = ImageBoxes(context: context)
+                    singleBox.id = UUID().uuidString
+                    singleBox.height = Float(i.boundingBox.height)
+                    singleBox.width = Float(i.boundingBox.width)
+                    singleBox.minX = Float(i.boundingBox.minX)
+                    singleBox.minY = Float(i.boundingBox.minY)
+                    singleBox.imageEntity2 = newData
+                }
+                
                 if cellId == "" {
                     newData.topic = Topic(context: context)
                     newData.topic?.id = UUID().uuidString
@@ -142,6 +177,19 @@ extension ViewController {
                     let newData = ImageEntity(context: context)
                     newData.imageData = jpegImageData
                     newData.id = image.index
+                    
+                    
+                    for i in image.boxes {
+                        let singleBox = ImageBoxes(context: context)
+                        singleBox.id = UUID().uuidString
+                        singleBox.height = Float(i.boundingBox.height)
+                        singleBox.width = Float(i.boundingBox.width)
+                        singleBox.minX = Float(i.boundingBox.minX)
+                        singleBox.minY = Float(i.boundingBox.minY)
+                        singleBox.imageEntity2 = newData
+                        newData.addToBoxes(singleBox)
+                    }
+                    
                     if cellId == "" {
                         newData.topic = Topic(context: context)
                         newData.topic?.id = UUID().uuidString

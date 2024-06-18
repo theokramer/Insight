@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ImageBoxes" representedClassName="ImageBoxes" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="minX" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minY" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="imageEntity2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageEntity" inverseName="boxes" inverseEntity="ImageEntity"/>
+    </entity>
     <entity name="ImageEntity" representedClassName="ImageEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <relationship name="boxes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImageBoxes" inverseName="imageEntity2" inverseEntity="ImageBoxes"/>
         <relationship name="review" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageReview" inverseName="image" inverseEntity="ImageReview"/>
         <relationship name="topic" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Topic" inverseName="imageEntity" inverseEntity="Topic"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="ImageReview" representedClassName="ImageReview" syncable="YES">
         <attribute name="ease_factor" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>

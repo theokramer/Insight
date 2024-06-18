@@ -101,7 +101,7 @@ extension OverviewController: PHPickerViewControllerDelegate {
             return
         }
         
-        selectedImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false))
+        selectedImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false, boxes: []))
         performSegue(withIdentifier: "showViewController", sender: cellId)
     }
     
@@ -113,7 +113,7 @@ extension OverviewController: PHPickerViewControllerDelegate {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [] (object, error) in
                             if let image = object as? UIImage {
                                 DispatchQueue.main.async { [] in
-                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false))
+                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false, boxes: []))
                                 }
                             }
                         })
