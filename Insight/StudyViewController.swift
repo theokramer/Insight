@@ -119,25 +119,22 @@ class StudyViewController: ViewController {
     }
     
     @objc func moreClicked(_ sender: Any) {
-            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            showBottomSheet()
+        }
+    
+    func showBottomSheet() {
+        let data = selectedImage(image: activeImage.image, index: activeImage.index, cropped: false, boxes: activeImage.boxes)
+            let bottomSheetVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BottomSheetViewController") as! BottomSheetViewController
+            bottomSheetVC.configure(with: data)
+            bottomSheetVC.info = data
+            bottomSheetVC.cellID = cellId
+            bottomSheetVC.indizes = [1,2,3,4]
             
-            let editAction = UIAlertAction(title: "Edit", style: .default) { _ in
-                print("Edit tapped")
-                // Handle edit action
-            }
-            
-            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                print("Delete tapped")
-                // Handle delete action
-            }
-            
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            alertController.addAction(editAction)
-            alertController.addAction(deleteAction)
-            alertController.addAction(cancelAction)
-            
-            present(alertController, animated: true, completion: nil)
+            bottomSheetVC.modalPresentationStyle = .custom
+        
+            minusHeight = 1
+            bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
+            present(bottomSheetVC, animated: true, completion: nil)
         }
     
     override func viewDidLoad() {

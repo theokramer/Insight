@@ -182,7 +182,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     override func viewWillAppear(_ animated: Bool) {
         topView.layer.cornerRadius = 15
-        maxImageIndex = 0
+        
         
         imageIndex = 0
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)
@@ -430,7 +430,8 @@ extension OverviewController: UICollectionViewDataSource {
             bottomSheetVC.configure(with: data)
             bottomSheetVC.info = data
             bottomSheetVC.cellID = cellId
-            
+            bottomSheetVC.indizes = [0,1,2,3,4]
+            minusHeight = 0
             bottomSheetVC.modalPresentationStyle = .custom
             bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
             present(bottomSheetVC, animated: true, completion: nil)
@@ -495,6 +496,7 @@ class BottomSheetViewController: UIViewController {
     private var dimmingView: UIView?
     var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     var cellID: String = ""
+    var indizes:[Int] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -525,10 +527,13 @@ class BottomSheetViewController: UIViewController {
         let buttonIcons = ["checkmark.circle", "pencil", "pause.circle", "arrow.right.circle", "trash"]
         
         for (index, title) in buttonTitles.enumerated() {
-            let button = createButton(title: title, icon: buttonIcons[index], index: index)
-            button.tag = index
-            button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-            stackView.addArrangedSubview(button)
+            if indizes.contains(index) {
+                let button = createButton(title: title, icon: buttonIcons[index], index: index)
+                button.tag = index
+                button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+                stackView.addArrangedSubview(button)
+            }
+            
         }
 
         view.addSubview(stackView)
@@ -690,12 +695,13 @@ class HalfScreenPresentationManager: NSObject, UIViewControllerTransitioningDele
     }
 }
 
+var minusHeight = 0.0
+
 class HalfScreenPresentationController: UIPresentationController {
     private let dimmingView = UIView()
-
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = containerView else { return .zero }
-        let height = containerView.bounds.height / 2
+        let height = containerView.bounds.height / 2 - containerView.bounds.height * 0.1 * minusHeight
         return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
     }
 
