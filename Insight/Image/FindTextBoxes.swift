@@ -11,6 +11,7 @@ import Vision
 
 
 extension ViewController {
+    
     // MARK: - Vision
     
     func presentAlert(_ title: String, error: NSError) {
@@ -84,11 +85,23 @@ extension ViewController {
                 return
             }
             
+            self.saveBoxes(results: results)
+            
+            print("DA: \(results)")
+            
             //Display Rectangles above the text
             self.draw(text: results, onImageWithBounds: drawLayer.frame)
             
             
             drawLayer.setNeedsDisplay()
+        }
+    }
+    
+    func saveBoxes(results: [VNTextObservation]) {
+        if self.singleMode {
+            self.singleImage.boxes = results
+        } else {
+            selectedImages[imageIndex].boxes = results
         }
     }
 }

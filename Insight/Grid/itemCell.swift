@@ -2,7 +2,7 @@ import UIKit
 
 class itemCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
-    var mySelImage = selectedImage(image: UIImage(), index: "", cropped: false)
+    var mySelImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     
     @IBOutlet weak var cellMoreButton: UIButton!
     func setImage(image: UIImage) {

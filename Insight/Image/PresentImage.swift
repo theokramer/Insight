@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Vision
 
 
 extension ViewController {
@@ -109,6 +110,29 @@ extension ViewController {
                 //Calls the vision request
                 
                 self.performVisionRequest(image: cgImage, orientation: cgOrientation)
+            }
+            
+        }
+    }
+    
+    func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [VNTextObservation]) {
+        
+        if let image = object as? UIImage {
+            //TODO: Not the best Approach. Display after view is loaded!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.show(image, thisImageView: thisImageView)
+                //Calls the vision request
+                
+                    guard let drawLayer = self.pathLayer else  {
+                        return
+                    }
+                    
+                    //Display Rectangles above the text
+                    self.draw(text: customBounds, onImageWithBounds: drawLayer.frame)
+                    
+                    
+                    drawLayer.setNeedsDisplay()
+                
             }
             
         }

@@ -9,18 +9,21 @@ import Foundation
 import UIKit
 import CoreData
 import SwiftUI
+import Vision
 
 //Object to add and modify new Images
 struct selectedImage {
     var image: UIImage
     var index: String
     var cropped: Bool
+    var boxes: [VNTextObservation]
 }
 
 struct studyImage {
     var image: UIImage
     var index: String
     var review: Review
+    var boxes: [VNTextObservation]
 }
 
 struct Review {
@@ -90,6 +93,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     var timeUntilNewCharts = -1
     
     func learnableImagesCount() -> Int {
+        dataSource.removeAll()
+        selectedImages.removeAll()
         
         var learnableImages:[studyImage] = []
         
@@ -107,6 +112,24 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                     
                     if myTopic.id == self.cellId {
                         
+                        if myTopic.name == "" {
+                            self.textField.placeholder = "Ohne Titel"
+                            self.textField.text = ""
+                        } else {
+                            self.textField.text = myTopic.wrappedName
+                        }
+                        
+                        let imageStruct = selectedImage.init(image: thisImage, index: item.wrappedId, cropped: false, boxes: [])
+                        self.dataSource.append(imageStruct)
+                        selectedImages.append(imageStruct)
+
+                        
+                        if self.cellId == "" {
+                            self.textField.text = ""
+                        } else {
+                            self.textField.text = myTopic.wrappedName
+                        }
+                        
                             if item.review != nil {
                                 guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
                                     return
@@ -117,7 +140,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                                
                                 
                                 if newReviewDate < Date.now {
-                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
                                     learnableImages.append(myStudyImage)
                                 } else {
                                     if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
@@ -127,7 +150,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                             
                                 
                             } else {
-                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
                                 learnableImages.append(myStudyImage)
                             }
                             
@@ -142,6 +165,13 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                 print("FEHLER")
             }
         }
+        
+        
+        if textField.text == "" {
+                   textField.becomeFirstResponder()
+               } else {
+                   textField.resignFirstResponder()
+               }
         
         return learnableImages.count
     }
@@ -201,63 +231,10 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         self.textField.delegate = self
         textField.returnKeyType = UIReturnKeyType.done
         textField.borderStyle = .none
-
-        //Load Topic Data from Core Data and apply it to textField
-        do {
-            guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
-                return
-            }
-            for myTopic in items {
-                if myTopic.id == self.cellId {
-                    if myTopic.name == "" {
-                        self.textField.placeholder = "Ohne Titel"
-                        self.textField.text = ""
-                    } else {
-                        self.textField.text = myTopic.wrappedName
-                    }
-                }
-                
-            }
-        } catch {
-            print("Fehler")
-        }
         
-        if textField.text == "" {
-                   textField.becomeFirstResponder()
-               } else {
-                   textField.resignFirstResponder()
-               }
-        dataSource.removeAll()
-        selectedImages.removeAll()
-        //Add all Images to the Data Array with previously selected Topic ID
-        ViewController.fetchCoreData {items in
-            if let items = (items ?? []) as [ImageEntity]? {
-                for item in items {
-                    
-                    guard let thisImage = UIImage(data: item.imageData ?? Data()) else {
-                        return
-                    }
-                    guard let myTopic = item.topic else {
-                        return
-                    }
-                    
-                    
-                    if myTopic.id == self.cellId {
-                        if self.cellId == "" {
-                            self.textField.text = ""
-                        } else {
-                            self.textField.text = myTopic.wrappedName
-                        }
-                        let imageStruct = selectedImage.init(image: thisImage, index: item.wrappedId, cropped: false)
-                        self.dataSource.append(imageStruct)
-                        selectedImages.append(imageStruct)
-                    }
-                    
-                }
-            } else {
-                print("FEHLER")
-            }
-        }
+        self.updateText()
+
+        
         if self.collectionView.dataSource != nil {
             self.collectionView.reloadData()
         } else {
@@ -273,7 +250,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         
         
         cardInDeck.text = "Total Charts (\(selectedImages.count))"
-        self.updateText()
+        
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             self.updateText()
             })
@@ -516,7 +493,7 @@ public extension UIView {
 class BottomSheetViewController: UIViewController {
     let presentationManager = HalfScreenPresentationManager()
     private var dimmingView: UIView?
-    var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false)
+    var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     var cellID: String = ""
 
     override func viewDidLoad() {

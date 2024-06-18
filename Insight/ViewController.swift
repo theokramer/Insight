@@ -38,7 +38,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
-    public var singleImage = selectedImage(image: UIImage(), index: "", cropped: false)
+    public var singleImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
@@ -131,6 +131,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 handleCompletion(object: singleImage.image, thisImageView: imageView)
             } else {
                 handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                
             }
         }
         
