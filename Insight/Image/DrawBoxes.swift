@@ -60,6 +60,7 @@ extension ViewController {
     //Creates white Boxes above the detected Text Fields
     func draw(text: [VNTextObservation], onImageWithBounds bounds: CGRect) {
         removeAllButtonsFromView()
+        
         var sliderValue = 0.5
         CATransaction.begin()
         
@@ -67,7 +68,8 @@ extension ViewController {
         var textGroups: [[VNTextObservation]] = []
         
         for wordObservation in text {
-        var grouped = false
+            print(wordObservation)
+            var grouped = false
             
             let wordBox = boundingBox(forRegionOfInterest: wordObservation.boundingBox, withinImageBounds: bounds)
             
@@ -76,9 +78,9 @@ extension ViewController {
                 for groupObservation in group {
                     let groupBox = boundingBox(forRegionOfInterest: groupObservation.boundingBox, withinImageBounds: bounds)
                     let distanceX = abs(wordBox.midX - groupBox.midX)
-                     let distanceY = abs(wordBox.midY - groupBox.midY)
-                     let minXDistance = (wordBox.width + groupBox.width) / 2
-                     let minYDistance = (wordBox.height + groupBox.height) / 2
+                    let distanceY = abs(wordBox.midY - groupBox.midY)
+                    let minXDistance = (wordBox.width + groupBox.width) / 2
+                    let minYDistance = (wordBox.height + groupBox.height) / 2
                     if wordBox.intersects(groupBox) || distanceX <= CGFloat(sliderValue) + minXDistance && distanceY <=  CGFloat(sliderValue) + minYDistance {
                         // Add the current observation to the existing group
                         textGroups[index].append(wordObservation)
@@ -95,29 +97,23 @@ extension ViewController {
             }
         }
         
-        
-        
         // Create buttons for each group of intersecting text observations
         for group in textGroups {
             let id = Int.random(in: 1..<100000000)
             let fillColor = toggleColor // You may want to change the fill color as needed
             
             // Calculate the bounding box for the group
-            
             for observation in group {
-                
                 var observationBox = boundingBox(forRegionOfInterest: observation.boundingBox, withinImageBounds: bounds)
-                
                 observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
                 let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
                 view.insertSubview(shapeButton, at: 2)
-                
             }
-            
         }
         
         CATransaction.commit()
     }
+
     
     //Makes the Boxes toggable
     func createShapeButton(frame: CGRect, fillColor: UIColor, tag: Int) -> UIButton {

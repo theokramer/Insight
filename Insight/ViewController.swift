@@ -131,6 +131,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 handleCompletion(object: singleImage.image, thisImageView: imageView)
             } else {
                 handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                
             }
         }
         

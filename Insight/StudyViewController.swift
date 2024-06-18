@@ -7,10 +7,11 @@
 
 import Foundation
 import UIKit
+import Vision
 
 func findNextImage(cellId: String) -> studyImage? {
     var activeImage: studyImage
-    var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+    var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
     ViewController.fetchCoreData {items in
         if let items = (items ?? []) as [ImageEntity]? {
             for item in items {
@@ -24,6 +25,9 @@ func findNextImage(cellId: String) -> studyImage? {
                 
                 
                 if myTopic.id == cellId {
+                    
+                    
+                    
                         if item.review != nil {
                             guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
                                 return
@@ -34,29 +38,37 @@ func findNextImage(cellId: String) -> studyImage? {
                             let currentNextReviewDate =
                              nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
                             
+                            
+                            
                             if newReviewDate < Date.now {
                                 
-                                if nextImage.index == "" {
-                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
+                                if nextImage.index == "" || nextImage.review.index == "" || newReviewDate < currentNextReviewDate! {
+                                    let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
                                     
-                                } else {
-                                    if nextImage.review.index == "" {
-                                        
-                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
+                                    let boxes = item.boxes?.allObjects as? [ImageBoxes] ?? []
+                                    
+                                    let boxData = boxes.map { box -> VNTextObservation in
+                                        return VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
                                     }
-                                    else if newReviewDate < currentNextReviewDate! {
-                                        let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
-                                        nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview)
-                                    }
+                                    
+                                    
+                                    
+                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview, boxes: boxData)
                                 }
                             }
                         
                             
                         } else {
                             if nextImage.index == "" {
-                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                let boxes = item.boxes?.allObjects as? [ImageBoxes] ?? []
+                                
+                                let boxData = boxes.map { box -> VNTextObservation in
+                                    return VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
+                                }
+
+                                
+                                
+                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: boxData)
                             }
                             
                         }
@@ -78,6 +90,7 @@ func findNextImage(cellId: String) -> studyImage? {
     } else {
         activeImage = nextImage
     }
+    
     return activeImage
 }
 
@@ -86,7 +99,7 @@ class StudyViewController: ViewController {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var imageViewStudy: UIImageView!
     
-    var activeImage: studyImage = studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+    var activeImage: studyImage = studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
     
     // Declare buttons and stack view
     let easyButton = UIButton()
@@ -96,7 +109,7 @@ class StudyViewController: ViewController {
     let buttonsStackView = UIStackView()
     
     @objc override func onOrientationChange() {
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy, customBounds: activeImage.boxes)
     }
     
 
@@ -151,20 +164,24 @@ class StudyViewController: ViewController {
         
 
         
-        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+        self.show(activeImage.image, thisImageView: imageViewStudy)
+        
+        handleCompletion(object: activeImage.image, thisImageView: imageViewStudy, customBounds: activeImage.boxes)
+        //print("HIER: \(activeImage.boxes)")
         setupButtons()
     }
+
     
     override func handleNextClick() {
-        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
         if (activeImage.index == "") {
             showCompletionAlert()
         } else {
-            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy)
+            handleCompletion(object: activeImage.image, thisImageView: imageViewStudy, customBounds: activeImage.boxes)
             buttonsStackView.isHidden = true
             nextButton.isHidden = false
         }

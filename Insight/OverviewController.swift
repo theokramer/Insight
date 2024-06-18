@@ -9,19 +9,21 @@ import Foundation
 import UIKit
 import CoreData
 import SwiftUI
+import Vision
 
 //Object to add and modify new Images
 struct selectedImage {
     var image: UIImage
     var index: String
     var cropped: Bool
-    var boxes: [TextBox]
+    var boxes: [VNTextObservation]
 }
 
 struct studyImage {
     var image: UIImage
     var index: String
     var review: Review
+    var boxes: [VNTextObservation]
 }
 
 struct Review {
@@ -138,7 +140,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                                
                                 
                                 if newReviewDate < Date.now {
-                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
                                     learnableImages.append(myStudyImage)
                                 } else {
                                     if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
@@ -148,7 +150,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                             
                                 
                             } else {
-                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1))
+                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
                                 learnableImages.append(myStudyImage)
                             }
                             

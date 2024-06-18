@@ -84,26 +84,24 @@ extension ViewController {
                   let results = request?.results as? [VNTextObservation] else {
                 return
             }
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
+            self.saveBoxes(results: results)
             
-            for j in results as [VNTextObservation] {
-                
-                if self.singleMode {
-                        self.singleImage.boxes.append(TextBox(minX: Float(j.boundingBox.minX), minY: Float(j.boundingBox.minY), width: Float(j.boundingBox.width), height: Float(j.boundingBox.height), id: UUID().uuidString))
-                    
-                } else {
-                    selectedImages[imageIndex].boxes.append(TextBox(minX: Float(j.boundingBox.minX), minY: Float(j.boundingBox.minY), width: Float(j.boundingBox.width), height: Float(j.boundingBox.height), id: UUID().uuidString))
-                }
-                
-            }
-            
+            print("DA: \(results)")
             
             //Display Rectangles above the text
             self.draw(text: results, onImageWithBounds: drawLayer.frame)
             
             
             drawLayer.setNeedsDisplay()
+        }
+    }
+    
+    func saveBoxes(results: [VNTextObservation]) {
+        if self.singleMode {
+            self.singleImage.boxes = results
+        } else {
+            selectedImages[imageIndex].boxes = results
         }
     }
 }

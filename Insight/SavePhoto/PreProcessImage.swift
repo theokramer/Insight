@@ -31,6 +31,16 @@ extension ViewController {
         }
     }
     
+    static func fetchCoreDataImageBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageBoxes.fetchRequest()) as? [ImageBoxes]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
     
 
     
@@ -48,6 +58,7 @@ extension ViewController {
     
     //Saves the added Images in Core Data
     @objc func prepareImageForSaving() {
+        var count = 0
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         
@@ -90,12 +101,13 @@ extension ViewController {
                 newData.id = singleImage.index
                 
                 for i in singleImage.boxes {
+                    
                     let singleBox = ImageBoxes(context: context)
-                    singleBox.id = i.id
-                    singleBox.height = i.height
-                    singleBox.width = i.width
-                    singleBox.minX = i.minX
-                    singleBox.minY = i.minX
+                    singleBox.id = UUID().uuidString
+                    singleBox.height = Float(i.boundingBox.height)
+                    singleBox.width = Float(i.boundingBox.width)
+                    singleBox.minX = Float(i.boundingBox.minX)
+                    singleBox.minY = Float(i.boundingBox.minY)
                     singleBox.imageEntity2 = newData
                 }
                 
@@ -169,12 +181,13 @@ extension ViewController {
                     
                     for i in image.boxes {
                         let singleBox = ImageBoxes(context: context)
-                        singleBox.id = i.id
-                        singleBox.height = i.height
-                        singleBox.width = i.width
-                        singleBox.minX = i.minX
-                        singleBox.minY = i.minX
+                        singleBox.id = UUID().uuidString
+                        singleBox.height = Float(i.boundingBox.height)
+                        singleBox.width = Float(i.boundingBox.width)
+                        singleBox.minX = Float(i.boundingBox.minX)
+                        singleBox.minY = Float(i.boundingBox.minY)
                         singleBox.imageEntity2 = newData
+                        newData.addToBoxes(singleBox)
                     }
                     
                     if cellId == "" {
