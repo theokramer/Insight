@@ -15,7 +15,7 @@ import CoreData
 
 //Tracks the Index of the current Image
 var imageIndex = 0
-
+var maxImageIndex = 0
 
 
 
@@ -158,11 +158,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handleNextClick() {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
-            if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView)
+            if imageIndex > maxImageIndex {
+                maxImageIndex = imageIndex
+                if singleMode {
+                    handleCompletion(object: singleImage.image, thisImageView: imageView)
+                } else {
+                    handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                }
             } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                if singleMode {
+                    handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
+                } else {
+                    handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView, customBounds: selectedImages[imageIndex].boxes)
+                }
             }
+            
+            
+            
+           
         }
         if imageIndex == selectedImages.count - 1 || singleMode {
             rightButton.isHidden = true
@@ -180,10 +193,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handlePrevClick() {
         if imageIndex > 0 {
             imageIndex -= 1
+            
             if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView)
+                handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
             } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView, customBounds: selectedImages[imageIndex].boxes)
             }
             
         }

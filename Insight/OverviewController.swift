@@ -182,7 +182,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     override func viewWillAppear(_ animated: Bool) {
         topView.layer.cornerRadius = 15
-        
+        maxImageIndex = 0
         
         imageIndex = 0
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)

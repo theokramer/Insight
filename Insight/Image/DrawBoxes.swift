@@ -68,7 +68,6 @@ extension ViewController {
         var textGroups: [[VNTextObservation]] = []
         
         for wordObservation in text {
-            print(wordObservation)
             var grouped = false
             
             let wordBox = boundingBox(forRegionOfInterest: wordObservation.boundingBox, withinImageBounds: bounds)

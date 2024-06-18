@@ -32,6 +32,7 @@ extension ViewController {
     
     /// - Tag: PerformRequests
     func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
+        print("Executed Vision Request")
         // Fetch desired requests based on switch status.
         let requests = createVisionRequests()
         // Create a request handler.
@@ -87,7 +88,6 @@ extension ViewController {
             
             self.saveBoxes(results: results)
             
-            print("DA: \(results)")
             
             //Display Rectangles above the text
             self.draw(text: results, onImageWithBounds: drawLayer.frame)
