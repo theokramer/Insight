@@ -58,8 +58,13 @@ extension ViewController {
         }
         if singleMode {
             handleCompletion(object: singleImage.image, thisImageView: imageView)
+            
+            
         } else {
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            
+            
+            
         }
         
         // Dismiss the picker to return to original view controller.

@@ -53,7 +53,16 @@ func findNextImage(cellId: String) -> studyImage? {
                                     
                                     
                                     
-                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview, boxes: boxData)
+                                    var newImageBoxArray:[ImageBox] = []
+                                    
+                                    for i in 0..<boxData.count {
+                                        let newImageBox = ImageBox(frame: boxData[i], tag: Int(boxes[i].tag))
+                                        newImageBoxArray.append(newImageBox)
+                                    }
+                                    
+                                    
+                                    
+                                    nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: nextReview, boxes: newImageBoxArray)
                                 }
                             }
                         
@@ -65,10 +74,16 @@ func findNextImage(cellId: String) -> studyImage? {
                                 let boxData = boxes.map { box -> VNTextObservation in
                                     return VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
                                 }
+                                
+                                var newImageBoxArray:[ImageBox] = []
+                                
+                                for i in 0..<boxData.count {
+                                    let newImageBox = ImageBox(frame: boxData[i], tag: Int(boxes[i].tag))
+                                    newImageBoxArray.append(newImageBox)
+                                }
 
                                 
-                                
-                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: boxData)
+                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: newImageBoxArray)
                             }
                             
                         }
@@ -138,6 +153,7 @@ class StudyViewController: ViewController {
         }
     
     override func viewDidLoad() {
+        viewController = false
         nextButton.tag = 3
         
         navigationController?.navigationBar.isHidden = false

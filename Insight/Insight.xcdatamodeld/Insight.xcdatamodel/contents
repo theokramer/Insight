@@ -5,6 +5,7 @@
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="minX" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="minY" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tag" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="imageEntity2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageEntity" inverseName="boxes" inverseEntity="ImageEntity"/>
     </entity>

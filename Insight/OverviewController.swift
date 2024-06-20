@@ -16,14 +16,19 @@ struct selectedImage {
     var image: UIImage
     var index: String
     var cropped: Bool
-    var boxes: [VNTextObservation]
+    var boxes: [ImageBox]
+}
+
+struct ImageBox {
+    var frame: VNTextObservation
+    var tag: Int
 }
 
 struct studyImage {
     var image: UIImage
     var index: String
     var review: Review
-    var boxes: [VNTextObservation]
+    var boxes: [ImageBox]
 }
 
 struct Review {
@@ -182,7 +187,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     
     override func viewWillAppear(_ animated: Bool) {
         topView.layer.cornerRadius = 15
-        
+        viewController = false
         
         imageIndex = 0
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)

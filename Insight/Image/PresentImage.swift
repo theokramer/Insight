@@ -115,7 +115,7 @@ extension ViewController {
         }
     }
     
-    func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [VNTextObservation]) {
+    func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [ImageBox]) {
         
         if let image = object as? UIImage {
             //TODO: Not the best Approach. Display after view is loaded!

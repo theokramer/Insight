@@ -15,6 +15,7 @@ import CoreData
 
 //Tracks the Index of the current Image
 var imageIndex = 0
+var viewController = true
 var maxImageIndex = 0
 
 
@@ -35,6 +36,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let nButton = UIButton(type: .custom)
     
     var singleMode = false
+    var firstTime = false
     
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
@@ -42,6 +44,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
+    
+    
     
     // Layer into which to draw bounding box paths.
     var pathLayer: CALayer?
@@ -68,12 +72,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @objc func onOrientationChange() {
         if singleMode {
             handleCompletion(object: singleImage.image, thisImageView: imageView)
+            
+            
         } else {
             handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            
+            
         }
     }
     
     override func viewDidLoad() {
+        viewController = true
         navigationController?.navigationBar.isHidden = false
         super.viewDidLoad()
         
@@ -126,11 +135,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
         self.navigationItem.leftBarButtonItem = backButton
-        if selectedImages.count != 0 {  
+        if selectedImages.count != 0 {
             if singleMode {
                 handleCompletion(object: singleImage.image, thisImageView: imageView)
+                if singleImage.boxes.isEmpty {
+                    
+                }
+                
             } else {
                 handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                
+                
                 
             }
         }
@@ -158,19 +173,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handleNextClick() {
         if selectedImages.count > imageIndex + 1 {
             imageIndex += 1
-            if imageIndex > maxImageIndex {
-                maxImageIndex = imageIndex
-                if singleMode {
-                    handleCompletion(object: singleImage.image, thisImageView: imageView)
-                } else {
-                    handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-                }
+            if singleMode {
+                handleCompletion(object: singleImage.image, thisImageView: imageView)
+                
+                
             } else {
-                if singleMode {
-                    handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
+                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+                /*if selectedImages[imageIndex].boxes.isEmpty {
+                    
                 } else {
                     handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView, customBounds: selectedImages[imageIndex].boxes)
-                }
+                }*/
+                
+                
             }
             
             

@@ -31,6 +31,16 @@ extension ViewController {
         }
     }
     
+    static func fetchCoreDataBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageBoxes.fetchRequest()) as? [ImageBoxes]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
     static func fetchCoreDataImageBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
@@ -104,11 +114,12 @@ extension ViewController {
                     
                     let singleBox = ImageBoxes(context: context)
                     singleBox.id = UUID().uuidString
-                    singleBox.height = Float(i.boundingBox.height)
-                    singleBox.width = Float(i.boundingBox.width)
-                    singleBox.minX = Float(i.boundingBox.minX)
-                    singleBox.minY = Float(i.boundingBox.minY)
+                    singleBox.height = Float(i.frame.boundingBox.height)
+                    singleBox.width = Float(i.frame.boundingBox.width)
+                    singleBox.minX = Float(i.frame.boundingBox.minX)
+                    singleBox.minY = Float(i.frame.boundingBox.minY)
                     singleBox.imageEntity2 = newData
+                    singleBox.tag = Int64(i.tag)
                 }
                 
                 if cellId == "" {
@@ -182,11 +193,12 @@ extension ViewController {
                     for i in image.boxes {
                         let singleBox = ImageBoxes(context: context)
                         singleBox.id = UUID().uuidString
-                        singleBox.height = Float(i.boundingBox.height)
-                        singleBox.width = Float(i.boundingBox.width)
-                        singleBox.minX = Float(i.boundingBox.minX)
-                        singleBox.minY = Float(i.boundingBox.minY)
+                        singleBox.height = Float(i.frame.boundingBox.height)
+                        singleBox.width = Float(i.frame.boundingBox.width)
+                        singleBox.minX = Float(i.frame.boundingBox.minX)
+                        singleBox.minY = Float(i.frame.boundingBox.minY)
                         singleBox.imageEntity2 = newData
+                        singleBox.tag = Int64(i.tag)
                         newData.addToBoxes(singleBox)
                     }
                     

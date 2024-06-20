@@ -87,19 +87,30 @@ extension ViewController {
             }
             
             
-            self.saveBoxes(results: results)
+            
+            print("handle!!")
+            var newImageBoxArray:[ImageBox] = []
+            
+            for i in results {
+                let newImageBox = ImageBox(frame: i, tag: Int.random(in: 1...100000000))
+                newImageBoxArray.append(newImageBox)
+            }
+            
+            
+            self.saveBoxes(results: newImageBoxArray)
             
             
             //Display Rectangles above the text
-            self.draw(text: results, onImageWithBounds: drawLayer.frame)
+            self.draw(text: newImageBoxArray, onImageWithBounds: drawLayer.frame)
             
             
             drawLayer.setNeedsDisplay()
         }
     }
     
-    func saveBoxes(results: [VNTextObservation]) {
+    func saveBoxes(results: [ImageBox]) {
         if self.singleMode {
+            
             self.singleImage.boxes = results
         } else {
             selectedImages[imageIndex].boxes = results

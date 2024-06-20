@@ -23,8 +23,6 @@
 		208F80AB2C2087EB00984C0A /* ImageReview+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */; };
 		208F80B42C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */; };
 		208F80B52C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */; };
-		208F80B62C20EB6F00984C0A /* ImageBoxes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B22C20EB6F00984C0A /* ImageBoxes+CoreDataProperties.swift */; };
-		208F80B72C20EB6F00984C0A /* ImageBoxes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B12C20EB6F00984C0A /* ImageBoxes+CoreDataClass.swift */; };
 		20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */; };
 		20BD34A02BF020B700E0D9CD /* EventHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349F2BF020B700E0D9CD /* EventHandling.swift */; };
 		20CCAB0B2C04BA6A00262034 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CCAB0A2C04BA6A00262034 /* StudyViewController.swift */; };
@@ -36,6 +34,8 @@
 		20DD54A52BF040F500AA5240 /* HandleBoxClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */; };
 		20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */; };
 		20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */; };
+		20DD7AB32C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD7AB12C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift */; };
+		20DD7AB42C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DD7AB22C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift */; };
 		20EEF98A2BF0F13300CF3295 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF9892BF0F13300CF3295 /* StartViewController.swift */; };
 		20EEF98D2BF0F16900CF3295 /* TopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEF98C2BF0F16900CF3295 /* TopicModel.swift */; };
 		D713D9A6BB45A29865887C42 /* Pods_Insight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */; };
@@ -60,8 +60,6 @@
 		208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageReview+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageReview+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		208F80A72C2087EB00984C0A /* Topic+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/Topic+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageEntity+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		208F80B12C20EB6F00984C0A /* ImageBoxes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageBoxes+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		208F80B22C20EB6F00984C0A /* ImageBoxes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageBoxes+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageEntity+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		20BD349F2BF020B700E0D9CD /* EventHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandling.swift; sourceTree = "<group>"; };
@@ -74,6 +72,8 @@
 		20DD54A42BF040F500AA5240 /* HandleBoxClick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleBoxClick.swift; sourceTree = "<group>"; };
 		20DD54A62BF0415800AA5240 /* FindTextBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindTextBoxes.swift; sourceTree = "<group>"; };
 		20DD54AC2BF0490A00AA5240 /* PreProcessImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreProcessImage.swift; sourceTree = "<group>"; };
+		20DD7AB12C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataProperties.swift"; path = "../ImageBoxes+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		20DD7AB22C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataClass.swift"; path = "../ImageBoxes+CoreDataClass.swift"; sourceTree = "<group>"; };
 		20EEF9892BF0F13300CF3295 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		20EEF98C2BF0F16900CF3295 /* TopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicModel.swift; sourceTree = "<group>"; };
 		6C9D71B6586EDBE08474C00F /* Pods_Insight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Insight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,10 +122,10 @@
 		205F8F7C2BFCF33E004EB775 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				20DD7AB22C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift */,
+				20DD7AB12C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift */,
 				208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */,
 				208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */,
-				208F80B12C20EB6F00984C0A /* ImageBoxes+CoreDataClass.swift */,
-				208F80B22C20EB6F00984C0A /* ImageBoxes+CoreDataProperties.swift */,
 				208F80A52C2087EB00984C0A /* Topic+CoreDataClass.swift */,
 				208F80A72C2087EB00984C0A /* Topic+CoreDataProperties.swift */,
 				208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */,
@@ -367,7 +367,7 @@
 				20DD54A32BF0404D00AA5240 /* DrawBoxes.swift in Sources */,
 				208F80AA2C2087EB00984C0A /* Topic+CoreDataClass.swift in Sources */,
 				20DD54A72BF0415800AA5240 /* FindTextBoxes.swift in Sources */,
-				208F80B72C20EB6F00984C0A /* ImageBoxes+CoreDataClass.swift in Sources */,
+				20DD7AB42C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift in Sources */,
 				20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */,
 				2080BB752BF000F600D724A5 /* ViewController.swift in Sources */,
 				208F80A82C2087EB00984C0A /* ImageReview+CoreDataProperties.swift in Sources */,
@@ -383,7 +383,7 @@
 				20262CDC2BF607B700DF066F /* itemCell.swift in Sources */,
 				2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */,
 				2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */,
-				208F80B62C20EB6F00984C0A /* ImageBoxes+CoreDataProperties.swift in Sources */,
+				20DD7AB32C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift in Sources */,
 				208F80AB2C2087EB00984C0A /* ImageReview+CoreDataClass.swift in Sources */,
 				20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */,
 				20DBA2B12BF23FCB002DCF9D /* OverviewController.swift in Sources */,
