@@ -1,9 +1,3 @@
-//
-//  ViewController.swift
-//  Insight
-//
-//  Created by Theo Kramer on 11.05.24.
-//
 
 import Photos
 import UIKit
@@ -13,48 +7,37 @@ import CropViewController
 import PhotosUI
 import CoreData
 
-//Tracks the Index of the current Image
 var imageIndex = 0
 var viewController = true
 var maxImageIndex = 0
-
 var editImages: [selectedImage] = []
 
 @available(iOS 13.0, *)
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
-    
-    //All Storyboard Components
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, UIScrollViewDelegate {
+
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet var panGesture: UIPanGestureRecognizer!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     public var editAllClicked = false
-    
-    
-    
     let toggleButton = UIButton(type: .custom)
     let nButton = UIButton(type: .custom)
     
+    private var lastPanPosition: CGPoint = .zero
+    
     var singleMode = false
     var firstTime = false
-    
     var imageWidth: CGFloat = 0
     var imageHeight: CGFloat = 0
     
-    //Gets Id of the selected Topic when called by View Controller
-    public var cellId:String = ""
-    
-    //Determines wether or not the User is currently editing the Text Boxes
+    public var cellId: String = ""
     var editMode = false
 
-
+    @FetchRequest(sortDescriptors: []) var topics: FetchedResults<Topic>
     
-    //Fetch Request to get all added Topics of the User
-    @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
-    
-    // Background is black, so display status bar in white.
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -64,8 +47,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func scaleAndOrient(image: UIImage) -> UIImage {
-        
-        // Set a default value for limiting image size.
         let maxResolution: CGFloat = 640
         
         guard let cgImage = image.cgImage else {
@@ -73,15 +54,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             return image
         }
         
-        // Compute parameters for transform.
         let width = CGFloat(cgImage.width)
         let height = CGFloat(cgImage.height)
         var transform = CGAffineTransform.identity
         
         var bounds = CGRect(x: 0, y: 0, width: width, height: height)
         
-        if width > maxResolution ||
-            height > maxResolution {
+        if width > maxResolution || height > maxResolution {
             let ratio = width / height
             if width > height {
                 bounds.size.width = maxResolution
@@ -91,7 +70,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 bounds.size.height = maxResolution
             }
         }
-        
         
         let scaleRatio = bounds.size.width / width
         let orientation = image.imageOrientation
@@ -143,20 +121,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    //Shows the selected and cropped Image
     func show(_ image: UIImage, thisImageView: UIImageView) {
-        // Remove previous paths & image
         pathLayer?.removeFromSuperlayer()
         pathLayer = nil
         thisImageView.image = nil
         
-        // Account for image orientation by transforming view.
         let correctedImage = scaleAndOrient(image: image)
-        
-        // Place photo inside imageView.
         thisImageView.image = correctedImage
         
-        // Transform image to fit screen.
         guard let cgImage = correctedImage.cgImage else {
             print("Trying to show an image not backed by CGImage!")
             return
@@ -169,201 +141,174 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let widthRatio = fullImageWidth / imageFrame.width
         let heightRatio = fullImageHeight / imageFrame.height
         
-        // ScaleAspectFit: The image will be scaled down according to the stricter dimension.
         let scaleDownRatio = max(widthRatio, heightRatio)
         
-        // Cache image dimensions to reference when drawing CALayer paths.
         imageWidth = fullImageWidth / scaleDownRatio
         imageHeight = fullImageHeight / scaleDownRatio
         
-        // Prepare pathLayer to hold Vision results.
         let xLayer = (imageFrame.width - imageWidth) / 2
         let yLayer = thisImageView.frame.minY + (imageFrame.height - imageHeight) / 2
         let drawingLayer = CALayer()
         drawingLayer.bounds = CGRect(x: xLayer, y: yLayer, width: imageWidth, height: imageHeight)
         drawingLayer.anchorPoint = CGPoint.zero
         drawingLayer.position = CGPoint(x: xLayer, y: yLayer)
-        //Change opacity of Rectangle HERE
         drawingLayer.opacity = 1
         pathLayer = drawingLayer
-        self.view.layer.addSublayer(pathLayer!)
+        self.scrollView.layer.addSublayer(pathLayer!)
     }
 
-    
     func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [ImageBox]) {
-        
         if let image = object as? UIImage {
-            //TODO: Not the best Approach. Display after view is loaded!
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.show(image, thisImageView: thisImageView)
-                //Calls the vision request
-                
-                    guard let drawLayer = pathLayer else  {
-                        return
-                    }
-                    
-                    //Display Rectangles above the text
-                    self.draw(text: customBounds, onImageWithBounds: drawLayer.frame)
-                    
-                    
-                    drawLayer.setNeedsDisplay()
-                
+                guard let drawLayer = pathLayer else {
+                    return
+                }
+                self.draw(text: customBounds, onImageWithBounds: drawLayer.frame)
+                drawLayer.setNeedsDisplay()
             }
-            
         }
     }
     
     override func viewDidLoad() {
-        var boxesArray:[ImageBox] = []
-        ViewController.fetchCoreDataBoxes {items in
+        super.viewDidLoad()
+        
+        if let imageSize = imageView.image?.size {
+                    scrollView.contentSize = imageSize
+                }
+        
+        
+        setupScrollView()
+
+        imageView.isUserInteractionEnabled = true // Allow interaction with imageView and its subviews
+
+        var boxesArray: [ImageBox] = []
+        ViewController.fetchCoreDataBoxes { items in
             if let items = (items ?? []) as [ImageBoxes]? {
                 for box in items {
                     if box.imageEntity2?.wrappedId == editImages[imageIndex].index {
                         let thisBoxFrame = VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
                         boxesArray.append(ImageBox(frame: thisBoxFrame, tag: Int(box.tag)))
                     }
-        
                 }
             } else {
                 print("FEHLER")
             }
         }
-        
-            if editImages.count != 0 {
-                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: boxesArray)
-            }
-        
+
+        if editImages.count != 0 {
+            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: boxesArray)
+        }
         
         viewController = true
         navigationController?.navigationBar.isHidden = false
         super.viewDidLoad()
         
         let editButton = UIButton(type: .custom)
+        editButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        editButton.setTitleColor(.white, for: .normal)
+        editButton.addTarget(self, action: #selector(editBoxes(_:)), for: .touchUpInside)
         
-        editButton.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
-        editButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
-        editButton.addTarget(self, action: #selector(editBoxes), for: .touchUpInside)
+        let barButton = UIBarButtonItem(customView: editButton)
+        self.navigationItem.rightBarButtonItem = barButton
         
-        toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal) // Image can be downloaded from here below link
-        toggleButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
-        toggleButton.addTarget(self, action: #selector(toggleBoxes), for: .touchUpInside)
-        
-        let cropButton = UIButton(type: .custom)
-        cropButton.setImage(UIImage(systemName: "crop"), for: .normal) // Image can be downloaded from here below link
-        cropButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
-        cropButton.addTarget(self, action: #selector(cropBoxes), for: .touchUpInside)
-        
-        
-        let toggle = UIBarButtonItem(customView: toggleButton)
-        let edit = UIBarButtonItem(customView: editButton)
-        let crop = UIBarButtonItem(customView: cropButton)
-        
-        
-        navigationItem.rightBarButtonItems = [toggle, edit, crop]
-        
-        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
-            edgePan.edges = .right
+        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    
 
-        view.addGestureRecognizer(edgePan)
-        
-        
-        let edgePanL = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedL))
-            edgePanL.edges = .left
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
 
-        view.addGestureRecognizer(edgePanL)
-        
-        
-        if imageIndex == 0 || singleMode {
-            leftButton.isHidden = true
+    @objc func editBoxes(_ sender: UIButton) {
+        editMode.toggle()
+        if editMode {
+            sender.setImage(UIImage(systemName: "pencil.circle.fill"), for: .normal)
         } else {
-            leftButton.isHidden = false
+            sender.setImage(UIImage(systemName: "pencil.circle"), for: .normal)
         }
-        if imageIndex == editImages.count - 1 || singleMode {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-        let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
-        self.navigationItem.leftBarButtonItem = backButton
-        
-        
-        
-        //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
-        leftButton.tag = 3
-        rightButton.tag = 3
+        handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
     }
-    
-    @objc func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        if recognizer.state == .recognized {
-            handleNextClick()
-        }
-    }
-    
-    @objc func screenEdgeSwipedL(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        if recognizer.state == .recognized {
-            handlePrevClick()
-        }
-    }
-    
-    
-    
+
     func handleNextClick() {
-        if editImages.count > imageIndex + 1 {
-            imageIndex += 1
-            
-                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-                /*if editImages[imageIndex].boxes.isEmpty {
-                    
-                } else {
-                    handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-                }*/
-                
-                
-            
-            
-            
-            
-           
-        }
-        if imageIndex == editImages.count - 1 || singleMode {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        
-        if imageIndex == 0 || singleMode {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
+        imageIndex += 1
     }
     
     func handlePrevClick() {
-        if imageIndex > 0 {
-            imageIndex -= 1
-            
-            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-            
-        }
-        
-        if imageIndex == editImages.count - 1 {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        
-        if imageIndex == 0 {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
+        imageIndex -= 1
     }
+}
 
-    //Ask the User to select new Photos, when no Image is displayed
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+
+// MARK: - UIScrollViewDelegate
+
+extension ViewController {
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
     
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        updateConstraintsForZooming()
+        
+        let imageViewSize = imageView.frame.size
+        let scrollViewSize = scrollView.bounds.size
+        
+        let verticalPadding = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 0
+        let horizontalPadding = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 0
+        
+        scrollView.contentInset = UIEdgeInsets(top: verticalPadding, left: horizontalPadding, bottom: verticalPadding, right: horizontalPadding)
+        
+        // Adjust content offset to zoom into the center of pinch gesture
+        let offsetX = max((scrollView.contentSize.width - scrollView.bounds.size.width) / 2, 0)
+        let offsetY = max((scrollView.contentSize.height - scrollView.bounds.size.height) / 2, 0)
+        
+        scrollView.contentOffset = CGPoint(x: offsetX, y: offsetY)
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        scrollView.contentInset = .zero // Reset content inset when zooming starts
+    }
+    
+    private func setupScrollView() {
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 10.0
+        scrollView.zoomScale = 1.0 // Set initial zoom scale
+        
+        // Add pan gesture recognizer for panning the image
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        imageView.addGestureRecognizer(panGesture)
+        
+        // Enable user interaction for imageView
+        imageView.isUserInteractionEnabled = true
+    }
+    
+    @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
+        guard let imageView = imageView else { return }
+        
+        let translation = recognizer.translation(in: imageView.superview)
+        
+        switch recognizer.state {
+        case .began, .changed:
+            imageView.center = CGPoint(x: imageView.center.x + translation.x, y: imageView.center.y + translation.y)
+            recognizer.setTranslation(.zero, in: imageView.superview)
+        default:
+            break
+        }
+    }
+    
+    private func updateConstraintsForZooming() {
+        guard let imageView = imageView else { return }
+        
+        let imageViewSize = imageView.frame.size
+        let scrollViewSize = scrollView.bounds.size
+        
+        let verticalPadding = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 0
+        let horizontalPadding = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 0
+        
+        scrollView.contentInset = UIEdgeInsets(top: verticalPadding, left: horizontalPadding, bottom: verticalPadding, right: horizontalPadding)
+    }
 }

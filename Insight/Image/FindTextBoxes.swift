@@ -92,7 +92,7 @@ class TextDetectionHandler {
     }
     
     func handleDetectedText(request: VNRequest?, error: Error?) {
-        if let nsError = error as NSError? {
+        if let _ = error as NSError? {
             print("Additional Variable: \(self.additionalVariable)")
             return
         }
@@ -117,7 +117,7 @@ class TextDetectionHandler {
     }
     
     func saveBoxes(results: [ImageBox]) {
-        var thisImageEdit = selectedImage.init(image: additionalVariable, index: UUID().uuidString, cropped: false, boxes: results)
+        let thisImageEdit = selectedImage.init(image: additionalVariable, index: UUID().uuidString, cropped: false, boxes: results)
         editImages.append(thisImageEdit)
     }
 }
