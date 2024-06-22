@@ -43,6 +43,11 @@ struct Review {
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
+// Layer into which to draw bounding box paths.
+var pathLayer: CALayer?
+
+
+
 @available(iOS 13.0, *)
 class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -71,6 +76,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Clicked Cell with Topic ID
     var cellId: String = ""
     
+    var activeImage = UIImage()
+
+    
     var timer = Timer()
     
     //Array with Images -> Gets fetched of Core Data
@@ -79,6 +87,17 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Configure Image Cell
     var estimateWidth = 300
     var cellMarginSize = UIScreen.main.bounds.width > 500 ? 50 : 30
+    
+
+    lazy var textDetectionHandler = TextDetectionHandler(additionalVariable: UIImage())
+
+    lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
+        let textDetectRequest = VNDetectTextRectanglesRequest { [weak self] (request, error) in
+            self?.textDetectionHandler.handleDetectedText(request: request, error: error)
+        }
+        textDetectRequest.reportCharacterBoxes = true
+        return textDetectRequest
+    }()
     
     
     @IBAction func studyChartsClicked(_ sender: Any) {
@@ -92,7 +111,8 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     @objc func editAll() {
-        performSegue(withIdentifier: "showViewController", sender: cellId)
+        editImages = selectedImages
+        performSegue(withIdentifier: "showViewController", sender: false)
     }
     
     var timeUntilNewCharts = -1
@@ -186,6 +206,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        editImages.removeAll()
         topView.layer.cornerRadius = 15
         viewController = false
         
@@ -389,14 +410,22 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if (segue.identifier == "showViewController") {
           let secondView = segue.destination as! ViewController
-          let object = sender as! String
-           secondView.cellId = object
-           secondView.singleMode = false
+           
+           if let object = sender as? Bool {
+               secondView.cellId = cellId
+               secondView.singleMode = false
+               secondView.firstTime = object
+           } else {
+               secondView.cellId = cellId
+               secondView.singleMode = false
+               secondView.firstTime = false
+           }
+           
+           
        }
         if (segue.identifier == "studyChartsClicked") {
            let secondView = segue.destination as! StudyViewController
-           let object = sender as! String
-            secondView.cellId = object
+            secondView.cellId = cellId
             secondView.singleMode = false
             
         }

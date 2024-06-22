@@ -18,7 +18,7 @@ var imageIndex = 0
 var viewController = true
 var maxImageIndex = 0
 
-
+var editImages: [selectedImage] = []
 
 @available(iOS 13.0, *)
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
@@ -32,37 +32,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     public var editAllClicked = false
     
+    
+    
     let toggleButton = UIButton(type: .custom)
     let nButton = UIButton(type: .custom)
     
     var singleMode = false
     var firstTime = false
     
+    var imageWidth: CGFloat = 0
+    var imageHeight: CGFloat = 0
+    
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
+    
+    //TODO: Replace by editImages
     public var singleImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
     
     
-    
-    // Layer into which to draw bounding box paths.
-    var pathLayer: CALayer?
-    
-    // Image parameters for reuse throughout app
-    var imageWidth: CGFloat = 0
-    var imageHeight: CGFloat = 0
+
+
     
     //Fetch Request to get all added Topics of the User
     @FetchRequest(sortDescriptors: []) var topics:FetchedResults<Topic>
-    
-    lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
-        let textDetectRequest = VNDetectTextRectanglesRequest(completionHandler: self.handleDetectedText)
-        // Tell Vision to report bounding box around each character.
-        textDetectRequest.reportCharacterBoxes = true
-        return textDetectRequest
-    }()
     
     // Background is black, so display status bar in white.
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -71,17 +66,175 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func onOrientationChange() {
         if singleMode {
-            handleCompletion(object: singleImage.image, thisImageView: imageView)
-            
-            
+            handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
         } else {
-            handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
+            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
             
+        }
+    }
+    
+    func scaleAndOrient(image: UIImage) -> UIImage {
+        
+        // Set a default value for limiting image size.
+        let maxResolution: CGFloat = 640
+        
+        guard let cgImage = image.cgImage else {
+            print("UIImage has no CGImage backing it!")
+            return image
+        }
+        
+        // Compute parameters for transform.
+        let width = CGFloat(cgImage.width)
+        let height = CGFloat(cgImage.height)
+        var transform = CGAffineTransform.identity
+        
+        var bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        
+        if width > maxResolution ||
+            height > maxResolution {
+            let ratio = width / height
+            if width > height {
+                bounds.size.width = maxResolution
+                bounds.size.height = round(maxResolution / ratio)
+            } else {
+                bounds.size.width = round(maxResolution * ratio)
+                bounds.size.height = maxResolution
+            }
+        }
+        
+        
+        let scaleRatio = bounds.size.width / width
+        let orientation = image.imageOrientation
+        switch orientation {
+        case .up:
+            transform = .identity
+        case .down:
+            transform = CGAffineTransform(translationX: width, y: height).rotated(by: .pi)
+        case .left:
+            let boundsHeight = bounds.size.height
+            bounds.size.height = bounds.size.width
+            bounds.size.width = boundsHeight
+            transform = CGAffineTransform(translationX: 0, y: width).rotated(by: 3.0 * .pi / 2.0)
+        case .right:
+            let boundsHeight = bounds.size.height
+            bounds.size.height = bounds.size.width
+            bounds.size.width = boundsHeight
+            transform = CGAffineTransform(translationX: height, y: 0).rotated(by: .pi / 2.0)
+        case .upMirrored:
+            transform = CGAffineTransform(translationX: width, y: 0).scaledBy(x: -1, y: 1)
+        case .downMirrored:
+            transform = CGAffineTransform(translationX: 0, y: height).scaledBy(x: 1, y: -1)
+        case .leftMirrored:
+            let boundsHeight = bounds.size.height
+            bounds.size.height = bounds.size.width
+            bounds.size.width = boundsHeight
+            transform = CGAffineTransform(translationX: height, y: width).scaledBy(x: -1, y: 1).rotated(by: 3.0 * .pi / 2.0)
+        case .rightMirrored:
+            let boundsHeight = bounds.size.height
+            bounds.size.height = bounds.size.width
+            bounds.size.width = boundsHeight
+            transform = CGAffineTransform(scaleX: -1, y: 1).rotated(by: .pi / 2.0)
+        default:
+            transform = .identity
+        }
+        
+        return UIGraphicsImageRenderer(size: bounds.size).image { rendererContext in
+            let context = rendererContext.cgContext
+            
+            if orientation == .right || orientation == .left {
+                context.scaleBy(x: -scaleRatio, y: scaleRatio)
+                context.translateBy(x: -height, y: 0)
+            } else {
+                context.scaleBy(x: scaleRatio, y: -scaleRatio)
+                context.translateBy(x: 0, y: -height)
+            }
+            context.concatenate(transform)
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
+    }
+    
+    //Shows the selected and cropped Image
+    func show(_ image: UIImage, thisImageView: UIImageView) {
+        // Remove previous paths & image
+        pathLayer?.removeFromSuperlayer()
+        pathLayer = nil
+        thisImageView.image = nil
+        
+        // Account for image orientation by transforming view.
+        let correctedImage = scaleAndOrient(image: image)
+        
+        // Place photo inside imageView.
+        thisImageView.image = correctedImage
+        
+        // Transform image to fit screen.
+        guard let cgImage = correctedImage.cgImage else {
+            print("Trying to show an image not backed by CGImage!")
+            return
+        }
+        
+        let fullImageWidth = CGFloat(cgImage.width)
+        let fullImageHeight = CGFloat(cgImage.height)
+        
+        let imageFrame = thisImageView.frame
+        let widthRatio = fullImageWidth / imageFrame.width
+        let heightRatio = fullImageHeight / imageFrame.height
+        
+        // ScaleAspectFit: The image will be scaled down according to the stricter dimension.
+        let scaleDownRatio = max(widthRatio, heightRatio)
+        
+        // Cache image dimensions to reference when drawing CALayer paths.
+        imageWidth = fullImageWidth / scaleDownRatio
+        imageHeight = fullImageHeight / scaleDownRatio
+        
+        // Prepare pathLayer to hold Vision results.
+        let xLayer = (imageFrame.width - imageWidth) / 2
+        let yLayer = thisImageView.frame.minY + (imageFrame.height - imageHeight) / 2
+        let drawingLayer = CALayer()
+        drawingLayer.bounds = CGRect(x: xLayer, y: yLayer, width: imageWidth, height: imageHeight)
+        drawingLayer.anchorPoint = CGPoint.zero
+        drawingLayer.position = CGPoint(x: xLayer, y: yLayer)
+        //Change opacity of Rectangle HERE
+        drawingLayer.opacity = 1
+        pathLayer = drawingLayer
+        self.view.layer.addSublayer(pathLayer!)
+    }
+
+    
+    func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [ImageBox]) {
+        
+        if let image = object as? UIImage {
+            //TODO: Not the best Approach. Display after view is loaded!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.show(image, thisImageView: thisImageView)
+                //Calls the vision request
+                
+                    guard let drawLayer = pathLayer else  {
+                        return
+                    }
+                    
+                    //Display Rectangles above the text
+                    self.draw(text: customBounds, onImageWithBounds: drawLayer.frame)
+                    
+                    
+                    drawLayer.setNeedsDisplay()
+                
+            }
             
         }
     }
     
     override func viewDidLoad() {
+        
+        
+            if editImages.count != 0 {
+                if singleMode {
+                    handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
+                } else {
+                    handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
+                }
+            }
+        
+        
         viewController = true
         navigationController?.navigationBar.isHidden = false
         super.viewDidLoad()
@@ -126,7 +279,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } else {
             leftButton.isHidden = false
         }
-        if imageIndex == selectedImages.count - 1 || singleMode {
+        if imageIndex == editImages.count - 1 || singleMode {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false
@@ -135,20 +288,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
         self.navigationItem.leftBarButtonItem = backButton
-        if selectedImages.count != 0 {
-            if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView)
-                if singleImage.boxes.isEmpty {
-                    
-                }
-                
-            } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-                
-                
-                
-            }
-        }
+        
         
         
         //Give all Buttons the same Tag, so they doesn't disappear, when removing the Toggle-Buttons
@@ -171,18 +311,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     func handleNextClick() {
-        if selectedImages.count > imageIndex + 1 {
+        if editImages.count > imageIndex + 1 {
             imageIndex += 1
             if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView)
+                handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
                 
                 
             } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView)
-                /*if selectedImages[imageIndex].boxes.isEmpty {
+                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
+                /*if editImages[imageIndex].boxes.isEmpty {
                     
                 } else {
-                    handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView, customBounds: selectedImages[imageIndex].boxes)
+                    handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
                 }*/
                 
                 
@@ -192,7 +332,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
            
         }
-        if imageIndex == selectedImages.count - 1 || singleMode {
+        if imageIndex == editImages.count - 1 || singleMode {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false
@@ -212,12 +352,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if singleMode {
                 handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
             } else {
-                handleCompletion(object: selectedImages[imageIndex].image, thisImageView: imageView, customBounds: selectedImages[imageIndex].boxes)
+                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
             }
             
         }
         
-        if imageIndex == selectedImages.count - 1 {
+        if imageIndex == editImages.count - 1 {
             rightButton.isHidden = true
         } else {
             rightButton.isHidden = false

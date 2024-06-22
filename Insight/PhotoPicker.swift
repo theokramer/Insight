@@ -100,29 +100,43 @@ extension OverviewController: PHPickerViewControllerDelegate {
             print("No image found")
             return
         }
-        
-        selectedImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false, boxes: []))
-        performSegue(withIdentifier: "showViewController", sender: cellId)
+        editImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false, boxes: []))
+        performSegue(withIdentifier: "showViewController", sender: true)
     }
     
     /// - Tag: ParsePickerResults
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
-        selectedImages.removeAll()
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [] (object, error) in
                             if let image = object as? UIImage {
-                                DispatchQueue.main.async { [] in
-                                    selectedImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false, boxes: []))
-                                }
+                                self.handleCompletion(object: image)
                             }
+                            
                         })
+            
         }
         
-        performSegue(withIdentifier: "showViewController", sender: cellId)
+        self.performSegue(withIdentifier: "showViewController", sender: true)
         
     }
     
+    func handleCompletion(object: Any?) {
+        
+        if let image = object as? UIImage {
+            //TODO: Not the best Approach. Display after view is loaded!
+            DispatchQueue.main.async {
+                let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
+                
+                // Fire off request based on URL of chosen photo.
+                
+                //Calls the vision request
+                
+                self.performVisionRequest(image: image, orientation: cgOrientation)
+            }
+            
+        }
+    }
 
     
     // MARK: - UIImagePickerControllerDelegate

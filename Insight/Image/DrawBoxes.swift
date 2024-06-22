@@ -73,7 +73,6 @@ extension ViewController {
             //var grouped = false
 
             id = wordObservation.tag
-            print(id)
             
             
             //let wordBox = boundingBox(forRegionOfInterest: wordObservation.frame.boundingBox, withinImageBounds: bounds)

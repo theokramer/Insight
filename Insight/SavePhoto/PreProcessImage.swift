@@ -146,7 +146,7 @@ extension ViewController {
             }
 
         } else {
-            for image in selectedImages {
+            for image in editImages {
                 found = false
                 
                 //Removes all Images in Core Data that got cropped, so it gets updated.

@@ -23,5 +23,9 @@ extension ImageBoxes {
     @NSManaged public var width: Float
     @NSManaged public var tag: Int64
     @NSManaged public var imageEntity2: ImageEntity?
+    
+    public var wrappedId: String {
+        id ?? "Unknown Name"
+    }
 
 }

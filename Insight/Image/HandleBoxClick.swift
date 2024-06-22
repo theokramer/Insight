@@ -103,18 +103,18 @@ extension ViewController {
             let tag = sender.tag
         
             
-            for i in 0..<selectedImages[imageIndex].boxes.count {
-                if selectedImages[imageIndex].boxes[i].tag == tag {
-                    selectedImages[imageIndex].boxes.remove(at: i)
+            for i in 0..<editImages[imageIndex].boxes.count {
+                if editImages[imageIndex].boxes[i].tag == tag {
+                    editImages[imageIndex].boxes.remove(at: i)
                 }
             }
             
              ViewController.fetchCoreDataBoxes {items in
              if let items = (items ?? []) as [ImageBoxes]? {
              for item in items {
-                 print("Dieser Tag ist drin: ", item.tag)
+                 //print("Dieser Tag ist drin: ", item.tag)
              if tag == item.tag {
-                 print("Dieser Tag wird gelöscht: ", tag)
+                 //print("Dieser Tag wird gelöscht: ", tag)
              context.delete(item)
              do {
              try context.save()
