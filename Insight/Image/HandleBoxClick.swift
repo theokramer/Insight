@@ -13,8 +13,27 @@ extension ViewController {
         // Function to handle button tap
         @objc func buttonTapped(_ sender: UIButton) {
             
-            if viewController {
+            if editMode {
                 let tag = sender.tag
+                
+                /*for layer in sender.layer.sublayers ?? [] {
+                    guard let shapeLayer = layer as? CAShapeLayer else {
+                        continue
+                    }
+                    for view in view.subviews {
+                        if let button = view as? UIButton {
+                            if sender.tag == button.tag  {
+                                if shapeLayer.fillColor == UIColor.green.withAlphaComponent(0.7).cgColor {
+                                    shapeLayer.fillColor = toggleColor.withAlphaComponent(0.7).cgColor
+                                    
+                                } else {
+                                    shapeLayer.fillColor = UIColor.green.withAlphaComponent(0.7).cgColor
+                                }
+                            }
+                            
+                        }
+                    }
+                }*/
                 
                 // Remove any existing overlay view
                 if let existingOverlay = view.viewWithTag(9999) {
@@ -106,6 +125,7 @@ extension ViewController {
             for i in 0..<editImages[imageIndex].boxes.count {
                 if editImages[imageIndex].boxes[i].tag == tag {
                     editImages[imageIndex].boxes.remove(at: i)
+                    break
                 }
             }
             

@@ -47,9 +47,12 @@ var selectedImages: [selectedImage] = []
 var pathLayer: CALayer?
 
 
+protocol BottomSheetDelegate: AnyObject {
+    func didDeleteImage(at index: String)
+}
 
 @available(iOS 13.0, *)
-class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BottomSheetDelegate {
     
     
     @IBOutlet weak var studyChartsButton: UIButton!
@@ -63,7 +66,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     @IBOutlet weak var moreButton: UIButton!
     
     @IBAction func moreButtonClicked(_ sender: Any) {
-        editAll()
+        //editAll()
     }
     
     @IBAction func backButtonClicked(_ sender: Any) {
@@ -111,7 +114,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     @objc func editAll() {
-        editImages = selectedImages
         performSegue(withIdentifier: "showViewController", sender: false)
     }
     
@@ -206,7 +208,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        editImages.removeAll()
+        
         topView.layer.cornerRadius = 15
         viewController = false
         
@@ -459,17 +461,69 @@ extension OverviewController: UICollectionViewDataSource {
                 showBottomSheet(with: selectedData)
     }
     
+    
+    static func fetchCoreData(onSuccess: @escaping ([ImageEntity]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageEntity.fetchRequest()) as? [ImageEntity]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
+    func didDeleteImage(at index: String) {
+        
+        let alert = UIAlertController(title: "Delete Image?", message: "This action is not reversible", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                    OverviewController.fetchCoreData { items in
+                        if let items = (items ?? []) as [ImageEntity]? {
+                            for item in items {
+                                if index == item.id {
+                                    context.delete(item)
+                                    do {
+                                        try context.save()
+                                        
+                                        print("Success")
+                                        
+                                        // Datenquelle aktualisieren
+                                        if let imageIndex = self.dataSource.firstIndex(where: { $0.index == index }) {
+                                            self.dataSource.remove(at: imageIndex)
+                                            selectedImages.removeAll(where: { $0.index == index })
+                                            self.collectionView.reloadData()
+                                            self.cardInDeck.text = "Total Charts (\(selectedImages.count))"
+                                        }
+                                        
+                                    } catch {
+                                        print("Error deleting data")
+                                    }
+                                }
+                            }
+                        } else {
+                            print("FEHLER")
+                        }
+                    }
+                })
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+    
     func showBottomSheet(with data: selectedImage) {
             let bottomSheetVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BottomSheetViewController") as! BottomSheetViewController
             bottomSheetVC.configure(with: data)
             bottomSheetVC.info = data
             bottomSheetVC.cellID = cellId
             bottomSheetVC.indizes = [0,1,2,3,4]
+            bottomSheetVC.delegate = self  // Set the delegate
             minusHeight = 0
+        
             bottomSheetVC.modalPresentationStyle = .custom
             bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
             present(bottomSheetVC, animated: true, completion: nil)
-            
         }
     
     // Funktion, um die Größe eines UIImage zu ändern
@@ -531,6 +585,7 @@ class BottomSheetViewController: UIViewController {
     var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     var cellID: String = ""
     var indizes:[Int] = []
+    weak var delegate: BottomSheetDelegate?  // Declare the delegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -613,8 +668,11 @@ class BottomSheetViewController: UIViewController {
         case 1:
             print("Edit tapped")
             if let editViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as? ViewController {
-                editViewController.singleImage = info
+                editImages.removeAll()
+                editImages.append(info)
+                
                 editViewController.cellId = cellID
+                editViewController.editMode = true
                 editViewController.singleMode = true
                 let navigationController = UINavigationController(rootViewController: editViewController)
                 navigationController.modalPresentationStyle = .overFullScreen
@@ -623,62 +681,26 @@ class BottomSheetViewController: UIViewController {
             
         case 2:
             print("Freeze tapped")
-            // Handle Freeze action
+            freezeImage()
         case 3:
             print("Move tapped")
             // Handle Move action
         case 4:
             print("Delete tapped")
-            dismissViewController()
+            deleteImage()
         default:
             break
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if (segue.identifier == "showViewController2") {
-          let secondView = segue.destination as! ViewController
-          let object = sender as! selectedImage
-           secondView.cellId = ""
-           secondView.singleImage = object
-       }
-        
+    @IBAction func deleteImage() {
+        dismiss(animated: true, completion: nil)
+        self.delegate?.didDeleteImage(at: self.info.index)  // Notify the delegate
     }
     
-    @IBAction func dismissViewController() {
-        
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            
-            //Removes all Images in Core Data that got cropped, so it gets updated.
-            //TODO: Instead change the UIImage when cropped?
-            ViewController.fetchCoreData {items in
-                if let items = (items ?? []) as [ImageEntity]? {
-                    for item in items {
-                        if self.info.index == item.id {
-
-                                context.delete(item)
-                                do {
-                                    try context.save()
-                                    self.dismiss(animated: true, completion: nil)
-                                    
-                                    print("Success")
-                                } catch {
-                                    print("error-Deleting data")
-                                }
-                                
-                            
-                        }
-                    }
-                } else {
-                    print("FEHLER")
-                }
-            }
-        
-        
+    @IBAction func freezeImage() {
         
     }
-    
-    
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
@@ -703,29 +725,9 @@ class BottomSheetViewController: UIViewController {
     }
 }
 
-
 class HalfScreenPresentationManager: NSObject, UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return HalfScreenPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-
-
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let containerView = transitionContext.containerView
-        guard let toView = transitionContext.view(forKey: .to) else { return }
-
-        containerView.addSubview(toView)
-        toView.frame = containerView.bounds.offsetBy(dx: 0, dy: containerView.bounds.height)
-
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-            toView.frame = containerView.bounds
-        }, completion: { finished in
-            transitionContext.completeTransition(finished)
-        })
-    }
-
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
     }
 }
 
@@ -733,6 +735,7 @@ var minusHeight = 0.0
 
 class HalfScreenPresentationController: UIPresentationController {
     private let dimmingView = UIView()
+    
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = containerView else { return .zero }
         let height = containerView.bounds.height / 2 - containerView.bounds.height * 0.1 * minusHeight
@@ -746,6 +749,10 @@ class HalfScreenPresentationController: UIPresentationController {
         dimmingView.alpha = 0
         containerView.addSubview(dimmingView)
 
+        // Adding Tap Gesture Recognizer to dimmingView
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        dimmingView.addGestureRecognizer(tapGesture)
+
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
             self.dimmingView.alpha = 1
         }, completion: nil)
@@ -757,5 +764,9 @@ class HalfScreenPresentationController: UIPresentationController {
         }, completion: { _ in
             self.dimmingView.removeFromSuperview()
         })
+    }
+
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        presentedViewController.dismiss(animated: true, completion: nil)
     }
 }

@@ -49,6 +49,7 @@ extension OverviewController {
            DispatchQueue.global(qos: .userInitiated).async {
                do {
                    try imageRequestHandler.perform(requests)
+                   
                } catch let error as NSError {
                    print("Failed to perform image request: \(error)")
                    self.presentAlert("Image Request Failed", error: error)
@@ -111,6 +112,7 @@ class TextDetectionHandler {
             }
             
             self.saveBoxes(results: newImageBoxArray)
+            
         }
     }
     

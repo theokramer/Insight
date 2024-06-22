@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2014A3B02C27618E001F1D7C /* ImageBoxes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2014A3AD2C27618E001F1D7C /* ImageBoxes+CoreDataClass.swift */; };
+		2014A3B12C27618E001F1D7C /* ImageReview+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2014A3AF2C27618E001F1D7C /* ImageReview+CoreDataClass.swift */; };
+		2014A3B22C27618E001F1D7C /* ImageReview+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2014A3AC2C27618E001F1D7C /* ImageReview+CoreDataProperties.swift */; };
+		2014A3B32C27618E001F1D7C /* ImageBoxes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2014A3AE2C27618E001F1D7C /* ImageBoxes+CoreDataProperties.swift */; };
 		20262CDC2BF607B700DF066F /* itemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20262CDA2BF607B700DF066F /* itemCell.swift */; };
 		20262CDD2BF607B700DF066F /* itemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20262CDB2BF607B700DF066F /* itemCell.xib */; };
 		2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB702BF000F600D724A5 /* AppDelegate.swift */; };
@@ -17,10 +21,8 @@
 		2080BB7D2BF000F800D724A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2080BB7C2BF000F800D724A5 /* Assets.xcassets */; };
 		2080BB802BF000F800D724A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2080BB7E2BF000F800D724A5 /* LaunchScreen.storyboard */; };
 		2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080BB8A2BF0017500D724A5 /* Utilities.swift */; };
-		208F80A82C2087EB00984C0A /* ImageReview+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80A42C2087EB00984C0A /* ImageReview+CoreDataProperties.swift */; };
 		208F80A92C2087EB00984C0A /* Topic+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80A72C2087EB00984C0A /* Topic+CoreDataProperties.swift */; };
 		208F80AA2C2087EB00984C0A /* Topic+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80A52C2087EB00984C0A /* Topic+CoreDataClass.swift */; };
-		208F80AB2C2087EB00984C0A /* ImageReview+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */; };
 		208F80B42C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */; };
 		208F80B52C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */; };
 		20BD349D2BF01E5200E0D9CD /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BD349C2BF01E5200E0D9CD /* PhotoPicker.swift */; };
@@ -42,6 +44,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2014A3AC2C27618E001F1D7C /* ImageReview+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageReview+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2014A3AD2C27618E001F1D7C /* ImageBoxes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataClass.swift"; path = "../ImageBoxes+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2014A3AE2C27618E001F1D7C /* ImageBoxes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageBoxes+CoreDataProperties.swift"; path = "../ImageBoxes+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2014A3AF2C27618E001F1D7C /* ImageReview+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageReview+CoreDataClass.swift"; sourceTree = "<group>"; };
 		20262CDA2BF607B700DF066F /* itemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = itemCell.swift; sourceTree = "<group>"; };
 		20262CDB2BF607B700DF066F /* itemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = itemCell.xib; sourceTree = "<group>"; };
 		2034F7BF2C1B8EBA004CE79E /* Insight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Insight.entitlements; sourceTree = "<group>"; };
@@ -55,9 +61,7 @@
 		2080BB7F2BF000F800D724A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2080BB812BF000F800D724A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2080BB8A2BF0017500D724A5 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		208F80A42C2087EB00984C0A /* ImageReview+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageReview+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageReview+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		208F80A52C2087EB00984C0A /* Topic+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/Topic+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageReview+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageReview+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		208F80A72C2087EB00984C0A /* Topic+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/Topic+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageEntity+CoreDataClass.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageEntity+CoreDataProperties.swift"; path = "/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
@@ -124,12 +128,14 @@
 			children = (
 				20DD7AB22C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift */,
 				20DD7AB12C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift */,
+				2014A3AF2C27618E001F1D7C /* ImageReview+CoreDataClass.swift */,
+				2014A3AC2C27618E001F1D7C /* ImageReview+CoreDataProperties.swift */,
+				2014A3AD2C27618E001F1D7C /* ImageBoxes+CoreDataClass.swift */,
+				2014A3AE2C27618E001F1D7C /* ImageBoxes+CoreDataProperties.swift */,
 				208F80B02C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift */,
 				208F80B32C20EB6F00984C0A /* ImageEntity+CoreDataProperties.swift */,
 				208F80A52C2087EB00984C0A /* Topic+CoreDataClass.swift */,
 				208F80A72C2087EB00984C0A /* Topic+CoreDataProperties.swift */,
-				208F80A62C2087EB00984C0A /* ImageReview+CoreDataClass.swift */,
-				208F80A42C2087EB00984C0A /* ImageReview+CoreDataProperties.swift */,
 				20EEF98B2BF0F15C00CF3295 /* Models */,
 			);
 			name = Classes;
@@ -370,7 +376,7 @@
 				20DD7AB42C24A1F200FEA479 /* ImageBoxes+CoreDataClass.swift in Sources */,
 				20DD549D2BF03EBC00AA5240 /* EditBoxes.swift in Sources */,
 				2080BB752BF000F600D724A5 /* ViewController.swift in Sources */,
-				208F80A82C2087EB00984C0A /* ImageReview+CoreDataProperties.swift in Sources */,
+				2014A3B32C27618E001F1D7C /* ImageBoxes+CoreDataProperties.swift in Sources */,
 				20DD54AD2BF0490A00AA5240 /* PreProcessImage.swift in Sources */,
 				20DD54A12BF03F8700AA5240 /* CropImage.swift in Sources */,
 				2080BB712BF000F600D724A5 /* AppDelegate.swift in Sources */,
@@ -380,12 +386,14 @@
 				20EEF98A2BF0F13300CF3295 /* StartViewController.swift in Sources */,
 				208F80B52C20EB6F00984C0A /* ImageEntity+CoreDataClass.swift in Sources */,
 				20EEF98D2BF0F16900CF3295 /* TopicModel.swift in Sources */,
+				2014A3B12C27618E001F1D7C /* ImageReview+CoreDataClass.swift in Sources */,
+				2014A3B22C27618E001F1D7C /* ImageReview+CoreDataProperties.swift in Sources */,
 				20262CDC2BF607B700DF066F /* itemCell.swift in Sources */,
 				2080BB7B2BF000F600D724A5 /* Insight.xcdatamodeld in Sources */,
 				2080BB8B2BF0017500D724A5 /* Utilities.swift in Sources */,
 				20DD7AB32C24A1F200FEA479 /* ImageBoxes+CoreDataProperties.swift in Sources */,
-				208F80AB2C2087EB00984C0A /* ImageReview+CoreDataClass.swift in Sources */,
 				20DD549F2BF03F3800AA5240 /* PresentImage.swift in Sources */,
+				2014A3B02C27618E001F1D7C /* ImageBoxes+CoreDataClass.swift in Sources */,
 				20DBA2B12BF23FCB002DCF9D /* OverviewController.swift in Sources */,
 				2080BB732BF000F600D724A5 /* SceneDelegate.swift in Sources */,
 			);

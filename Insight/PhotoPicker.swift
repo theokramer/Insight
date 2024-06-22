@@ -106,6 +106,7 @@ extension OverviewController: PHPickerViewControllerDelegate {
     
     /// - Tag: ParsePickerResults
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        editImages.removeAll()
         dismiss(animated: true)
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [] (object, error) in

@@ -144,10 +144,9 @@ class StudyViewController: ViewController {
             bottomSheetVC.info = data
             bottomSheetVC.cellID = cellId
             bottomSheetVC.indizes = [1,2,3,4]
-            
             bottomSheetVC.modalPresentationStyle = .custom
         
-            minusHeight = 1
+            
             bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
             present(bottomSheetVC, animated: true, completion: nil)
         }

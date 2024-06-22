@@ -46,13 +46,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //Gets Id of the selected Topic when called by View Controller
     public var cellId:String = ""
     
-    //TODO: Replace by editImages
-    public var singleImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
-    
     //Determines wether or not the User is currently editing the Text Boxes
     var editMode = false
-    
-    
 
 
     
@@ -65,12 +60,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @objc func onOrientationChange() {
-        if singleMode {
-            handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
-        } else {
-            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-            
-        }
+        handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
     }
     
     func scaleAndOrient(image: UIImage) -> UIImage {
@@ -224,14 +214,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func viewDidLoad() {
+        var boxesArray:[ImageBox] = []
+        ViewController.fetchCoreDataBoxes {items in
+            if let items = (items ?? []) as [ImageBoxes]? {
+                for box in items {
+                    if box.imageEntity2?.wrappedId == editImages[imageIndex].index {
+                        let thisBoxFrame = VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
+                        boxesArray.append(ImageBox(frame: thisBoxFrame, tag: Int(box.tag)))
+                    }
         
+                }
+            } else {
+                print("FEHLER")
+            }
+        }
         
             if editImages.count != 0 {
-                if singleMode {
-                    handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
-                } else {
-                    handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-                }
+                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: boxesArray)
             }
         
         
@@ -313,11 +312,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func handleNextClick() {
         if editImages.count > imageIndex + 1 {
             imageIndex += 1
-            if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
-                
-                
-            } else {
+            
                 handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
                 /*if editImages[imageIndex].boxes.isEmpty {
                     
@@ -326,7 +321,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }*/
                 
                 
-            }
+            
             
             
             
@@ -349,11 +344,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if imageIndex > 0 {
             imageIndex -= 1
             
-            if singleMode {
-                handleCompletion(object: singleImage.image, thisImageView: imageView, customBounds: singleImage.boxes)
-            } else {
-                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-            }
+            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
             
         }
         

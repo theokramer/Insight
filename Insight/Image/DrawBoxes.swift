@@ -125,12 +125,11 @@ extension ViewController {
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height)).cgPath
         
-        shapeLayer.fillColor = fillColor.cgColor
-        
-        
+        shapeLayer.fillColor = editMode ? fillColor.withAlphaComponent(0.7).cgColor : fillColor.cgColor
         let button = UIButton()
         button.frame = frame
         button.tag = tag
+        
         
         // Add shape layer to button's layer
         button.layer.addSublayer(shapeLayer)
