@@ -2,7 +2,7 @@
 //  ImageReview+CoreDataProperties.swift
 //  
 //
-//  Created by Theo Kramer on 17.06.24.
+//  Created by Theo Kramer on 22.06.24.
 //
 //
 
@@ -22,6 +22,7 @@ extension ImageReview {
     @NSManaged public var rating: Int16
     @NSManaged public var repetitions: Int16
     @NSManaged public var review_date: Date?
+    @NSManaged public var freeze: Bool
     @NSManaged public var image: ImageEntity?
 
 }

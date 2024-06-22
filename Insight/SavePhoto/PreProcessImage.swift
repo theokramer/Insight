@@ -31,6 +31,16 @@ extension ViewController {
         }
     }
     
+    static func fetchCoreDataBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageBoxes.fetchRequest()) as? [ImageBoxes]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
     static func fetchCoreDataImageBoxes(onSuccess: @escaping ([ImageBoxes]?) -> Void) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
@@ -62,80 +72,8 @@ extension ViewController {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         var found = false
         
-        if singleMode {
-            
-            ViewController.fetchCoreData {items in
-                if let items = (items ?? []) as [ImageEntity]? {
-                    for item in items {
-                        if self.singleImage.index == item.id {
-                            
-                            if self.singleImage.cropped {
-                                context.delete(item)
-                                do {
-                                    try context.save()
-                                    print("Single Success")
-                                    found = false
-                                } catch {
-                                    print("error-Deleting data")
-                                }
-                                
-                            } else {
-                                found = true
-                            }
-                        }
-                    }
-                } else {
-                    print("FEHLER")
-                }
-            }
-            if !found {
-                // create NSData from UIImage
-                guard let jpegImageData = singleImage.image.jpegData(compressionQuality: 1) else {
-                    // handle failed conversion
-                    print("jpg error")
-                    return
-                }
-                
-                let newData = ImageEntity(context: context)
-                newData.imageData = jpegImageData
-                newData.id = singleImage.index
-                
-                for i in singleImage.boxes {
-                    
-                    let singleBox = ImageBoxes(context: context)
-                    singleBox.id = UUID().uuidString
-                    singleBox.height = Float(i.boundingBox.height)
-                    singleBox.width = Float(i.boundingBox.width)
-                    singleBox.minX = Float(i.boundingBox.minX)
-                    singleBox.minY = Float(i.boundingBox.minY)
-                    singleBox.imageEntity2 = newData
-                }
-                
-                if cellId == "" {
-                    newData.topic = Topic(context: context)
-                    newData.topic?.id = UUID().uuidString
-                    newData.topic?.name = "Physikum"
-                } else {
-                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-                    do {
-                        guard let items = try context.fetch(Topic.fetchRequest()) as? [Topic] else {
-                            return
-                        }
-                        for myTopic in items {
-                            if myTopic.id == cellId {
-                                newData.topic = myTopic
-                            }
-                            
-                        }
-                    } catch {
-                        print("error-Fetching data")
-                    }
-                }
-                
-            }
-
-        } else {
-            for image in selectedImages {
+        
+            for image in editImages {
                 found = false
                 
                 //Removes all Images in Core Data that got cropped, so it gets updated.
@@ -182,11 +120,12 @@ extension ViewController {
                     for i in image.boxes {
                         let singleBox = ImageBoxes(context: context)
                         singleBox.id = UUID().uuidString
-                        singleBox.height = Float(i.boundingBox.height)
-                        singleBox.width = Float(i.boundingBox.width)
-                        singleBox.minX = Float(i.boundingBox.minX)
-                        singleBox.minY = Float(i.boundingBox.minY)
+                        singleBox.height = Float(i.frame.boundingBox.height)
+                        singleBox.width = Float(i.frame.boundingBox.width)
+                        singleBox.minX = Float(i.frame.boundingBox.minX)
+                        singleBox.minY = Float(i.frame.boundingBox.minY)
                         singleBox.imageEntity2 = newData
+                        singleBox.tag = Int64(i.tag)
                         newData.addToBoxes(singleBox)
                     }
                     
@@ -214,7 +153,7 @@ extension ViewController {
                 }
                 
             }
-        }
+        
         
         
         
@@ -226,12 +165,12 @@ extension ViewController {
                 print("error-saving data")
             }
         }
-        
         if singleMode {
             self.dismiss(animated: true)
         } else {
             self.navigationController?.popViewController(animated: true)
         }
+        
     }
     
     

@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import Vision
 
-var toggleColor: UIColor = .systemGray
+var toggleColor: UIColor = .purple
 
 
 extension ViewController {
@@ -58,24 +58,40 @@ extension ViewController {
     }
     
     //Creates white Boxes above the detected Text Fields
-    func draw(text: [VNTextObservation], onImageWithBounds bounds: CGRect) {
+    func draw(text: [ImageBox], onImageWithBounds bounds: CGRect) {
         removeAllButtonsFromView()
+        var id = 0
         
-        var sliderValue = 0.5
+        
+        //var sliderValue = 0.5
         CATransaction.begin()
         
         // Array to hold groups of intersecting text observations
-        var textGroups: [[VNTextObservation]] = []
+        //var textGroups: [[ImageBox]] = []
         
         for wordObservation in text {
-            var grouped = false
+            //var grouped = false
+
+            id = wordObservation.tag
             
-            let wordBox = boundingBox(forRegionOfInterest: wordObservation.boundingBox, withinImageBounds: bounds)
+            
+            //let wordBox = boundingBox(forRegionOfInterest: wordObservation.frame.boundingBox, withinImageBounds: bounds)
+            
+            let fillColor = toggleColor // You may want to change the fill color as needed
+            
+            // Calculate the bounding box for the group
+            
+
+                var observationBox = boundingBox(forRegionOfInterest: wordObservation.frame.boundingBox, withinImageBounds: bounds)
+                observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
+                let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
+                view.insertSubview(shapeButton, at: 2)
+            
             
             // Check if the current word observation intersects with any existing group
-            for (index, group) in textGroups.enumerated() {
+            /*for (index, group) in textGroups.enumerated() {
                 for groupObservation in group {
-                    let groupBox = boundingBox(forRegionOfInterest: groupObservation.boundingBox, withinImageBounds: bounds)
+                    let groupBox = boundingBox(forRegionOfInterest: groupObservation.frame.boundingBox, withinImageBounds: bounds)
                     let distanceX = abs(wordBox.midX - groupBox.midX)
                     let distanceY = abs(wordBox.midY - groupBox.midY)
                     let minXDistance = (wordBox.width + groupBox.width) / 2
@@ -93,22 +109,10 @@ extension ViewController {
             // If the current observation does not intersect with any existing group, create a new group
             if !grouped {
                 textGroups.append([wordObservation])
-            }
+            }*/
         }
         
         // Create buttons for each group of intersecting text observations
-        for group in textGroups {
-            let id = Int.random(in: 1..<100000000)
-            let fillColor = toggleColor // You may want to change the fill color as needed
-            
-            // Calculate the bounding box for the group
-            for observation in group {
-                var observationBox = boundingBox(forRegionOfInterest: observation.boundingBox, withinImageBounds: bounds)
-                observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
-                let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
-                view.insertSubview(shapeButton, at: 2)
-            }
-        }
         
         CATransaction.commit()
     }
@@ -121,12 +125,11 @@ extension ViewController {
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height)).cgPath
         
-        shapeLayer.fillColor = fillColor.cgColor
-        
-        
+        shapeLayer.fillColor = editMode ? fillColor.withAlphaComponent(0.7).cgColor : fillColor.cgColor
         let button = UIButton()
         button.frame = frame
         button.tag = tag
+        
         
         // Add shape layer to button's layer
         button.layer.addSublayer(shapeLayer)

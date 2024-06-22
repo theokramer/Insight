@@ -5,6 +5,18 @@
       location = "container:"
       name = "Models2">
       <FileRef
+         location = "group:Insight/ImageReview+CoreDataClass.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Insight/ImageReview+CoreDataProperties.swift">
+      </FileRef>
+      <FileRef
+         location = "group:ImageBoxes+CoreDataClass.swift">
+      </FileRef>
+      <FileRef
+         location = "group:ImageBoxes+CoreDataProperties.swift">
+      </FileRef>
+      <FileRef
          location = "group:/Users/theokramer/Documents/Insight/Insight/Topic+CoreDataClass.swift">
       </FileRef>
       <FileRef
@@ -21,12 +33,6 @@
       </FileRef>
       <FileRef
          location = "group:/Users/theokramer/Documents/Insight/Insight/ImageEntity+CoreDataProperties.swift">
-      </FileRef>
-      <FileRef
-         location = "group:/Users/theokramer/Documents/Insight/Insight/ImageBoxes+CoreDataClass.swift">
-      </FileRef>
-      <FileRef
-         location = "group:/Users/theokramer/Documents/Insight/Insight/ImageBoxes+CoreDataProperties.swift">
       </FileRef>
    </Group>
    <FileRef

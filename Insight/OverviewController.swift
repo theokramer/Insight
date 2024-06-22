@@ -16,14 +16,19 @@ struct selectedImage {
     var image: UIImage
     var index: String
     var cropped: Bool
-    var boxes: [VNTextObservation]
+    var boxes: [ImageBox]
+}
+
+struct ImageBox {
+    var frame: VNTextObservation
+    var tag: Int
 }
 
 struct studyImage {
     var image: UIImage
     var index: String
     var review: Review
-    var boxes: [VNTextObservation]
+    var boxes: [ImageBox]
 }
 
 struct Review {
@@ -33,13 +38,22 @@ struct Review {
     var interval: Int64
     var ease_factor: Float
     var repetitions: Int16
+    var freeze: Bool
 }
 
 //Array of selected Images in Photo Picker
 var selectedImages: [selectedImage] = []
 
+// Layer into which to draw bounding box paths.
+var pathLayer: CALayer?
+
+
+protocol BottomSheetDelegate: AnyObject {
+    func didDeleteImage(at index: String)
+}
+
 @available(iOS 13.0, *)
-class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BottomSheetDelegate {
     
     
     @IBOutlet weak var studyChartsButton: UIButton!
@@ -53,7 +67,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     @IBOutlet weak var moreButton: UIButton!
     
     @IBAction func moreButtonClicked(_ sender: Any) {
-        editAll()
+        //editAll()
     }
     
     @IBAction func backButtonClicked(_ sender: Any) {
@@ -66,6 +80,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Clicked Cell with Topic ID
     var cellId: String = ""
     
+    var activeImage = UIImage()
+
+    
     var timer = Timer()
     
     //Array with Images -> Gets fetched of Core Data
@@ -74,6 +91,17 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     //Configure Image Cell
     var estimateWidth = 300
     var cellMarginSize = UIScreen.main.bounds.width > 500 ? 50 : 30
+    
+
+    lazy var textDetectionHandler = TextDetectionHandler(additionalVariable: UIImage())
+
+    lazy var textDetectionRequest: VNDetectTextRectanglesRequest = {
+        let textDetectRequest = VNDetectTextRectanglesRequest { [weak self] (request, error) in
+            self?.textDetectionHandler.handleDetectedText(request: request, error: error)
+        }
+        textDetectRequest.reportCharacterBoxes = true
+        return textDetectRequest
+    }()
     
     
     @IBAction func studyChartsClicked(_ sender: Any) {
@@ -87,7 +115,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     @objc func editAll() {
-        performSegue(withIdentifier: "showViewController", sender: cellId)
+        performSegue(withIdentifier: "showViewController", sender: false)
     }
     
     var timeUntilNewCharts = -1
@@ -131,7 +159,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                         }
                         
                             if item.review != nil {
-                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions, let freeze = item.review?.freeze else {
                                     return
                                 }
                                 
@@ -139,18 +167,20 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                                 
                                
                                 
-                                if newReviewDate < Date.now {
-                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
-                                    learnableImages.append(myStudyImage)
-                                } else {
-                                    if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
-                                        self.timeUntilNewCharts = Int(newReviewDate.timeIntervalSince(Date.now))
+                                if !freeze {
+                                    if newReviewDate < Date.now {
+                                        let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
+                                        learnableImages.append(myStudyImage)
+                                    } else {
+                                        if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
+                                            self.timeUntilNewCharts = Int(newReviewDate.timeIntervalSince(Date.now))
+                                        }
                                     }
                                 }
                             
                                 
                             } else {
-                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
                                 learnableImages.append(myStudyImage)
                             }
                             
@@ -181,8 +211,9 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         topView.layer.cornerRadius = 15
-        maxImageIndex = 0
+        viewController = false
         
         imageIndex = 0
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)
@@ -384,14 +415,22 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if (segue.identifier == "showViewController") {
           let secondView = segue.destination as! ViewController
-          let object = sender as! String
-           secondView.cellId = object
-           secondView.singleMode = false
+           
+           if let object = sender as? Bool {
+               secondView.cellId = cellId
+               secondView.singleMode = false
+               secondView.firstTime = object
+           } else {
+               secondView.cellId = cellId
+               secondView.singleMode = false
+               secondView.firstTime = false
+           }
+           
+           
        }
         if (segue.identifier == "studyChartsClicked") {
            let secondView = segue.destination as! StudyViewController
-           let object = sender as! String
-            secondView.cellId = object
+            secondView.cellId = cellId
             secondView.singleMode = false
             
         }
@@ -425,16 +464,69 @@ extension OverviewController: UICollectionViewDataSource {
                 showBottomSheet(with: selectedData)
     }
     
+    
+    static func fetchCoreData(onSuccess: @escaping ([ImageEntity]?) -> Void) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ImageEntity.fetchRequest()) as? [ImageEntity]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+        }
+    }
+    
+    func didDeleteImage(at index: String) {
+        
+        let alert = UIAlertController(title: "Delete Image?", message: "This action is not reversible", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                    OverviewController.fetchCoreData { items in
+                        if let items = (items ?? []) as [ImageEntity]? {
+                            for item in items {
+                                if index == item.id {
+                                    context.delete(item)
+                                    do {
+                                        try context.save()
+                                        
+                                        print("Success")
+                                        
+                                        // Datenquelle aktualisieren
+                                        if let imageIndex = self.dataSource.firstIndex(where: { $0.index == index }) {
+                                            self.dataSource.remove(at: imageIndex)
+                                            selectedImages.removeAll(where: { $0.index == index })
+                                            self.collectionView.reloadData()
+                                            self.cardInDeck.text = "Total Charts (\(selectedImages.count))"
+                                        }
+                                        
+                                    } catch {
+                                        print("Error deleting data")
+                                    }
+                                }
+                            }
+                        } else {
+                            print("FEHLER")
+                        }
+                    }
+                })
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+    
     func showBottomSheet(with data: selectedImage) {
             let bottomSheetVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BottomSheetViewController") as! BottomSheetViewController
             bottomSheetVC.configure(with: data)
             bottomSheetVC.info = data
             bottomSheetVC.cellID = cellId
-            
+            bottomSheetVC.indizes = [0,1,2,3,4]
+            bottomSheetVC.delegate = self  // Set the delegate
+            minusHeight = 0
+        
             bottomSheetVC.modalPresentationStyle = .custom
             bottomSheetVC.transitioningDelegate = bottomSheetVC.presentationManager
             present(bottomSheetVC, animated: true, completion: nil)
-            
         }
     
     // Funktion, um die Größe eines UIImage zu ändern
@@ -495,9 +587,14 @@ class BottomSheetViewController: UIViewController {
     private var dimmingView: UIView?
     var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     var cellID: String = ""
+    var indizes:[Int] = []
+    var freeze = false
+    weak var delegate: BottomSheetDelegate?  // Declare the delegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         view.backgroundColor = .white
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
@@ -521,14 +618,36 @@ class BottomSheetViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
-        let buttonTitles = ["Select", "Edit", "Freeze", "Move", "Delete"]
-        let buttonIcons = ["checkmark.circle", "pencil", "pause.circle", "arrow.right.circle", "trash"]
+        ViewController.fetchCoreData { items in
+            guard let items = (items ?? []) as [ImageEntity]? else {
+                return
+            }
+            
+            for item in items {
+                if self.info.index == item.id {
+                    // Toggle the freeze attribute
+                    if item.review != nil {
+                        guard let freezeNew = item.review?.freeze else {
+                            return
+                        }
+                        self.freeze = freezeNew
+                    }
+                    
+                }
+            }
+        }
+        
+        let buttonTitles = ["Select", "Edit", freeze ? "Start" :"Freeze", "Move", "Delete"]
+        let buttonIcons = ["checkmark.circle", "pencil", freeze ? "play.circle" : "pause.circle", "arrow.right.circle", "trash"]
         
         for (index, title) in buttonTitles.enumerated() {
-            let button = createButton(title: title, icon: buttonIcons[index], index: index)
-            button.tag = index
-            button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-            stackView.addArrangedSubview(button)
+            if indizes.contains(index) {
+                let button = createButton(title: title, icon: buttonIcons[index], index: index)
+                button.tag = index
+                button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+                stackView.addArrangedSubview(button)
+            }
+            
         }
 
         view.addSubview(stackView)
@@ -574,8 +693,11 @@ class BottomSheetViewController: UIViewController {
         case 1:
             print("Edit tapped")
             if let editViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as? ViewController {
-                editViewController.singleImage = info
+                editImages.removeAll()
+                editImages.append(info)
+                
                 editViewController.cellId = cellID
+                editViewController.editMode = true
                 editViewController.singleMode = true
                 let navigationController = UINavigationController(rootViewController: editViewController)
                 navigationController.modalPresentationStyle = .overFullScreen
@@ -584,62 +706,55 @@ class BottomSheetViewController: UIViewController {
             
         case 2:
             print("Freeze tapped")
-            // Handle Freeze action
+            freezeImage()
         case 3:
             print("Move tapped")
             // Handle Move action
         case 4:
             print("Delete tapped")
-            dismissViewController()
+            deleteImage()
         default:
             break
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if (segue.identifier == "showViewController2") {
-          let secondView = segue.destination as! ViewController
-          let object = sender as! selectedImage
-           secondView.cellId = ""
-           secondView.singleImage = object
-       }
-        
+    @IBAction func deleteImage() {
+        dismiss(animated: true, completion: nil)
+        self.delegate?.didDeleteImage(at: self.info.index)  // Notify the delegate
     }
     
-    @IBAction func dismissViewController() {
-        
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    @IBAction func freezeImage() {
+        dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
-            //Removes all Images in Core Data that got cropped, so it gets updated.
-            //TODO: Instead change the UIImage when cropped?
-            ViewController.fetchCoreData {items in
-                if let items = (items ?? []) as [ImageEntity]? {
-                    for item in items {
-                        if self.info.index == item.id {
-
-                                context.delete(item)
-                                do {
-                                    try context.save()
-                                    self.dismiss(animated: true, completion: nil)
-                                    
-                                    print("Success")
-                                } catch {
-                                    print("error-Deleting data")
-                                }
-                                
-                            
-                        }
-                    }
-                } else {
+            // Assuming fetchCoreData is an async method
+            ViewController.fetchCoreData { items in
+                guard let items = (items ?? []) as [ImageEntity]? else {
                     print("FEHLER")
+                    return
+                }
+                
+                for item in items {
+                    if self.info.index == item.id {
+                        // Toggle the freeze attribute
+                        item.review?.freeze.toggle()
+                        
+                        do {
+                            // Save the context
+                            try context.save()
+                            print("Success")
+                        } catch {
+                            // Handle the error specifically
+                            print("Error saving context: \(error.localizedDescription)")
+                        }
+                        break // Assuming `id` is unique, break after updating the matched item
+                    }
                 }
             }
-        
-        
-        
+        }
     }
-    
-    
+
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
@@ -664,38 +779,20 @@ class BottomSheetViewController: UIViewController {
     }
 }
 
-
 class HalfScreenPresentationManager: NSObject, UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return HalfScreenPresentationController(presentedViewController: presented, presenting: presenting)
     }
-
-
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let containerView = transitionContext.containerView
-        guard let toView = transitionContext.view(forKey: .to) else { return }
-
-        containerView.addSubview(toView)
-        toView.frame = containerView.bounds.offsetBy(dx: 0, dy: containerView.bounds.height)
-
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-            toView.frame = containerView.bounds
-        }, completion: { finished in
-            transitionContext.completeTransition(finished)
-        })
-    }
-
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
-    }
 }
+
+var minusHeight = 0.0
 
 class HalfScreenPresentationController: UIPresentationController {
     private let dimmingView = UIView()
-
+    
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = containerView else { return .zero }
-        let height = containerView.bounds.height / 2
+        let height = containerView.bounds.height / 2 - containerView.bounds.height * 0.1 * minusHeight
         return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
     }
 
@@ -705,6 +802,10 @@ class HalfScreenPresentationController: UIPresentationController {
         dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimmingView.alpha = 0
         containerView.addSubview(dimmingView)
+
+        // Adding Tap Gesture Recognizer to dimmingView
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        dimmingView.addGestureRecognizer(tapGesture)
 
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
             self.dimmingView.alpha = 1
@@ -717,5 +818,9 @@ class HalfScreenPresentationController: UIPresentationController {
         }, completion: { _ in
             self.dimmingView.removeFromSuperview()
         })
+    }
+
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        presentedViewController.dismiss(animated: true, completion: nil)
     }
 }
