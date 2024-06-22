@@ -10,7 +10,7 @@ import UIKit
 import Vision
 
 
-extension ViewController {
+extension OverviewController {
     
     // MARK: - Vision
     
@@ -31,29 +31,36 @@ extension ViewController {
     
     
     /// - Tag: PerformRequests
-    func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
-        print("Executed Vision Request")
-        // Fetch desired requests based on switch status.
-        let requests = createVisionRequests()
-        // Create a request handler.
-        let imageRequestHandler = VNImageRequestHandler(cgImage: image,
-                                                        orientation: orientation,
-                                                        options: [:])
-        
-        // Send the requests to the request handler.
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                try imageRequestHandler.perform(requests)
-            } catch let error as NSError {
-                print("Failed to perform image request: \(error)")
-                self.presentAlert("Image Request Failed", error: error)
-                return
-            }
-        }
-    }
+    func performVisionRequest(image: UIImage, orientation: CGImagePropertyOrientation) {
+           guard let cgImage = image.cgImage else { return }
+           
+           print("Executed Vision Request")
+           
+           let textDetectionHandler = TextDetectionHandler(additionalVariable: image)
+           let textDetectionRequest = VNDetectTextRectanglesRequest { (request, error) in
+               textDetectionHandler.handleDetectedText(request: request, error: error)
+           }
+           textDetectionRequest.reportCharacterBoxes = true
+           
+           let requests: [VNRequest] = [textDetectionRequest]
+           
+           let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
+           
+           DispatchQueue.global(qos: .userInitiated).async {
+               do {
+                   try imageRequestHandler.perform(requests)
+                   
+               } catch let error as NSError {
+                   print("Failed to perform image request: \(error)")
+                   self.presentAlert("Image Request Failed", error: error)
+                   return
+               }
+           }
+       }
     
     /// - Tag: CreateRequests
-    func createVisionRequests() -> [VNRequest] {
+    func createVisionRequests(activeImage: UIImage) -> [VNRequest] {
+        
         
         // Create an array to collect all desired requests.
         var requests: [VNRequest] = []
@@ -64,45 +71,53 @@ extension ViewController {
         
             //requests.append(self.rectangleDetectionRequest)
         
-        
-            requests.append(self.textDetectionRequest)
+        textDetectionHandler.additionalVariable = activeImage
+        requests.append(self.textDetectionRequest)
         
         
         // Return grouped requests as a single array.
         return requests
     }
-    
 
+}
+
+
+
+// Wrapper-Klasse, die die zusätzliche Variable und den Request-Handler enthält
+class TextDetectionHandler {
+    var additionalVariable: UIImage
+    
+    init(additionalVariable: UIImage) {
+        self.additionalVariable = additionalVariable
+    }
     
     func handleDetectedText(request: VNRequest?, error: Error?) {
         if let nsError = error as NSError? {
-            self.presentAlert("Text Detection Error", error: nsError)
+            print("Additional Variable: \(self.additionalVariable)")
             return
         }
-        // Perform drawing on the main thread.
+        
         DispatchQueue.main.async {
-            guard let drawLayer = self.pathLayer,
-                  let results = request?.results as? [VNTextObservation] else {
+            guard let results = request?.results as? [VNTextObservation] else {
+                print("Fehler")
                 return
             }
             
+            print("handle!!")
+            var newImageBoxArray: [ImageBox] = []
             
-            self.saveBoxes(results: results)
+            for observation in results {
+                let newImageBox = ImageBox(frame: observation, tag: Int.random(in: 1...100000000))
+                newImageBoxArray.append(newImageBox)
+            }
             
+            self.saveBoxes(results: newImageBoxArray)
             
-            //Display Rectangles above the text
-            self.draw(text: results, onImageWithBounds: drawLayer.frame)
-            
-            
-            drawLayer.setNeedsDisplay()
         }
     }
     
-    func saveBoxes(results: [VNTextObservation]) {
-        if self.singleMode {
-            self.singleImage.boxes = results
-        } else {
-            selectedImages[imageIndex].boxes = results
-        }
+    func saveBoxes(results: [ImageBox]) {
+        var thisImageEdit = selectedImage.init(image: additionalVariable, index: UUID().uuidString, cropped: false, boxes: results)
+        editImages.append(thisImageEdit)
     }
 }
