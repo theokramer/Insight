@@ -11,7 +11,7 @@ import Vision
 
 func findNextImage(cellId: String) -> studyImage? {
     var activeImage: studyImage
-    var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+    var nextImage = studyImage.init(image: UIImage(), index: "", review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
     ViewController.fetchCoreData {items in
         if let items = (items ?? []) as [ImageEntity]? {
             for item in items {
@@ -29,7 +29,7 @@ func findNextImage(cellId: String) -> studyImage? {
                     
                     
                         if item.review != nil {
-                            guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                            guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions, let freeze = item.review?.freeze else {
                                 return
                             }
                             
@@ -38,12 +38,10 @@ func findNextImage(cellId: String) -> studyImage? {
                             let currentNextReviewDate =
                              nextImage.review.review_date?.addingTimeInterval((Double(nextImage.review.interval) * 60))
                             
-                            
-                            
-                            if newReviewDate < Date.now {
+                            if newReviewDate < Date.now && freeze == false {
                                 
                                 if nextImage.index == "" || nextImage.review.index == "" || newReviewDate < currentNextReviewDate! {
-                                    let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions)
+                                    let nextReview = Review.init(index: reviewIndex, review_date: review_date, rating: ratingNum, interval: interval, ease_factor: ease_factor, repetitions: repetitions, freeze: freeze)
                                     
                                     let boxes = item.boxes?.allObjects as? [ImageBoxes] ?? []
                                     
@@ -83,7 +81,7 @@ func findNextImage(cellId: String) -> studyImage? {
                                 }
 
                                 
-                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: newImageBoxArray)
+                                nextImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: newImageBoxArray)
                             }
                             
                         }
@@ -106,6 +104,8 @@ func findNextImage(cellId: String) -> studyImage? {
         activeImage = nextImage
     }
     
+    print(activeImage.review)
+    
     return activeImage
 }
 
@@ -114,7 +114,7 @@ class StudyViewController: ViewController {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var imageViewStudy: UIImageView!
     
-    var activeImage: studyImage = studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+    var activeImage: studyImage = studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
     
     // Declare buttons and stack view
     let easyButton = UIButton()
@@ -176,7 +176,7 @@ class StudyViewController: ViewController {
         
 
         
-        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -187,7 +187,8 @@ class StudyViewController: ViewController {
 
     
     override func handleNextClick() {
-        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+        
+        activeImage = findNextImage(cellId: cellId) ?? studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
         if (activeImage.index == "") {
             showCompletionAlert()
         } else {
@@ -195,6 +196,7 @@ class StudyViewController: ViewController {
             buttonsStackView.isHidden = true
             nextButton.isHidden = false
         }
+        
         
     }
     
@@ -332,15 +334,15 @@ class StudyViewController: ViewController {
                         if item.review != nil && item.review?.repetitions != 0 {
                                 
                                 
-                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                            guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions, let freeze = item.review?.freeze else {
                                     return
                                 }
-                                print("Previous Review:")
+                                /*print("Previous Review:")
                                 print(reviewIndex)
                                 print(ratingNum)
                                 print(interval)
                                 print(ease_factor)
-                                print(review_date)
+                                print(review_date)*/
                             
                                 let newInterval = Int64(self.calculate_next_interval(rating: sender.tag, current_interval: Int(interval), current_ease_factor: ease_factor, reps: Int(repetitions)))
                                 let new_ease_factor = self.calculate_new_ease_factor(current_ease_factor: ease_factor, rating: sender.tag)
@@ -348,7 +350,7 @@ class StudyViewController: ViewController {
                                 let new_repetitions = self.calcReps(rating: sender.tag, repetitions: Int(repetitions))
                                 
                                 
-                                saveReview = Review.init(index: reviewIndex, review_date: Date.now, rating: Int16(sender.tag), interval: newInterval, ease_factor: new_ease_factor, repetitions: new_repetitions)
+                            saveReview = Review.init(index: reviewIndex, review_date: Date.now, rating: Int16(sender.tag), interval: newInterval, ease_factor: new_ease_factor, repetitions: new_repetitions, freeze: freeze)
                                 
                             } else {
                                 let newInterval: Int64
@@ -365,7 +367,7 @@ class StudyViewController: ViewController {
                                         newInterval = 1
                                 }
                                 
-                                saveReview = Review.init(index: UUID().uuidString, review_date: Date.now, rating: Int16(sender.tag), interval: newInterval, ease_factor: 2.5, repetitions: 1)
+                                saveReview = Review.init(index: UUID().uuidString, review_date: Date.now, rating: Int16(sender.tag), interval: newInterval, ease_factor: 2.5, repetitions: 1, freeze: false)
                             }
                             
                         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

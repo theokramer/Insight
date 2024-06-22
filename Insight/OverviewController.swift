@@ -38,6 +38,7 @@ struct Review {
     var interval: Int64
     var ease_factor: Float
     var repetitions: Int16
+    var freeze: Bool
 }
 
 //Array of selected Images in Photo Picker
@@ -158,7 +159,7 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                         }
                         
                             if item.review != nil {
-                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions else {
+                                guard let reviewIndex = item.review?.id, let ratingNum = item.review?.rating, let interval = item.review?.interval, let ease_factor = item.review?.ease_factor, let review_date = item.review?.review_date, let repetitions = item.review?.repetitions, let freeze = item.review?.freeze else {
                                     return
                                 }
                                 
@@ -166,18 +167,20 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
                                 
                                
                                 
-                                if newReviewDate < Date.now {
-                                    let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
-                                    learnableImages.append(myStudyImage)
-                                } else {
-                                    if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
-                                        self.timeUntilNewCharts = Int(newReviewDate.timeIntervalSince(Date.now))
+                                if !freeze {
+                                    if newReviewDate < Date.now {
+                                        let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
+                                        learnableImages.append(myStudyImage)
+                                    } else {
+                                        if Int(newReviewDate.timeIntervalSince(Date.now)) < self.timeUntilNewCharts || self.timeUntilNewCharts == -1 {
+                                            self.timeUntilNewCharts = Int(newReviewDate.timeIntervalSince(Date.now))
+                                        }
                                     }
                                 }
                             
                                 
                             } else {
-                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1), boxes: [])
+                                let myStudyImage = studyImage.init(image: thisImage, index: item.wrappedId, review: Review.init(index: "", review_date: Date.now, rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
                                 learnableImages.append(myStudyImage)
                             }
                             
@@ -585,10 +588,13 @@ class BottomSheetViewController: UIViewController {
     var info: selectedImage = selectedImage(image: UIImage(), index: "", cropped: false, boxes: [])
     var cellID: String = ""
     var indizes:[Int] = []
+    var freeze = false
     weak var delegate: BottomSheetDelegate?  // Declare the delegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         view.backgroundColor = .white
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
@@ -612,8 +618,27 @@ class BottomSheetViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
-        let buttonTitles = ["Select", "Edit", "Freeze", "Move", "Delete"]
-        let buttonIcons = ["checkmark.circle", "pencil", "pause.circle", "arrow.right.circle", "trash"]
+        ViewController.fetchCoreData { items in
+            guard let items = (items ?? []) as [ImageEntity]? else {
+                return
+            }
+            
+            for item in items {
+                if self.info.index == item.id {
+                    // Toggle the freeze attribute
+                    if item.review != nil {
+                        guard let freezeNew = item.review?.freeze else {
+                            return
+                        }
+                        self.freeze = freezeNew
+                    }
+                    
+                }
+            }
+        }
+        
+        let buttonTitles = ["Select", "Edit", freeze ? "Start" :"Freeze", "Move", "Delete"]
+        let buttonIcons = ["checkmark.circle", "pencil", freeze ? "play.circle" : "pause.circle", "arrow.right.circle", "trash"]
         
         for (index, title) in buttonTitles.enumerated() {
             if indizes.contains(index) {
@@ -699,8 +724,37 @@ class BottomSheetViewController: UIViewController {
     }
     
     @IBAction func freezeImage() {
-        
+        dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            
+            // Assuming fetchCoreData is an async method
+            ViewController.fetchCoreData { items in
+                guard let items = (items ?? []) as [ImageEntity]? else {
+                    print("FEHLER")
+                    return
+                }
+                
+                for item in items {
+                    if self.info.index == item.id {
+                        // Toggle the freeze attribute
+                        item.review?.freeze.toggle()
+                        
+                        do {
+                            // Save the context
+                            try context.save()
+                            print("Success")
+                        } catch {
+                            // Handle the error specifically
+                            print("Error saving context: \(error.localizedDescription)")
+                        }
+                        break // Assuming `id` is unique, break after updating the matched item
+                    }
+                }
+            }
+        }
     }
+
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
