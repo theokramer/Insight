@@ -213,7 +213,6 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     override func viewWillAppear(_ animated: Bool) {
         
         topView.layer.cornerRadius = 15
-        viewController = false
         
         imageIndex = 0
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .ultraLight, scale: .large)
@@ -415,11 +414,13 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if (segue.identifier == "showViewController") {
           let secondView = segue.destination as! ViewController
+           secondView.editMode = true
            
            if let object = sender as? Bool {
                secondView.cellId = cellId
                secondView.singleMode = false
                secondView.firstTime = object
+               
            } else {
                secondView.cellId = cellId
                secondView.singleMode = false
