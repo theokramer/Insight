@@ -203,16 +203,68 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         viewController = true
         navigationController?.navigationBar.isHidden = false
         super.viewDidLoad()
-        
         let editButton = UIButton(type: .custom)
-        editButton.setImage(UIImage(systemName: "pencil"), for: .normal)
-        editButton.setTitleColor(.white, for: .normal)
+        editButton.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
+        editButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
         editButton.addTarget(self, action: #selector(editBoxes(_:)), for: .touchUpInside)
+
+        toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal) // Image can be downloaded from here below link
+        toggleButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        toggleButton.addTarget(self, action: #selector(toggleBoxes), for: .touchUpInside)
+
+        let cropButton = UIButton(type: .custom)
+        cropButton.setImage(UIImage(systemName: "crop"), for: .normal) // Image can be downloaded from here below link
+        cropButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        cropButton.addTarget(self, action: #selector(cropBoxes), for: .touchUpInside)
+
+
+        let toggle = UIBarButtonItem(customView: toggleButton)
+        let edit = UIBarButtonItem(customView: editButton)
+        let crop = UIBarButtonItem(customView: cropButton)
         
-        let barButton = UIBarButtonItem(customView: editButton)
-        self.navigationItem.rightBarButtonItem = barButton
+        navigationItem.rightBarButtonItems = [toggle, edit, crop]
+
+          let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
+              edgePan.edges = .right
+        view.addGestureRecognizer(edgePan)
+
+
+                let edgePanL = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedL))
+                    edgePanL.edges = .left
+        view.addGestureRecognizer(edgePanL)
+        
+        if imageIndex == 0 || singleMode {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
+        
+        leftButton.tag = 3
+        rightButton.tag = 3
+        
+        if imageIndex == editImages.count - 1 || singleMode {
+              rightButton.isHidden = true
+          } else {
+              rightButton.isHidden = false
+          }
+          UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+          NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+          let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
+          self.navigationItem.leftBarButtonItem = backButton
         
         NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    @objc func screenEdgeSwipedL(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        if recognizer.state == .recognized {
+            handlePrevClick()
+        }
+    }
+        
+    @objc func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        if recognizer.state == .recognized {
+            handleNextClick()
+        }
     }
     
     
@@ -232,13 +284,45 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
     }
 
+
     func handleNextClick() {
-        imageIndex += 1
+        if editImages.count > imageIndex + 1 {
+            imageIndex += 1
+            
+            handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
+        }
+        if imageIndex == editImages.count - 1 || singleMode {
+            rightButton.isHidden = true
+        } else {
+            rightButton.isHidden = false
+        }
+        if imageIndex == 0 || singleMode {
+                   leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
     }
     
-    func handlePrevClick() {
-        imageIndex -= 1
-    }
+        func handlePrevClick() {
+            if imageIndex > 0 {
+                imageIndex -= 1
+                
+                handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
+                
+            }
+            if imageIndex == editImages.count - 1 {
+                        rightButton.isHidden = true
+                    } else {
+                        rightButton.isHidden = false
+                    }
+            
+            if imageIndex == 0 {
+                        leftButton.isHidden = true
+                    } else {
+                        leftButton.isHidden = false
+                    }
+            
+        }
     
 }
 
@@ -251,7 +335,6 @@ extension ViewController {
         return imageView
     }
 
-    
     
     
     private func setupScrollView() {
