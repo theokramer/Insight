@@ -316,9 +316,23 @@
                                 <rect key="frame" x="0.0" y="0.0" width="704" height="794"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4rB-HK-9vG">
-                                <rect key="frame" x="0.0" y="0.0" width="704" height="794"/>
-                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Xe-1F-VhT">
+                                <rect key="frame" x="0.0" y="11" width="704" height="783"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4rB-HK-9vG">
+                                        <rect key="frame" x="0.0" y="0.0" width="704" height="783"/>
+                                        <gestureRecognizers/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="7hj-bx-e74" secondAttribute="top" id="GqH-tT-Ayd"/>
+                                    <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="7hj-bx-e74" secondAttribute="leading" id="MK3-bg-peU"/>
+                                    <constraint firstItem="7hj-bx-e74" firstAttribute="trailing" secondItem="4rB-HK-9vG" secondAttribute="trailing" id="RNp-jH-49E"/>
+                                    <constraint firstItem="4rB-HK-9vG" firstAttribute="bottom" secondItem="7hj-bx-e74" secondAttribute="bottom" id="hW7-pL-14d"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="CiI-Sr-lgY"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="7hj-bx-e74"/>
+                            </scrollView>
                             <slider hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="n6p-Vg-RiL">
                                 <rect key="frame" x="48" y="93.5" width="180" height="31"/>
                                 <constraints>
@@ -353,18 +367,18 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="5Xe-1F-VhT" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="11" id="07q-Or-27e"/>
                             <constraint firstAttribute="trailing" secondItem="tzf-FX-006" secondAttribute="trailing" id="3b8-Vn-iBO"/>
                             <constraint firstAttribute="bottom" secondItem="tzf-FX-006" secondAttribute="bottom" id="6Jn-G4-tF9"/>
-                            <constraint firstItem="4rB-HK-9vG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="79b-yv-hGF"/>
-                            <constraint firstItem="4rB-HK-9vG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7GN-Ir-EKT"/>
                             <constraint firstItem="tzf-FX-006" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="B6s-t3-YUh"/>
                             <constraint firstItem="tzf-FX-006" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="I8y-eZ-ngr"/>
                             <constraint firstItem="hzM-hy-IMf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="PdN-do-FVT"/>
                             <constraint firstItem="Kym-Mn-vz1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="WFA-jG-3nq"/>
-                            <constraint firstItem="4rB-HK-9vG" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="XOq-Cj-hO6"/>
+                            <constraint firstItem="5Xe-1F-VhT" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="XWq-QM-V68"/>
+                            <constraint firstItem="5Xe-1F-VhT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Xvv-BX-mVr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kym-Mn-vz1" secondAttribute="trailing" constant="35" id="a1q-2q-URY"/>
                             <constraint firstItem="hzM-hy-IMf" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="eAp-gx-fb0"/>
-                            <constraint firstItem="4rB-HK-9vG" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="qkf-tD-0tv"/>
+                            <constraint firstItem="5Xe-1F-VhT" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nP6-Tm-pkA"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="Gtw-Jq-hwK" appends="YES" id="A5M-mF-Chr"/>
@@ -376,6 +390,7 @@
                         <outlet property="leftButton" destination="hzM-hy-IMf" id="NtO-ys-FCM"/>
                         <outlet property="panGesture" destination="Gtw-Jq-hwK" id="cNQ-7j-QMT"/>
                         <outlet property="rightButton" destination="Kym-Mn-vz1" id="joH-05-JPB"/>
+                        <outlet property="scrollView" destination="5Xe-1F-VhT" id="J9y-gU-ptB"/>
                         <outlet property="slider" destination="n6p-Vg-RiL" id="cPJ-7p-bM2"/>
                         <segue destination="ua2-a8-Tae" kind="show" identifier="showOverviewController2" id="P6j-wl-aMZ"/>
                     </connections>
@@ -411,7 +426,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="VDD-Cr-jZK"/>
-        <segue reference="Hw4-Gg-KMM"/>
+        <segue reference="P6j-wl-aMZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="95"/>

@@ -101,6 +101,7 @@ extension OverviewController: PHPickerViewControllerDelegate {
             return
         }
         editImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false, boxes: []))
+        
         performSegue(withIdentifier: "showViewController", sender: true)
     }
     

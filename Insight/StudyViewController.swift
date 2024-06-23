@@ -152,7 +152,6 @@ class StudyViewController: ViewController {
         }
     
     override func viewDidLoad() {
-        viewController = false
         nextButton.tag = 3
         
         navigationController?.navigationBar.isHidden = false
