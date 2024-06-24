@@ -199,9 +199,10 @@ class StudyViewController: ViewController {
         
     }
     
-
     
-
+    
+    @IBOutlet weak var studyScrollView: UIScrollView!
+    
     
     
     func goBack(_ sender: Any) {

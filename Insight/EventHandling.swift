@@ -64,37 +64,6 @@ extension ViewController {
             
         }
     }
-    
-    @objc func  toggleBoxes() {
-        var on = toggleButton.imageView?.image == UIImage(systemName: "lightswitch.on") ? true : false
-        
-        for view in view.subviews {
-                            if let button = view as? UIButton {
-                                if button.tag != 3 {
-                                    for layer2 in button.layer.sublayers ?? [] {
-                                        guard let shapeLayer2 = layer2 as? CAShapeLayer else {
-                                            continue
-                                        }
-                                        if on {
-                                            shapeLayer2.fillColor = UIColor.clear.cgColor
-                                            
-                                        } else {
-                                            shapeLayer2.fillColor = toggleColor.cgColor
-                                        }
-
-                                    }
-                                }
-                                
-                            
-                            }
-                        }
-        if on {
-            toggleButton.setImage(UIImage(systemName: "lightswitch.off"), for: .normal)
-        } else {
-            toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal)
-        }
-        
-    }
 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

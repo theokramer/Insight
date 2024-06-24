@@ -14,7 +14,6 @@ var editImages: [selectedImage] = []
 
 @available(iOS 13.0, *)
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, UIScrollViewDelegate {
-
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var leftButton: UIButton!
@@ -23,7 +22,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var scrollView: UIScrollView!
     
     public var editAllClicked = false
-    let toggleButton = UIButton(type: .custom)
     let nButton = UIButton(type: .custom)
     
     private var lastPanPosition: CGPoint = .zero
@@ -154,7 +152,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         drawingLayer.position = CGPoint(x: xLayer, y: yLayer)
         drawingLayer.opacity = 1
         pathLayer = drawingLayer
-        self.scrollView.layer.addSublayer(pathLayer!)
+        if editMode {
+            self.scrollView.layer.addSublayer(pathLayer!)
+        }
+         else {
+             //self.scrollView.layer.addSublayer(pathLayer!)
+            
+        }
     }
 
     func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [ImageBox]) {
@@ -208,21 +212,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         editButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
         editButton.addTarget(self, action: #selector(editBoxes(_:)), for: .touchUpInside)
 
-        toggleButton.setImage(UIImage(systemName: "lightswitch.on"), for: .normal) // Image can be downloaded from here below link
-        toggleButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
-        toggleButton.addTarget(self, action: #selector(toggleBoxes), for: .touchUpInside)
-
         let cropButton = UIButton(type: .custom)
         cropButton.setImage(UIImage(systemName: "crop"), for: .normal) // Image can be downloaded from here below link
         cropButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
         cropButton.addTarget(self, action: #selector(cropBoxes), for: .touchUpInside)
 
 
-        let toggle = UIBarButtonItem(customView: toggleButton)
         let edit = UIBarButtonItem(customView: editButton)
         let crop = UIBarButtonItem(customView: cropButton)
         
-        navigationItem.rightBarButtonItems = [toggle, edit, crop]
+        navigationItem.rightBarButtonItems = [edit, crop]
 
           let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
               edgePan.edges = .right
@@ -290,17 +289,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageIndex += 1
             
             handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
+            resetImageViewPosition()
         }
-        if imageIndex == editImages.count - 1 || singleMode {
-            rightButton.isHidden = true
-        } else {
-            rightButton.isHidden = false
-        }
-        if imageIndex == 0 || singleMode {
-                   leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
+        updateButtonsVisibility()
+       
+    }
+    
+    func updateButtonsVisibility() {
+        rightButton.isHidden = imageIndex == editImages.count - 1 || singleMode
+        leftButton.isHidden = imageIndex == 0 || singleMode
     }
     
         func handlePrevClick() {
@@ -308,21 +305,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 imageIndex -= 1
                 
                 handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: editImages[imageIndex].boxes)
-                
+                resetImageViewPosition()
             }
-            if imageIndex == editImages.count - 1 {
-                        rightButton.isHidden = true
-                    } else {
-                        rightButton.isHidden = false
-                    }
-            
-            if imageIndex == 0 {
-                        leftButton.isHidden = true
-                    } else {
-                        leftButton.isHidden = false
-                    }
+            updateButtonsVisibility()
             
         }
+    
+    private func resetImageViewPosition() {
+        scrollView.zoomScale = 1.0
+        imageView.center = CGPoint(x: scrollView.bounds.midX, y: scrollView.bounds.midY)
+    }
     
 }
 

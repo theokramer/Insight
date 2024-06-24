@@ -61,6 +61,7 @@ extension ViewController {
             var observationBox = boundingBox(forRegionOfInterest: wordObservation.frame.boundingBox, withinImageBounds: bounds)
             observationBox = observationBox.offsetBy(dx: 0, dy: (observationBox.minY - observationBox.maxY))
             
+            
             let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
             imageView.addSubview(shapeButton)  // <- Buttons zur imageView hinzufügen
         }
