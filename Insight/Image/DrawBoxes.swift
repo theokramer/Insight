@@ -38,18 +38,20 @@ extension ViewController {
         return rect
     }
     
-    func removeAllButtonsFromView() {
-        for subview in imageView.subviews {
-            if let button = subview as? UIButton {
-                if button.tag != 3 {
-                    button.removeFromSuperview()
+    func removeAllButtonsFromView(thisImageView: UIImageView) {
+            for subview in thisImageView.subviews {
+                if let button = subview as? UIButton {
+                    if button.tag != 3 {
+                        button.removeFromSuperview()
+                    }
                 }
             }
-        }
+        
+        
     }
     
-    func draw(text: [ImageBox], onImageWithBounds bounds: CGRect) {
-        removeAllButtonsFromView()
+    func draw(text: [ImageBox], onImageWithBounds bounds: CGRect, thisImageView: UIImageView) {
+        removeAllButtonsFromView(thisImageView: thisImageView)
         var id = 0
         
         CATransaction.begin()
@@ -63,7 +65,7 @@ extension ViewController {
             
             
             let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
-            imageView.addSubview(shapeButton)  // <- Buttons zur imageView hinzufügen
+            thisImageView.addSubview(shapeButton)  // <- Buttons zur imageView hinzufügen
         }
         
         CATransaction.commit()
@@ -74,7 +76,6 @@ extension ViewController {
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height)).cgPath
         shapeLayer.fillColor = editMode ? fillColor.withAlphaComponent(0.7).cgColor : fillColor.cgColor
-
         let button = UIButton()
         button.frame = frame
         button.tag = tag

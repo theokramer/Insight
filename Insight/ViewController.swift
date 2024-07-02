@@ -168,7 +168,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 guard let drawLayer = pathLayer else {
                     return
                 }
-                self.draw(text: customBounds, onImageWithBounds: drawLayer.frame)
+                self.draw(text: customBounds, onImageWithBounds: drawLayer.frame, thisImageView: thisImageView)
                 drawLayer.setNeedsDisplay()
             }
         }

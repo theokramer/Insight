@@ -12,7 +12,6 @@ extension ViewController {
         
         // Function to handle button tap
         @objc func buttonTapped(_ sender: UIButton) {
-            
             if editMode {
                 let tag = sender.tag
                 
@@ -69,6 +68,7 @@ extension ViewController {
                 // Add overlay view to main view
                 view.addSubview(overlayView)
             } else {
+                
                 for layer in sender.layer.sublayers ?? [] {
                     guard let shapeLayer = layer as? CAShapeLayer else {
                         continue
