@@ -48,6 +48,11 @@ var selectedImages: [selectedImage] = []
 // Layer into which to draw bounding box paths.
 var pathLayer: CALayer?
 
+extension Notification.Name {
+    static let imageDeleted = Notification.Name("imageDeleted")
+}
+
+
 
 protocol BottomSheetDelegate: AnyObject {
     func didDeleteImage(at index: String)
@@ -207,11 +212,27 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         return learnableImages.count
     }
     
+    @objc private func handleImageDeletedNotification() {
+        // Reload images and update the UI
+        reloadImages()
+    }
+    
+    private func reloadImages() {
+            dataSource.removeAll()
+            selectedImages.removeAll()
+            learnableImagesCount()  // Re-fetch the images and update the UI
+            collectionView.reloadData()
+            cardInDeck.text = "Total Charts (\(selectedImages.count))"
+        }
+    
     override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .imageDeleted, object: nil)
         timer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleImageDeletedNotification), name: .imageDeleted, object: nil)
         
         topView.layer.cornerRadius = 15
         
@@ -736,7 +757,19 @@ class BottomSheetViewController: UIViewController {
             freezeImage()
         case 3:
             print("Move tapped")
-            // Handle Move action
+            let topicSelectionVC = TopicSelectionViewController()
+                    topicSelectionVC.topics = TopicModel.topicData // Pass the topics from StartViewController
+                    
+                    // Set the current topic ID to highlight
+                    topicSelectionVC.currentTopicId = self.cellID
+                    
+                    topicSelectionVC.selectedTopic = { [weak self] selectedTopic in
+                        self?.moveImage(to: selectedTopic)
+                    }
+                    
+                    let navigationController = UINavigationController(rootViewController: topicSelectionVC)
+                    navigationController.modalPresentationStyle = .overFullScreen
+                    present(navigationController, animated: true, completion: nil)
         case 4:
             print("Delete tapped")
             deleteImage()
@@ -744,6 +777,44 @@ class BottomSheetViewController: UIViewController {
             break
         }
     }
+    
+    private func moveImage(to topic: TopicModel) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Fetch the image to move
+        let fetchRequest: NSFetchRequest<ImageEntity> = ImageEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", info.index)
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let imageToMove = results.first {
+                // Update the topic for the image
+                let topicFetchRequest: NSFetchRequest<Topic> = Topic.fetchRequest()
+                topicFetchRequest.predicate = NSPredicate(format: "id == %@", topic.id)
+                
+                let topics = try context.fetch(topicFetchRequest)
+                if let newTopic = topics.first {
+                    imageToMove.topic = newTopic
+                } else {
+                    // Handle case where topic was not found (if necessary)
+                    print("Topic not found")
+                }
+                
+                // Save the context
+                try context.save()
+                print("Image moved to topic \(topic.name)")
+                
+                // Post a notification to update OverviewController
+                NotificationCenter.default.post(name: .imageDeleted, object: nil)
+            }
+        } catch {
+            print("Failed to move image: \(error)")
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+
+
     
     @IBAction func deleteImage() {
         dismiss(animated: true, completion: nil)
@@ -851,3 +922,123 @@ class HalfScreenPresentationController: UIPresentationController {
         presentedViewController.dismiss(animated: true, completion: nil)
     }
 }
+
+
+import UIKit
+
+import UIKit
+
+class TopicSelectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    var topics: [TopicModel] = [] // This will hold the list of topics.
+    var selectedTopic: ((TopicModel) -> Void)? // A closure to pass the selected topic back.
+    var currentTopicId: String? // The ID of the topic to be highlighted
+
+    private let tableView = UITableView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemGroupedBackground
+        title = "Select Topic"
+        
+        setupTableView()
+        setupNavigationBar()
+    }
+
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TopicCell.self, forCellReuseIdentifier: TopicCell.reuseIdentifier)
+        tableView.backgroundColor = .clear
+        view.addSubview(tableView)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func setupNavigationBar() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Cancel",
+            style: .plain,
+            target: self,
+            action: #selector(cancelButtonTapped)
+        )
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return topics.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TopicCell.reuseIdentifier, for: indexPath) as! TopicCell
+        let topic = topics[indexPath.row]
+        cell.configure(with: topic, isSelected: topic.id == currentTopicId)
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let topic = topics[indexPath.row]
+        if topic.id != currentTopicId {
+            selectedTopic?(topic) // Pass the selected topic back to the original view controller.
+            dismiss(animated: true, completion: nil)
+        }
+    }
+}
+
+class TopicCell: UITableViewCell {
+
+    static let reuseIdentifier = "TopicCell"
+
+    private let titleLabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupUI() {
+        titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel.textColor = .label
+        contentView.addSubview(titleLabel)
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+
+        contentView.layer.cornerRadius = 10
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOpacity = 0.1
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowRadius = 4
+    }
+
+    func configure(with topic: TopicModel, isSelected: Bool) {
+        titleLabel.text = topic.name
+        contentView.backgroundColor = isSelected ? UIColor.systemBlue.withAlphaComponent(0.2) : .systemBackground
+        contentView.layer.borderColor = isSelected ? UIColor.systemBlue.cgColor : UIColor.clear.cgColor
+        contentView.layer.borderWidth = isSelected ? 2 : 0
+        contentView.transform = isSelected ? CGAffineTransform(scaleX: 1.02, y: 1.02) : .identity
+        UIView.animate(withDuration: 0.3) {
+            self.contentView.transform = .identity
+        }
+    }
+}
+

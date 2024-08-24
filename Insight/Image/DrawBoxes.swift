@@ -66,6 +66,7 @@ extension ViewController {
             
             let shapeButton = createShapeButton(frame: observationBox, fillColor: fillColor, tag: id)
             thisImageView.addSubview(shapeButton)  // <- Buttons zur imageView hinzufügen
+            
         }
         
         CATransaction.commit()
@@ -73,6 +74,7 @@ extension ViewController {
 
     // Makes the Boxes toggable
     func createShapeButton(frame: CGRect, fillColor: UIColor, tag: Int) -> UIButton {
+        
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height)).cgPath
         shapeLayer.fillColor = editMode ? fillColor.withAlphaComponent(0.7).cgColor : fillColor.cgColor

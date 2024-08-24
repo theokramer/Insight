@@ -181,6 +181,7 @@ class StudyViewController: ViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         
         handleCompletion(object: activeImage.image, thisImageView: imageViewStudy, customBounds: activeImage.boxes)
+        
         setupButtons()
     }
 
