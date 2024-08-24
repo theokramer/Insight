@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import SwiftUI
 import Vision
+import PDFKit
 
 //Object to add and modify new Images
 struct selectedImage {
@@ -53,7 +54,7 @@ protocol BottomSheetDelegate: AnyObject {
 }
 
 @available(iOS 13.0, *)
-class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BottomSheetDelegate {
+class OverviewController: UIViewController, UICollectionViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BottomSheetDelegate, UIDropInteractionDelegate {
     
     
     @IBOutlet weak var studyChartsButton: UIButton!
@@ -326,9 +327,30 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
         
         return parts.joined(separator: " : ")
     }
+    
 
 
+    // This method will update the visual state of the drop area during the drag session
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
 
+    // This method will handle the dropped image
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        editImages.removeAll()
+        session.loadObjects(ofClass: UIImage.self) { items in
+            guard let images = items as? [UIImage] else { return }
+            
+            // Display the dropped image in the imageView
+            print(images)
+            
+            for image in images {
+                self.handleCompletion(object: image)
+            }
+            self.performSegue(withIdentifier: "showViewController", sender: true)
+        }
+        
+    }
 
     
     override func viewDidLoad() {
@@ -340,6 +362,10 @@ class OverviewController: UIViewController, UICollectionViewDelegate, UITextFiel
             setUpGridView()
             print(learnableImagesCount())
             print(timeUntilNewCharts)
+        
+        collectionView.isUserInteractionEnabled = true
+            let dropInteraction = UIDropInteraction(delegate: self)
+        collectionView.addInteraction(dropInteraction)
             
         }
     

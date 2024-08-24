@@ -8,8 +8,9 @@
 import Foundation
 import PhotosUI
 import UIKit
+import PDFKit
 
-extension OverviewController: PHPickerViewControllerDelegate {
+extension OverviewController: PHPickerViewControllerDelegate, UIDocumentPickerDelegate {
     
     //Let the User select a photo of his Library or Take a new one
         @objc
@@ -38,8 +39,11 @@ extension OverviewController: PHPickerViewControllerDelegate {
             }
             
             func presentFilePicker(_ _: UIAlertAction) {
-                presentPicker(filter: nil)
+                presentThisPicker()
             }
+            
+            
+            
             
             let libraryAction = UIAlertAction(title: "Photo Library",
                                               style: .default,
@@ -76,6 +80,16 @@ extension OverviewController: PHPickerViewControllerDelegate {
         }
     
     
+    
+    func presentThisPicker() {
+        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.jpeg, .png, .pdf, .archive])
+        documentPicker.modalPresentationStyle = .overFullScreen
+        documentPicker.allowsMultipleSelection = true
+        documentPicker.delegate = self
+        self.present(documentPicker, animated: true)
+    }
+    
+    
     func presentPicker(filter: PHPickerFilter?) {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
         
@@ -93,14 +107,91 @@ extension OverviewController: PHPickerViewControllerDelegate {
         present(picker, animated: true)
     }
     
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        editImages.removeAll()
+        dismiss(animated: true)
+        guard url.startAccessingSecurityScopedResource() else {
+            return
+        }
+
+        defer {
+            url.stopAccessingSecurityScopedResource()
+        }
+        
+        let images = convertPDFToImages(pdfURL: url)
+        
+        if let images = images {
+        for image in images {
+            self.handleCompletion(object: image)
+        }
+        }
+        performSegue(withIdentifier: "showViewController", sender: true)
+
+        
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        editImages.removeAll()
+        dismiss(animated: true)
+        for url in urls {
+            guard url.startAccessingSecurityScopedResource() else {
+                return
+            }
+
+            defer {
+                url.stopAccessingSecurityScopedResource()
+            }
+            let images = convertPDFToImages(pdfURL: url)
+            
+            if let images = images {
+                for image in images {
+                    //editImages.append(selectedImage(image: image, index: UUID().uuidString, cropped: false, boxes: []))
+                    self.handleCompletion(object: image)
+                }
+            }
+        }
+        performSegue(withIdentifier: "showViewController", sender: true)
+        
+        
+    }
+    
+    func convertPDFToImages(pdfURL: URL) -> [UIImage]? {
+        guard let pdfDocument = PDFDocument(url: pdfURL) else {
+            return nil
+        }
+        
+        var images: [UIImage] = []
+        
+        for pageNum in 0..<pdfDocument.pageCount {
+            if let pdfPage = pdfDocument.page(at: pageNum) {
+                let pdfPageSize = pdfPage.bounds(for: .mediaBox)
+                let renderer = UIGraphicsImageRenderer(size: pdfPageSize.size)
+                
+                let image = renderer.image { ctx in
+                    UIColor.white.set()
+                    ctx.fill(pdfPageSize)
+                    ctx.cgContext.translateBy(x: 0.0, y: pdfPageSize.size.height)
+                    ctx.cgContext.scaleBy(x: 1.0, y: -1.0)
+                    
+                    pdfPage.draw(with: .mediaBox, to: ctx.cgContext)
+                }
+                
+                images.append(image)
+            }
+        }
+        
+        return images
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        editImages.removeAll()
         picker.dismiss(animated: true)
 
         guard let image = info[.editedImage] as? UIImage else {
             print("No image found")
             return
         }
-        editImages.append(selectedImage.init(image: image, index: UUID().uuidString, cropped: false, boxes: []))
+        self.handleCompletion(object: image)
         
         performSegue(withIdentifier: "showViewController", sender: true)
     }

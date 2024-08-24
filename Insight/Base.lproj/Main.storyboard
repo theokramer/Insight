@@ -285,7 +285,7 @@
                         <outlet property="addChartsButton" destination="IuL-1H-wYq" id="NAC-g2-f6e"/>
                         <outlet property="backButton" destination="qCz-cu-sTY" id="9ck-TZ-KVK"/>
                         <outlet property="cardInDeck" destination="cvG-KP-gE3" id="uYr-h0-OeL"/>
-                        <outlet property="collectionView" destination="XZT-QM-MFc" id="wux-Uu-Oix"/>
+                        <outlet property="collectionView" destination="XZT-QM-MFc" id="c8P-tG-lY9"/>
                         <outlet property="moreButton" destination="u3f-qc-cdM" id="hjB-sF-egX"/>
                         <outlet property="studyChartsButton" destination="cY5-fC-vgu" id="zPp-tK-04A"/>
                         <outlet property="tempDescrLabel" destination="m4l-Us-ORX" id="wAQ-Hr-dr8"/>
@@ -439,6 +439,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="Tky-gt-f10"/>
         <segue reference="VDD-Cr-jZK"/>
         <segue reference="Hw4-Gg-KMM"/>
     </inferredMetricsTieBreakers>

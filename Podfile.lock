@@ -1,16 +1,20 @@
 PODS:
   - CropViewController (2.6.1)
+  - ZoomImageView (0.6.0)
 
 DEPENDENCIES:
   - CropViewController
+  - ZoomImageView
 
 SPEC REPOS:
   trunk:
     - CropViewController
+    - ZoomImageView
 
 SPEC CHECKSUMS:
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
+  ZoomImageView: 2a88d0c10ad30b9a06c8f5660d51623fb32beed5
 
-PODFILE CHECKSUM: c3663ef02f35c54b6c5782f71e4f7c236a9873ce
+PODFILE CHECKSUM: 16271916903e4d25ccc98adf119804d53b4eb81f
 
 COCOAPODS: 1.15.2

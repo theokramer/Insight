@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-Insight/Pods-Insight-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework
+${BUILT_PRODUCTS_DIR}/ZoomImageView/ZoomImageView.framework

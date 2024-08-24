@@ -6,6 +6,7 @@ import SwiftUI
 import CropViewController
 import PhotosUI
 import CoreData
+import ZoomImageView
 
 var imageIndex = 0
 var viewController = true
@@ -14,7 +15,7 @@ var editImages: [selectedImage] = []
 
 @available(iOS 13.0, *)
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, UIScrollViewDelegate {
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: ZoomImageView!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
@@ -119,7 +120,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func show(_ image: UIImage, thisImageView: UIImageView) {
+    func show(_ image: UIImage, thisImageView: ZoomImageView) {
         pathLayer?.removeFromSuperlayer()
         pathLayer = nil
         thisImageView.image = nil
@@ -161,7 +162,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
 
-    func handleCompletion(object: Any?, thisImageView: UIImageView, customBounds: [ImageBox]) {
+    func handleCompletion(object: Any?, thisImageView: ZoomImageView, customBounds: [ImageBox]) {
         if let image = object as? UIImage {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.show(image, thisImageView: thisImageView)
@@ -177,82 +178,92 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let imageSize = imageView.image?.size {
-                    scrollView.contentSize = imageSize
-                }
-        
-        
+        // Setup ScrollView
         setupScrollView()
 
-        imageView.isUserInteractionEnabled = true // Allow interaction with imageView and its subviews
+        // Enable interaction with imageView and its subviews
+        imageView.isUserInteractionEnabled = true
 
+        // Update content size of scrollView
+        if let imageSize = imageView.image?.size {
+            scrollView.contentSize = imageSize
+        }
+        
+        // Fetch Core Data Boxe
+        
+        
+        
         var boxesArray: [ImageBox] = []
         ViewController.fetchCoreDataBoxes { items in
             if let items = (items ?? []) as [ImageBoxes]? {
                 for box in items {
-                    if box.imageEntity2?.wrappedId == editImages[imageIndex].index {
-                        let thisBoxFrame = VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
-                        boxesArray.append(ImageBox(frame: thisBoxFrame, tag: Int(box.tag)))
+                    if imageIndex < editImages.count {
+                        if box.imageEntity2?.wrappedId == editImages[imageIndex].index {
+                            let thisBoxFrame = VNTextObservation(boundingBox: CGRect(x: Double(box.minX), y: Double(box.minY), width: Double(box.width), height: Double(box.height)))
+                            boxesArray.append(ImageBox(frame: thisBoxFrame, tag: Int(box.tag)))
+                        }
                     }
+                    
                 }
             } else {
                 print("FEHLER")
             }
         }
 
+        // If there are images, handle the first one
         if editImages.count != 0 {
             handleCompletion(object: editImages[imageIndex].image, thisImageView: imageView, customBounds: boxesArray)
         }
-        
-        viewController = true
+
+        // Setup buttons and gesture recognizers
+        setupButtonsAndGestures()
+
+        // Manage Navigation Bar
         navigationController?.navigationBar.isHidden = false
-        super.viewDidLoad()
+        let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
+        self.navigationItem.leftBarButtonItem = backButton
+
+        // Update button visibility
+        updateButtonsVisibility()
+
+        // Orientation change notification
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+
+    private func setupButtonsAndGestures() {
+        // Edit button
         let editButton = UIButton(type: .custom)
-        editButton.setImage(UIImage(systemName: "pencil"), for: .normal) // Image can be downloaded from here below link
-        editButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        editButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        editButton.setTitleColor(.white, for: .normal)
         editButton.addTarget(self, action: #selector(editBoxes(_:)), for: .touchUpInside)
 
+        // Crop button
         let cropButton = UIButton(type: .custom)
-        cropButton.setImage(UIImage(systemName: "crop"), for: .normal) // Image can be downloaded from here below link
-        cropButton.setTitleColor(.white, for: .normal) // You can change the TitleColor
+        cropButton.setImage(UIImage(systemName: "crop"), for: .normal)
+        cropButton.setTitleColor(.white, for: .normal)
         cropButton.addTarget(self, action: #selector(cropBoxes), for: .touchUpInside)
 
-
+        // Add buttons to navigation bar
         let edit = UIBarButtonItem(customView: editButton)
         let crop = UIBarButtonItem(customView: cropButton)
-        
         navigationItem.rightBarButtonItems = [edit, crop]
 
-          let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
-              edgePan.edges = .right
-        view.addGestureRecognizer(edgePan)
+        // Add screen edge gestures
+        let edgePanR = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped))
+        edgePanR.edges = .right
+        view.addGestureRecognizer(edgePanR)
 
-
-                let edgePanL = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedL))
-                    edgePanL.edges = .left
+        let edgePanL = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedL))
+        edgePanL.edges = .left
         view.addGestureRecognizer(edgePanL)
-        
-        if imageIndex == 0 || singleMode {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
-        
-        leftButton.tag = 3
-        rightButton.tag = 3
-        
-        if imageIndex == editImages.count - 1 || singleMode {
-              rightButton.isHidden = true
-          } else {
-              rightButton.isHidden = false
-          }
-          UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-          NotificationCenter.default.addObserver(self, selector: #selector(self.onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-          let backButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(prepareImageForSaving))
-          self.navigationItem.leftBarButtonItem = backButton
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+
     
     @objc func screenEdgeSwipedL(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         if recognizer.state == .recognized {
@@ -264,13 +275,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if recognizer.state == .recognized {
             handleNextClick()
         }
-    }
-    
-    
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
 
     @objc func editBoxes(_ sender: UIButton) {

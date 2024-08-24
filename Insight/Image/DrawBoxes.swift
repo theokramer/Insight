@@ -1,4 +1,5 @@
 import Foundation
+import ZoomImageView
 import UIKit
 import SwiftUI
 import Vision
@@ -38,7 +39,7 @@ extension ViewController {
         return rect
     }
     
-    func removeAllButtonsFromView(thisImageView: UIImageView) {
+    func removeAllButtonsFromView(thisImageView: ZoomImageView) {
             for subview in thisImageView.subviews {
                 if let button = subview as? UIButton {
                     if button.tag != 3 {
@@ -50,7 +51,7 @@ extension ViewController {
         
     }
     
-    func draw(text: [ImageBox], onImageWithBounds bounds: CGRect, thisImageView: UIImageView) {
+    func draw(text: [ImageBox], onImageWithBounds bounds: CGRect, thisImageView: ZoomImageView) {
         removeAllButtonsFromView(thisImageView: thisImageView)
         var id = 0
         

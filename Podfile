@@ -7,6 +7,7 @@ target 'Insight' do
 
   # Pods for Insight
 pod 'CropViewController'
+pod 'ZoomImageView'
 
 end
 

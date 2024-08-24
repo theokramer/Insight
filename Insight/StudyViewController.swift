@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Vision
+import ZoomImageView
 
 func findNextImage(cellId: String) -> studyImage? {
     var activeImage: studyImage
@@ -112,7 +113,7 @@ func findNextImage(cellId: String) -> studyImage? {
 class StudyViewController: ViewController {
     
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var imageViewStudy: UIImageView!
+    @IBOutlet weak var imageViewStudy: ZoomImageView!
     
     var activeImage: studyImage = studyImage(image: UIImage(), index: "", review: Review.init(index: "", rating: -1, interval: -1, ease_factor: -1, repetitions: -1, freeze: false), boxes: [])
     
