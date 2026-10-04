@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Alert } from "react-native";
+import { router } from "expo-router";
 import {
   CustomPurchaseControllerProvider,
   SuperwallProvider,
@@ -14,6 +15,11 @@ import {
   useSubscription,
 } from "./subscriptions";
 import { token } from "./services";
+import {
+  performProAction,
+  type AccessIssue,
+  type ProPlacement,
+} from "./pro-access";
 
 const apiKeys = {
   ios: process.env.EXPO_PUBLIC_SUPERWALL_IOS_KEY,
@@ -51,56 +57,87 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   );
 }
 export function useProAction() {
-  const { registerPlacement } = usePlacement({
-    onError: () =>
+  const pending = useRef(false);
+  const reported = useRef(false);
+  const report = (issue: AccessIssue) => {
+    if (reported.current) return;
+    reported.current = true;
+    if (issue === "setup" && __DEV__) {
       Alert.alert(
-        "Couldn’t load Insight Pro",
-        "Please check your connection and try again.",
-      ),
-  });
-  const configured = useSuperwall((s) => s.isConfigured);
-  return async (
-    placement: "generate_occlusions" | "upgrade_tapped",
-    action?: () => void | Promise<void>,
-  ) => {
-    // A secure, development-only token permits testing the protected preview.
-    if (placement === "generate_occlusions" && __DEV__ && (await token())) {
-      await action?.();
-      return;
-    }
-    if (!configured) {
-      Alert.alert(
-        "Insight Pro is connecting",
-        "Please try again in a moment. Your images are saved.",
+        "Connect the GPT preview",
+        "This development build needs its private preview token. Save it in Settings, then return to analyze your images.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Connect preview", onPress: () => router.push("/Settings") },
+        ],
       );
       return;
     }
-    await initializePurchases();
+    const messages: Record<AccessIssue, [string, string]> = {
+      preview: [
+        "Couldn’t read preview access",
+        "Reopen Insight and try again, or reconnect the private preview in Settings.",
+      ],
+      setup: [
+        "Insight Pro is not available yet",
+        "Store purchases are still being connected. Your images are saved, and you can draw masks manually.",
+      ],
+      connecting: [
+        "Insight Pro is connecting",
+        "Please try again in a moment. Your images are saved.",
+      ],
+      verification: [
+        "Couldn’t verify Insight Pro",
+        "Check your connection and try again. Your images are saved.",
+      ],
+      subscription: [
+        "Insight Pro required",
+        "An active Insight subscription unlocks GPT image creation. You can also draw masks manually.",
+      ],
+      paywall: [
+        "Couldn’t load Insight Pro",
+        "The subscription screen is unavailable. Please try again later. Your images are saved.",
+      ],
+      action: [
+        "Couldn’t start analysis",
+        "Your images are saved. Please try again.",
+      ],
+    };
+    Alert.alert(...messages[issue]);
+  };
+  const { registerPlacement } = usePlacement({
+    onError: () => {
+      pending.current = false;
+      report("paywall");
+    },
+    onDismiss: () => {
+      pending.current = false;
+    },
+    onSkip: () => {
+      pending.current = false;
+    },
+  });
+  const configured = useSuperwall((s) => s.isConfigured);
+  return async (
+    placement: ProPlacement,
+    action?: () => void | Promise<void>,
+  ) => {
+    if (pending.current) return;
+    pending.current = true;
+    reported.current = false;
     try {
-      await registerPlacement({
-        placement,
-        feature: () => {
-          if (!action) return;
-          void (async () => {
-            // Remote holdouts and non-gated paywalls cannot bypass paid GPT access.
-            if (!(await refreshSubscription())) {
-              Alert.alert(
-                "Insight Pro required",
-                "An active Insight subscription unlocks GPT image creation. You can also draw masks manually.",
-              );
-              return;
-            }
-            await action();
-          })().catch(() =>
-            Alert.alert(
-              "Couldn’t verify access",
-              "Check your connection and try again.",
-            ),
-          );
-        },
+      await performProAction(placement, action, {
+        development: __DEV__,
+        previewToken: token,
+        initialize: initializePurchases,
+        purchasesConfigured: () => useSubscription.getState().configured,
+        subscribed: refreshSubscription,
+        paywallConfigured: () => configured,
+        present: (feature) => registerPlacement({ placement, feature }),
+        report,
       });
-    } catch {
-      Alert.alert("Couldn’t load Insight Pro", "Please try again.");
+    } finally {
+      pending.current = false;
     }
   };
 }

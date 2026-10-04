@@ -12,7 +12,7 @@ The image fixture contains 17 study labels: small 18–24 px type, multiword ter
 | Bundled ML Kit on Android emulator, EXIF-rotated JPEG | 17/17 |
 | Real GPT-4.1 through the deployed private Worker | 17/17 cards; heading excluded; every mask uses a measured OCR box |
 | Full native app builds | iPhone simulator and Android development APK succeed |
-| App / backend regression tests | 7 / 10 pass |
+| App / backend regression tests | 18 / 10 pass |
 | TypeScript / Expo lint | Both TypeScript projects and Expo lint pass |
 
 The independent check script matches each occurrence against its known label rectangle and requires an intersection-over-union of at least 0.40. The worst observed overlap after padding is 0.63 on iPhone and 0.65 on Android. This includes both occurrences of repeated text. Timings on the iPhone simulator were approximately 1.3 seconds for the PNG and 1.7 seconds for the EXIF JPEG; these are sample measurements, not physical-device performance guarantees. Results are saved in `ocr-report.json`.
@@ -49,3 +49,13 @@ node --experimental-strip-types tests/native-ocr/check-results.ts /path/to/ios.j
 ```
 
 These are controlled diagram fixtures, not a benchmark of every textbook, script, or blurry photograph. The Android local recognizer remains the Latin model. Other scripts and poor-quality images need further representative testing; editable mask review remains part of the learning flow.
+
+## App connection regression
+
+The reported October 3 simulator failure occurred at the Insight Pro placement, before OCR or GPT. The development app had no preview token saved and its store purchase integration was not configured. The previous generic message incorrectly suggested a network failure. The app now directs an unconnected development build to Settings, checks authorized preview access before presenting a paywall, and lets verified subscribers analyze when paywall presentation is unavailable. Remote holdouts still require an active subscription. Presentation failures release the action lock and do not stack duplicate alerts for the same attempt.
+
+A second client defect was found: RN 0.81 uses `abort-controller`, whose `AbortSignal` does not implement `timeout()`. The GPT request now creates an `AbortController`, starts a timer, and always clears it. A regression test runs with the actual native polyfill. Timeout, offline, invalid JSON, malformed result, authorization, and rate-limit responses have also been checked. HTTP statuses remain available to the queue for automatic rate-limit retries.
+
+Unfinished imports remain visible in their collection after reopening the import screen. The diagram editor now exposes GPT analysis for an imported image, as well as retries for failed images. Secure keychain save failures are distinguished from invalid backend addresses.
+
+Current checks: 18 app tests, 10 backend tests, both TypeScript projects, Expo lint, and iOS/Android Hermes bundle export pass. Earlier native OCR and live Worker fixture checks above remain valid; they do **not** constitute an end-to-end app GPT test. The final simulator test is pending the Mac being unlocked and approval to save the private preview token in the simulator. Real store purchases and restores remain unverified until store products and purchase-provider keys are connected.

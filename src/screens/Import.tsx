@@ -20,7 +20,11 @@ export function ImportScreen({ route, navigation }: any) {
   const [deckId, setDeck] = useState(route.params?.deckId || decks[0]?.id);
   const [busy, setBusy] = useState(false);
   const [batch, setBatch] = useState<string[]>([]);
-  const images = diagrams.filter((d) => batch.includes(d.id));
+  // Unfinished images remain reachable after navigating away or restarting.
+  const images = diagrams.filter(
+    (d) =>
+      d.deckId === deckId && (d.status !== "ready" || batch.includes(d.id)),
+  );
   const ready = images.filter(
     (d) => d.status === "review" || d.status === "ready",
   ).length;

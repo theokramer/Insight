@@ -8,6 +8,7 @@ import { Diagram, id, makeMask, validBounds } from "./model";
 import { useStore } from "./store";
 import { subscriberId } from "./subscriptions";
 import { prepareText, type RawText } from "./text-detection";
+import { AnalysisError, requestAnalysis } from "./analysis-request";
 const native = requireOptionalNativeModule("InsightVision") as {
   renderPDF(
     uri: string,
@@ -202,14 +203,6 @@ export async function setToken(value: string) {
     await SecureStore.setItemAsync("insight-access-token", value.trim());
   else await SecureStore.deleteItemAsync("insight-access-token");
 }
-class AnalysisError extends Error {
-  constructor(
-    message: string,
-    readonly status: number,
-  ) {
-    super(message);
-  }
-}
 export async function analyze(diagram: Diagram) {
   if (!diagram.uri) throw new Error("This example already has masks.");
   const url = useStore.getState().backendUrl.replace(/\/$/, "");
@@ -261,35 +254,36 @@ export async function analyze(diagram: Diagram) {
   } finally {
     await FS.deleteAsync(upload.uri, { idempotent: true }).catch(() => {});
   }
-  const res = await fetch(`${url}/v1/occlusions`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(access
-        ? { authorization: `Bearer ${access}` }
-        : { "x-app-user-id": userId! }),
-    },
-    body: JSON.stringify({
+  const data = await requestAnalysis(
+    url,
+    access
+      ? { authorization: `Bearer ${access}` }
+      : { "x-app-user-id": userId! },
+    {
       image: `data:image/jpeg;base64,${base64}`,
       candidates,
-    }),
-    signal: AbortSignal.timeout(110000),
-  });
-  const data = await res.json();
-  if (!res.ok)
-    throw new AnalysisError(
-      data.error || "GPT could not analyze this image.",
-      res.status,
-    );
-  if (!Array.isArray(data.masks))
-    throw new Error("GPT returned an invalid result.");
+    },
+  );
   const masks = data.masks
-    .filter(validBounds)
+    .filter(
+      (m: any) =>
+        m && typeof m.label === "string" && m.label.trim() && validBounds(m),
+    )
     .map((m: any) =>
-      makeMask(m.label, m.x, m.y, m.width, m.height, m.explanation),
+      makeMask(
+        m.label,
+        m.x,
+        m.y,
+        m.width,
+        m.height,
+        typeof m.explanation === "string" ? m.explanation : "",
+      ),
     );
   return {
-    title: data.title || diagram.title,
+    title:
+      typeof data.title === "string" && data.title.trim()
+        ? data.title
+        : diagram.title,
     masks,
     status: "review" as const,
     error: undefined,

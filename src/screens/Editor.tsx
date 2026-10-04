@@ -360,7 +360,7 @@ export function EditorScreen({ route, navigation }: any) {
           color: c.ink,
         }}
       />
-      {original.status === "failed" && (
+      {(original.status === "failed" || original.status === "imported") && (
         <View
           style={{
             padding: 16,
@@ -369,9 +369,16 @@ export function EditorScreen({ route, navigation }: any) {
             gap: 10,
           }}
         >
-          <Txt style={{ fontSize: 14 }}>{original.error}</Txt>
+          <Txt style={{ fontSize: 14 }}>
+            {original.error ||
+              "Find labels automatically, then review each proposed mask."}
+          </Txt>
           <Button
-            title="Retry GPT analysis"
+            title={
+              original.status === "failed"
+                ? "Retry GPT analysis"
+                : "Find labels with GPT"
+            }
             secondary
             disabled={dirty}
             onPress={() =>

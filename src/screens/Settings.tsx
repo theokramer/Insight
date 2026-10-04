@@ -20,7 +20,8 @@ export function SettingsScreen({ navigation }: any) {
   const backend = useStore((s) => s.backendUrl);
   const [url, setUrl] = useState(backend),
     [access, setAccess] = useState(""),
-    [saved, setSaved] = useState(false);
+    [saved, setSaved] = useState(false),
+    [saving, setSaving] = useState(false);
   const proAction = useProAction();
   const pro = useSubscription((s) => s.active);
   useEffect(() => {
@@ -135,19 +136,44 @@ export function SettingsScreen({ navigation }: any) {
           />
           <Button
             title={saved ? "Connection saved" : "Save connection"}
+            loading={saving}
             onPress={async () => {
+              let address: string;
               try {
                 const parsed = new URL(url.trim());
-                if (!["http:", "https:"].includes(parsed.protocol))
+                const local =
+                  /^(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)$/.test(
+                    parsed.hostname,
+                  );
+                if (
+                  (parsed.protocol !== "https:" &&
+                    !(parsed.protocol === "http:" && local)) ||
+                  parsed.username ||
+                  parsed.password ||
+                  parsed.search ||
+                  parsed.hash
+                )
                   throw new Error();
+                address = parsed.toString().replace(/\/$/, "");
+              } catch {
+                Alert.alert(
+                  "Check the backend address",
+                  "Use an HTTPS backend address, or a local development address.",
+                );
+                return;
+              }
+              setSaving(true);
+              try {
                 await setToken(access);
-                useStore.getState().setBackend(url.trim().replace(/\/$/, ""));
+                useStore.getState().setBackend(address);
                 setSaved(true);
               } catch {
                 Alert.alert(
-                  "Check the connection",
-                  "Enter a valid backend address.",
+                  "Couldn’t save preview access",
+                  "The secure keychain could not save your token. Reopen Insight and try again.",
                 );
+              } finally {
+                setSaving(false);
               }
             }}
           />
