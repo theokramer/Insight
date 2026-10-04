@@ -10,7 +10,7 @@ A native iPhone and Android app for learning complicated diagrams through image 
 - Move, resize, draw, remove, and rename masks; review the next proposed image with one action.
 - Offline library and per-label spaced repetition, reveal-before-rating study sessions, pinch and double-tap zoom, and real review history.
 - Cloudflare Worker keeps the OpenAI key on the server and verifies Insight subscriptions using the same proxy pattern as Meeting Notes.
-- Superwall integration is wired for presentation, with RevenueCat handling store purchases, restores, and entitlement verification. Live paywall authoring is pending the owner's Superwall browser sign-in.
+- Custom Superwall paywalls are saved for iPhone and Android, with RevenueCat handling store purchases, restores, and entitlement verification. Plan selection and billing copy are verified in editor previews. Campaign activation, legal URLs, and store product configuration remain pending.
 
 This is a complete replacement of the original UIKit project. The original iPhone bundle identifier is preserved (`de.tk.Insight`); Android uses `de.tk.insight`.
 
