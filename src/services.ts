@@ -9,6 +9,7 @@ import { useStore } from "./store";
 import { subscriberId } from "./subscriptions";
 import { prepareText, type RawText } from "./text-detection";
 import { AnalysisError, requestAnalysis } from "./analysis-request";
+import { currentImageUri } from "./image-location";
 const native = requireOptionalNativeModule("InsightVision") as {
   renderPDF(
     uri: string,
@@ -204,7 +205,8 @@ export async function setToken(value: string) {
   else await SecureStore.deleteItemAsync("insight-access-token");
 }
 export async function analyze(diagram: Diagram) {
-  if (!diagram.uri) throw new Error("This example already has masks.");
+  const uri = currentImageUri(diagram.uri, FS.documentDirectory);
+  if (!uri) throw new Error("This example already has masks.");
   const url = useStore.getState().backendUrl.replace(/\/$/, "");
   if (
     !/^https:\/\//.test(url) &&
@@ -222,7 +224,7 @@ export async function analyze(diagram: Diagram) {
   let candidates;
   try {
     candidates = prepareText(
-      await native.recognize(diagram.uri),
+      await native.recognize(uri),
       diagram.width,
       diagram.height,
     );
@@ -233,7 +235,7 @@ export async function analyze(diagram: Diagram) {
   }
   // OCR retains the original pixels; GPT receives a bounded image with the same aspect ratio.
   const upload = await ImageManipulator.manipulateAsync(
-    diagram.uri,
+    uri,
     [
       {
         resize: {
@@ -328,7 +330,8 @@ export async function runQueue() {
   }
 }
 export async function deleteImage(diagram: Diagram) {
-  if (diagram.uri) await FS.deleteAsync(diagram.uri, { idempotent: true });
+  const uri = currentImageUri(diagram.uri, FS.documentDirectory);
+  if (uri) await FS.deleteAsync(uri, { idempotent: true });
   useStore.getState().removeDiagram(diagram.id);
 }
 

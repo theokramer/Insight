@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import Storage from "expo-sqlite/kv-store";
+import * as FS from "expo-file-system/legacy";
+import { currentImageUri } from "./image-location";
 import { Deck, Diagram, Rating, ReviewLog, schedule } from "./model";
 import { seedDecks, seedDiagrams } from "./seeds";
 type State = {
@@ -31,9 +33,11 @@ export const useStore = create<State>()(
       setHydrated: () =>
         set((s) => ({
           hydrated: true,
-          diagrams: s.diagrams.map((d) =>
-            d.status === "processing" ? { ...d, status: "queued" } : d,
-          ),
+          diagrams: s.diagrams.map((d) => ({
+            ...d,
+            uri: currentImageUri(d.uri, FS.documentDirectory),
+            status: d.status === "processing" ? "queued" : d.status,
+          })),
         })),
       addDeck: (deck) => set((s) => ({ decks: [deck, ...s.decks] })),
       updateDeck: (id, title) =>

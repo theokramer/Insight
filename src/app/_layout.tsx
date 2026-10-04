@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ActivityIndicator, View, useColorScheme } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import {
   ThemeProvider,
   DefaultTheme,
@@ -14,6 +14,18 @@ import { useStore } from "../store";
 import { runQueue } from "../services";
 import { initializePurchases } from "../subscriptions";
 import { PaywallProvider } from "../paywall";
+import { IconButton } from "../components/UI";
+function BackButton() {
+  return (
+    <IconButton
+      name="chevron-back"
+      label="Back"
+      onPress={() =>
+        router.canGoBack() ? router.back() : router.replace("/(tabs)")
+      }
+    />
+  );
+}
 function Routes() {
   const c = useColors(),
     dark = useColorScheme() === "dark";
@@ -59,18 +71,61 @@ function Routes() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="Deck" options={{ title: "Collection" }} />
+        <Stack.Screen
+          name="Deck"
+          options={{ title: "Collection", headerLeft: () => <BackButton /> }}
+        />
         <Stack.Screen
           name="NewDeck"
-          options={{ title: "Collection", presentation: "modal" }}
+          options={{
+            title: "Collection",
+            presentation: "modal",
+            headerRight: () => (
+              <IconButton
+                name="close"
+                label="Close new collection"
+                onPress={() => router.back()}
+              />
+            ),
+          }}
         />
         <Stack.Screen
           name="Import"
-          options={{ title: "Add images", presentation: "modal" }}
+          options={{
+            title: "Add images",
+            presentation: "modal",
+            headerRight: () => (
+              <IconButton
+                name="close"
+                label="Close import"
+                onPress={() => router.back()}
+              />
+            ),
+          }}
         />
-        <Stack.Screen name="Editor" options={{ title: "Review masks" }} />
-        <Stack.Screen name="Settings" options={{ title: "Settings" }} />
-        <Stack.Screen name="Privacy" options={{ title: "Privacy" }} />
+        <Stack.Screen
+          name="Editor"
+          options={{ title: "Review masks", headerLeft: () => <BackButton /> }}
+        />
+        <Stack.Screen
+          name="Settings"
+          options={{
+            title: "Settings",
+            headerRight: () => (
+              <IconButton
+                name="close"
+                label="Close settings"
+                onPress={() =>
+                  router.canGoBack() ? router.back() : router.replace("/(tabs)")
+                }
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Privacy"
+          options={{ title: "Privacy", headerLeft: () => <BackButton /> }}
+        />
         <Stack.Screen
           name="Study"
           options={{

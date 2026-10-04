@@ -19,7 +19,9 @@ export function ImportScreen({ route, navigation }: any) {
     diagrams = useStore((s) => s.diagrams);
   const [deckId, setDeck] = useState(route.params?.deckId || decks[0]?.id);
   const [busy, setBusy] = useState(false);
-  const [batch, setBatch] = useState<string[]>([]);
+  const [batch, setBatch] = useState<string[]>(() =>
+    diagrams.filter((d) => d.status !== "ready").map((d) => d.id),
+  );
   // Unfinished images remain reachable after navigating away or restarting.
   const images = diagrams.filter(
     (d) =>
@@ -263,14 +265,17 @@ export function ImportScreen({ route, navigation }: any) {
           ))}
           {ready > 0 && (
             <Button
-              title="Review proposed masks"
-              onPress={() =>
-                navigation.navigate("Editor", {
-                  diagramId:
-                    images.find((d) => d.status === "review")?.id ||
-                    images[0].id,
-                })
+              title={
+                images.some((d) => d.status === "review")
+                  ? "Review proposed masks"
+                  : "Study this collection"
               }
+              onPress={() => {
+                const proposal = images.find((d) => d.status === "review");
+                if (proposal)
+                  navigation.navigate("Editor", { diagramId: proposal.id });
+                else navigation.navigate("Study", { deckId });
+              }}
             />
           )}
         </View>

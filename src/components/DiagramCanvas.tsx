@@ -1,6 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import { Image } from "expo-image";
+import * as FS from "expo-file-system/legacy";
+import { currentImageUri } from "../image-location";
 import { SvgXml } from "react-native-svg";
 import { Diagram, Mask } from "../model";
 import { useColors } from "../theme";
@@ -16,7 +18,7 @@ export function DiagramImage({ diagram }: { diagram: Diagram }) {
     <SvgXml xml={diagram.svg} width="100%" height="100%" />
   ) : (
     <Image
-      source={{ uri: diagram.uri }}
+      source={{ uri: currentImageUri(diagram.uri, FS.documentDirectory) }}
       style={{ width: "100%", height: "100%" }}
       contentFit="fill"
       cachePolicy="disk"
