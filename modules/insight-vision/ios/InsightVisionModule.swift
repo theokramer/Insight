@@ -14,7 +14,7 @@ public class InsightVisionModule: Module {
         for i in 0..<doc.pageCount {
           guard let page = doc.page(at: i) else { continue }
           let bounds = page.bounds(for: .mediaBox)
-          let scale = min(2, 1800 / max(bounds.width, bounds.height))
+          let scale = min(4, 3000 / max(bounds.width, bounds.height))
           let size = CGSize(width: bounds.width * scale, height: bounds.height * scale)
           let image = page.thumbnail(of: size, for: .mediaBox)
           guard let bytes = image.jpegData(compressionQuality: 0.92) else { continue }
@@ -29,19 +29,8 @@ public class InsightVisionModule: Module {
       }
     }
     AsyncFunction("recognize") { (uri: String) -> [[String: Any]] in
-      guard let url = URL(string: uri), let image = UIImage(contentsOfFile: url.path), let cgImage = image.cgImage else { return [] }
-      let request = VNRecognizeTextRequest()
-      request.recognitionLevel = .accurate
-      request.usesLanguageCorrection = false
-      let handler = VNImageRequestHandler(cgImage: cgImage)
-      try handler.perform([request])
-      return (request.results ?? []).compactMap { result in
-        guard let text = result.topCandidates(1).first?.string else { return nil }
-        let b = result.boundingBox
-        let pad: CGFloat = 0.006
-        let x = max(0, b.minX - pad), y = max(0, 1 - b.maxY - pad)
-        return ["label": text, "x": x, "y": y, "width": min(1-x, b.width + pad*2), "height": min(1-y, b.height + pad*2)]
-      }
+      guard let url = URL(string: uri) else { throw NSError(domain: "InsightOCR", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid image location."]) }
+      return try InsightTextDetection.recognize(url: url)
     }
   }
 }

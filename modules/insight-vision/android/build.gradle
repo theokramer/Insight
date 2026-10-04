@@ -4,7 +4,11 @@ group = 'expo.modules.insightvision'
 version = '1.0.0'
 android {
   namespace 'expo.modules.insightvision'
-  defaultConfig { versionCode 1; versionName '1.0.0' }
+  defaultConfig {
+    versionCode 1; versionName '1.0.0'
+    testInstrumentationRunner 'expo.modules.insightvision.OCRRegression'
+    if (findProperty('insightTestAbi')) { ndk { abiFilters findProperty('insightTestAbi') } }
+  }
 }
 dependencies {
   implementation 'com.google.mlkit:text-recognition:16.0.1'

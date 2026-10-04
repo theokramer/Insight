@@ -7,18 +7,12 @@ import { requireOptionalNativeModule } from "expo-modules-core";
 import { Diagram, id, makeMask, validBounds } from "./model";
 import { useStore } from "./store";
 import { subscriberId } from "./subscriptions";
-export type Candidate = {
-  label: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
+import { prepareText, type RawText } from "./text-detection";
 const native = requireOptionalNativeModule("InsightVision") as {
   renderPDF(
     uri: string,
   ): Promise<{ uri: string; width: number; height: number }[]>;
-  recognize(uri: string): Promise<Candidate[]>;
+  recognize(uri: string): Promise<RawText[]>;
 } | null;
 const root = () => `${FS.documentDirectory}diagrams/`;
 export async function keepImage(
@@ -35,12 +29,12 @@ export async function keepImage(
         resize: {
           width: Math.max(
             1,
-            Math.round(width * Math.min(1, 2000 / Math.max(width, height))),
+            Math.round(width * Math.min(1, 3200 / Math.max(width, height))),
           ),
         },
       },
     ],
-    { compress: 0.9, format: ImageManipulator.SaveFormat.JPEG },
+    { compress: 0.94, format: ImageManipulator.SaveFormat.JPEG },
   );
   await FS.makeDirectoryAsync(root(), { intermediates: true });
   const imageId = id();
@@ -230,13 +224,43 @@ export async function analyze(diagram: Diagram) {
     );
   const access = __DEV__ ? await token() : null;
   const userId = access ? null : await subscriberId();
-  const base64 = await FS.readAsStringAsync(diagram.uri, {
-    encoding: FS.EncodingType.Base64,
-  });
-  let candidates: Candidate[] = [];
+  if (!native)
+    throw new Error("Text detection needs the native Insight build.");
+  let candidates;
   try {
-    candidates = (await native?.recognize(diagram.uri)) || [];
-  } catch {}
+    candidates = prepareText(
+      await native.recognize(diagram.uri),
+      diagram.width,
+      diagram.height,
+    );
+  } catch {
+    throw new Error(
+      "Could not detect text in this image. Your image is saved; reimport it or retry.",
+    );
+  }
+  // OCR retains the original pixels; GPT receives a bounded image with the same aspect ratio.
+  const upload = await ImageManipulator.manipulateAsync(
+    diagram.uri,
+    [
+      {
+        resize: {
+          width: Math.round(
+            diagram.width *
+              Math.min(1, 2000 / Math.max(diagram.width, diagram.height)),
+          ),
+        },
+      },
+    ],
+    { compress: 0.9, format: ImageManipulator.SaveFormat.JPEG },
+  );
+  let base64: string;
+  try {
+    base64 = await FS.readAsStringAsync(upload.uri, {
+      encoding: FS.EncodingType.Base64,
+    });
+  } finally {
+    await FS.deleteAsync(upload.uri, { idempotent: true }).catch(() => {});
+  }
   const res = await fetch(`${url}/v1/occlusions`, {
     method: "POST",
     headers: {

@@ -24,7 +24,15 @@ export function SettingsScreen({ navigation }: any) {
   const proAction = useProAction();
   const pro = useSubscription((s) => s.active);
   useEffect(() => {
-    if (__DEV__) token().then((v) => setAccess(v || ""));
+    if (__DEV__)
+      token()
+        .then((v) => setAccess(v || ""))
+        .catch(() =>
+          Alert.alert(
+            "Couldn’t load preview access",
+            "Please reopen Insight and try again.",
+          ),
+        );
   }, []);
   return (
     <ScrollView

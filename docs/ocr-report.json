@@ -1,0 +1,34 @@
+[
+  {
+    "path": "../../work/ocr-regression/ios.json",
+    "matched": 17,
+    "expected": 17,
+    "minimumBoxOverlap": 0.6318888265896926,
+    "seconds": 1.3248660564422607
+  },
+  {
+    "path": "../../work/ocr-regression/ios-exif.json",
+    "matched": 17,
+    "expected": 17,
+    "minimumBoxOverlap": 0.6318888265896926,
+    "seconds": 1.6939109563827515
+  },
+  {
+    "path": "../../work/ocr-regression/android.json",
+    "matched": 17,
+    "expected": 17,
+    "minimumBoxOverlap": 0.6548291546235064
+  },
+  {
+    "path": "../../work/ocr-regression/android-exif.json",
+    "matched": 17,
+    "expected": 17,
+    "minimumBoxOverlap": 0.6548291546235064
+  },
+  {
+    "path": "../../work/ocr-regression/gpt-result.json",
+    "matched": 17,
+    "expected": 17,
+    "minimumBoxOverlap": 0.6318888265896926
+  }
+]

@@ -207,3 +207,94 @@ test("Risenote-style subscriptions require a real active Insight entitlement", a
   );
   assert.equal(response.status, 200);
 });
+
+test("candidate IDs anchor corrected OCR text even when GPT guesses invalid coordinates", () => {
+  const candidate = {
+    id: "ocr_0",
+    label: "Myelin sheatb",
+    x: 0.1,
+    y: 0.2,
+    width: 0.15,
+    height: 0.02,
+  };
+  const result = sanitize(
+    {
+      title: "Neuron",
+      masks: [
+        {
+          label: "Myelin sheath",
+          explanation: "Insulates the axon",
+          candidate_ids: ["ocr_0"],
+          x: -1,
+          y: 2,
+          width: 4,
+          height: 5,
+        },
+      ],
+    },
+    [candidate],
+  );
+  assert.equal(result.masks.length, 1);
+  assert.equal(result.masks[0].label, "Myelin sheath");
+  assert.equal(result.masks[0].x, 0.1);
+  assert.equal(result.masks[0].width, 0.15);
+});
+test("adjacent lines can form one label, distant lines and unknown IDs cannot", () => {
+  const candidates = [
+    { id: "ocr_0", label: "Node of", x: 0.1, y: 0.2, width: 0.1, height: 0.02 },
+    {
+      id: "ocr_1",
+      label: "Ranvier",
+      x: 0.1,
+      y: 0.23,
+      width: 0.09,
+      height: 0.02,
+    },
+    { id: "ocr_2", label: "Nucleus", x: 0.8, y: 0.7, width: 0.1, height: 0.02 },
+  ];
+  const mask = (ids: string[]) => ({
+    label: "Node of Ranvier",
+    explanation: "",
+    candidate_ids: ids,
+    x: 0,
+    y: 0,
+    width: 0.5,
+    height: 0.5,
+  });
+  const result = sanitize(
+    {
+      title: "Neuron",
+      masks: [
+        mask(["ocr_0", "ocr_2"]),
+        mask(["unknown"]),
+        mask(["ocr_0", "ocr_1"]),
+      ],
+    },
+    candidates,
+  );
+  assert.equal(result.masks.length, 1);
+  assert.ok(Math.abs(result.masks[0].height - 0.05) < 1e-8);
+});
+test("the same OCR candidate cannot produce duplicate cards; repeated labels keep independent boxes", () => {
+  const candidates = [
+    { id: "ocr_0", label: "Axon", x: 0.1, y: 0.2, width: 0.1, height: 0.02 },
+    { id: "ocr_1", label: "Axon", x: 0.7, y: 0.2, width: 0.1, height: 0.02 },
+  ];
+  const mask = (id: string) => ({
+    label: "Axon",
+    explanation: "",
+    candidate_ids: [id],
+    x: 0,
+    y: 0,
+    width: 0.5,
+    height: 0.5,
+  });
+  const result = sanitize(
+    { title: "Neuron", masks: [mask("ocr_0"), mask("ocr_0"), mask("ocr_1")] },
+    candidates,
+  );
+  assert.deepEqual(
+    result.masks.map((m) => m.x),
+    [0.1, 0.7],
+  );
+});
