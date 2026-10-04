@@ -1,0 +1,43 @@
+{
+  "name": "insight-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-03",
+  "observability": {
+    "enabled": true,
+  },
+  "vars": {
+    "OPENAI_MODEL": "gpt-4.1",
+    "ACCESS_MODE": "revenuecat",
+    "ENTITLEMENT_ID": "insight_pro",
+  },
+  "ratelimits": [
+    {
+      "name": "RATE_LIMITER",
+      "namespace_id": "1002",
+      "simple": {
+        "limit": 20,
+        "period": 60,
+      },
+    },
+  ],
+  "env": {
+    "preview": {
+      "name": "insight-preview",
+      "vars": {
+        "OPENAI_MODEL": "gpt-4.1",
+        "ACCESS_MODE": "private",
+        "ENTITLEMENT_ID": "insight_pro",
+      },
+      "ratelimits": [
+        {
+          "name": "RATE_LIMITER",
+          "namespace_id": "1003",
+          "simple": {
+            "limit": 20,
+            "period": 60,
+          },
+        },
+      ],
+    },
+  },
+}
