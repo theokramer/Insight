@@ -8,7 +8,12 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "de.tk.Insight"
+      "bundleIdentifier": "de.tk.Insight",
+      "appleTeamId": "67AYJ24F97",
+      "buildNumber": "20261004",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

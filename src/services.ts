@@ -205,6 +205,8 @@ export async function setToken(value: string) {
   else await SecureStore.deleteItemAsync("insight-access-token");
 }
 export async function analyze(diagram: Diagram) {
+  if (!useStore.getState().analysisConsent)
+    throw new Error("Allow image analysis before sending pictures to OpenAI.");
   const uri = currentImageUri(diagram.uri, FS.documentDirectory);
   if (!uri) throw new Error("This example already has masks.");
   const url = useStore.getState().backendUrl.replace(/\/$/, "");
@@ -297,6 +299,7 @@ export async function runQueue() {
   running = true;
   try {
     while (true) {
+      if (!useStore.getState().analysisConsent) break;
       const next = useStore
         .getState()
         .diagrams.find((d) => d.status === "queued");

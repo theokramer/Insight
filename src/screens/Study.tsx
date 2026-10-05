@@ -11,6 +11,7 @@ import {
   Icon,
   IconButton,
   Eyebrow,
+  SafeScreen,
   common,
 } from "../components/UI";
 import { Rating, schedule } from "../model";
@@ -229,56 +230,57 @@ export function StudyScreen({ route, navigation }: any) {
   );
 }
 export function CompleteScreen({ route, navigation }: any) {
-  const c = useColors(),
-    insets = useSafeAreaInsets();
+  const c = useColors();
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: c.bg }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        justifyContent: "center",
-        padding: 32,
-        paddingTop: insets.top + 32,
-        gap: 22,
-      }}
-    >
-      <View
-        style={{
-          alignSelf: "center",
-          width: 106,
-          height: 106,
-          borderRadius: 53,
-          backgroundColor: c.soft,
-          alignItems: "center",
+    <SafeScreen bottom>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={{ backgroundColor: c.bg }}
+        contentContainerStyle={{
+          flexGrow: 1,
           justifyContent: "center",
+          padding: 32,
+          gap: 22,
         }}
       >
-        <Icon name="checkmark" size={48} color={c.accent} />
-      </View>
-      <Eyebrow>A LITTLE CLEARER THAN BEFORE</Eyebrow>
-      <Txt style={[common.title, { fontSize: 39, lineHeight: 46 }]}>
-        That’s how{"\n"}knowledge grows.
-      </Txt>
-      <Txt muted>
-        You reviewed {route.params.count} labels and recalled{" "}
-        {route.params.remembered}. Your next reviews are scheduled.
-      </Txt>
-      <View
-        style={{
-          padding: 20,
-          borderWidth: 1,
-          borderColor: c.line,
-          borderRadius: 22,
-          gap: 7,
-        }}
-      >
-        <Txt style={{ fontWeight: "600" }}>Leave a little space.</Txt>
-        <Txt muted style={{ fontSize: 14 }}>
-          Coming back later helps this picture become something you really know.
+        <View
+          style={{
+            alignSelf: "center",
+            width: 106,
+            height: 106,
+            borderRadius: 53,
+            backgroundColor: c.soft,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Icon name="checkmark" size={48} color={c.accent} />
+        </View>
+        <Eyebrow>A LITTLE CLEARER THAN BEFORE</Eyebrow>
+        <Txt style={[common.title, { fontSize: 39, lineHeight: 46 }]}>
+          That’s how{"\n"}knowledge grows.
         </Txt>
-      </View>
-      <Button title="Back to today" onPress={() => navigation.popToTop()} />
-    </ScrollView>
+        <Txt muted>
+          You reviewed {route.params.count} labels and recalled{" "}
+          {route.params.remembered}. Your next reviews are scheduled.
+        </Txt>
+        <View
+          style={{
+            padding: 20,
+            borderWidth: 1,
+            borderColor: c.line,
+            borderRadius: 22,
+            gap: 7,
+          }}
+        >
+          <Txt style={{ fontWeight: "600" }}>Leave a little space.</Txt>
+          <Txt muted style={{ fontSize: 14 }}>
+            Coming back later helps this picture become something you really
+            know.
+          </Txt>
+        </View>
+        <Button title="Back to today" onPress={() => navigation.popToTop()} />
+      </ScrollView>
+    </SafeScreen>
   );
 }

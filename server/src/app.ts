@@ -1,3 +1,4 @@
+import { legalResponse } from "./legal.ts";
 export interface Env {
   OPENAI_API_KEY: string;
   PRIVATE_ACCESS_TOKEN?: string;
@@ -233,6 +234,8 @@ export async function handleRequest(
   fetcher: typeof fetch = fetch,
 ): Promise<Response> {
   const path = new URL(req.url).pathname;
+  const publicPage = legalResponse(path, req.method);
+  if (publicPage) return publicPage;
   if (path === "/health" && req.method === "GET")
     return json({ ok: true, service: "insight-proxy" });
   if (path !== "/v1/occlusions" || req.method !== "POST")

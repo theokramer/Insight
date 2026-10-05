@@ -332,6 +332,7 @@ export function EditorScreen({ route, navigation }: any) {
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
       style={{ backgroundColor: c.bg }}
       contentContainerStyle={[common.page, { gap: 18 }]}
     >
@@ -347,6 +348,8 @@ export function EditorScreen({ route, navigation }: any) {
       </View>
       <TextInput
         accessibilityLabel="Diagram title"
+        multiline
+        maxLength={120}
         value={title}
         onChangeText={(v) => {
           setTitle(v);

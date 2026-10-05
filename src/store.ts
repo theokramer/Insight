@@ -10,6 +10,8 @@ type State = {
   diagrams: Diagram[];
   reviews: ReviewLog[];
   backendUrl: string;
+  analysisConsent: boolean;
+  setAnalysisConsent: (allowed: boolean) => void;
   hydrated: boolean;
   setHydrated: () => void;
   addDeck: (deck: Deck) => void;
@@ -27,6 +29,18 @@ export const useStore = create<State>()(
       decks: seedDecks,
       diagrams: seedDiagrams,
       reviews: [],
+      analysisConsent: false,
+      setAnalysisConsent: (allowed) =>
+        set((s) => ({
+          analysisConsent: allowed,
+          diagrams: allowed
+            ? s.diagrams
+            : s.diagrams.map((d) =>
+                d.status === "queued"
+                  ? { ...d, status: "imported", error: undefined }
+                  : d,
+              ),
+        })),
       backendUrl:
         process.env.EXPO_PUBLIC_BACKEND_URL || "http://localhost:8787",
       hydrated: false,
@@ -36,7 +50,13 @@ export const useStore = create<State>()(
           diagrams: s.diagrams.map((d) => ({
             ...d,
             uri: currentImageUri(d.uri, FS.documentDirectory),
-            status: d.status === "processing" ? "queued" : d.status,
+            status:
+              !s.analysisConsent &&
+              (d.status === "processing" || d.status === "queued")
+                ? "imported"
+                : d.status === "processing"
+                  ? "queued"
+                  : d.status,
           })),
         })),
       addDeck: (deck) => set((s) => ({ decks: [deck, ...s.decks] })),

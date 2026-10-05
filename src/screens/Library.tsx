@@ -18,6 +18,7 @@ import {
   Eyebrow,
   Section,
   Empty,
+  SafeScreen,
   common,
 } from "../components/UI";
 import { MaskedDiagram } from "../components/DiagramCanvas";
@@ -83,8 +84,7 @@ export function DeckRow({ deck, navigation }: { deck: Deck; navigation: any }) {
   );
 }
 export function TodayScreen({ navigation }: any) {
-  const c = useColors(),
-    insets = useSafeAreaInsets();
+  const c = useColors();
   const diagrams = useStore((s) => s.diagrams),
     decks = useStore((s) => s.decks),
     reviews = useStore((s) => s.reviews);
@@ -94,228 +94,229 @@ export function TodayScreen({ navigation }: any) {
     (r) => new Date(r.at).toDateString() === new Date().toDateString(),
   ).length;
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: c.bg }}
-      contentContainerStyle={[common.page, { paddingTop: insets.top + 12 }]}
-    >
-      <View
-        style={[
-          common.row,
-          { justifyContent: "space-between", marginBottom: 32 },
-        ]}
+    <SafeScreen>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={{ backgroundColor: c.bg }}
+        contentContainerStyle={[common.page, { paddingTop: 12 }]}
       >
-        <View style={common.row}>
-          <View
-            style={{
-              width: 31,
-              height: 31,
-              backgroundColor: c.accent,
-              borderRadius: 10,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Icon name="scan-outline" color={c.bg} size={21} />
-          </View>
-          <Txt style={{ fontWeight: "700", fontSize: 22, letterSpacing: -0.8 }}>
-            insight
-          </Txt>
-        </View>
-        <IconButton
-          name="options-outline"
-          label="Settings"
-          onPress={() => navigation.navigate("Settings")}
-        />
-      </View>
-      <Eyebrow>YOUR DAILY MOMENT</Eyebrow>
-      <Txt style={[common.title, { marginTop: 7 }]}>Make it stick.</Txt>
-      <Txt muted style={{ marginTop: 8, marginBottom: 24 }}>
-        A little focus. A clearer picture.
-      </Txt>
-      <View
-        style={{
-          backgroundColor: c.hero,
-          borderRadius: 28,
-          padding: 22,
-          gap: 16,
-        }}
-      >
-        <View style={[common.row, { justifyContent: "space-between" }]}>
-          <View style={{ gap: 3, flex: 1 }}>
-            <Txt
-              style={{
-                color: "#BCCFBD",
-                fontSize: 11,
-                fontWeight: "700",
-                letterSpacing: 1.4,
-              }}
-            >
-              READY WHEN YOU ARE
-            </Txt>
-            <Txt
-              style={{
-                color: "#FFF",
-                fontSize: 27,
-                lineHeight: 32,
-                fontWeight: "600",
-                letterSpacing: -0.6,
-              }}
-            >
-              {due.length
-                ? `${due.length} labels to remember.`
-                : "A moment well spent."}
-            </Txt>
-          </View>
-          <Icon name="sunny-outline" color="#B8CDBB" size={26} />
-        </View>
-        {sample && (
-          <View
-            style={{
-              backgroundColor: "#F5F6EE",
-              borderRadius: 20,
-              overflow: "hidden",
-              aspectRatio: sample.width / sample.height,
-            }}
-          >
-            <View>
-              <MaskedDiagram diagram={sample} all />
-            </View>
+        <View
+          style={[
+            common.row,
+            { justifyContent: "space-between", marginBottom: 32 },
+          ]}
+        >
+          <View style={common.row}>
             <View
               style={{
-                position: "absolute",
-                bottom: 10,
-                left: 12,
-                backgroundColor: "#FFF",
-                paddingHorizontal: 10,
-                paddingVertical: 5,
+                width: 31,
+                height: 31,
+                backgroundColor: c.accent,
                 borderRadius: 10,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
+              <Icon name="scan-outline" color={c.bg} size={21} />
+            </View>
+            <Txt
+              style={{ fontWeight: "700", fontSize: 22, letterSpacing: -0.8 }}
+            >
+              insight
+            </Txt>
+          </View>
+          <IconButton
+            name="options-outline"
+            label="Settings"
+            onPress={() => navigation.navigate("Settings")}
+          />
+        </View>
+        <Eyebrow>YOUR DAILY MOMENT</Eyebrow>
+        <Txt style={[common.title, { marginTop: 7 }]}>Make it stick.</Txt>
+        <Txt muted style={{ marginTop: 8, marginBottom: 24 }}>
+          A little focus. A clearer picture.
+        </Txt>
+        <View
+          style={{
+            backgroundColor: c.hero,
+            borderRadius: 28,
+            padding: 22,
+            gap: 16,
+          }}
+        >
+          <View style={[common.row, { justifyContent: "space-between" }]}>
+            <View style={{ gap: 3, flex: 1 }}>
               <Txt
-                style={{ color: "#25463B", fontSize: 10, fontWeight: "600" }}
+                style={{
+                  color: "#BCCFBD",
+                  fontSize: 11,
+                  fontWeight: "700",
+                  letterSpacing: 1.4,
+                }}
               >
-                A picture. A few hidden labels. You’ve got this.
+                READY WHEN YOU ARE
+              </Txt>
+              <Txt
+                style={{
+                  color: "#FFF",
+                  fontSize: 27,
+                  lineHeight: 32,
+                  fontWeight: "600",
+                  letterSpacing: -0.6,
+                }}
+              >
+                {due.length
+                  ? `${due.length} labels to remember.`
+                  : "A moment well spent."}
               </Txt>
             </View>
+            <Icon name="sunny-outline" color="#B8CDBB" size={26} />
           </View>
+          {sample && (
+            <View
+              style={{
+                backgroundColor: "#F5F6EE",
+                borderRadius: 20,
+                overflow: "hidden",
+              }}
+            >
+              <View>
+                <MaskedDiagram diagram={sample} all />
+              </View>
+              <View
+                style={{
+                  margin: 12,
+                  backgroundColor: "#FFF",
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderRadius: 10,
+                }}
+              >
+                <Txt
+                  style={{ color: "#25463B", fontSize: 10, fontWeight: "600" }}
+                >
+                  A picture. A few hidden labels. You’ve got this.
+                </Txt>
+              </View>
+            </View>
+          )}
+          <Pressable
+            accessibilityRole="button"
+            onPress={() =>
+              due.length
+                ? navigation.navigate("Study", {})
+                : navigation.navigate("Import", {})
+            }
+            style={({ pressed }) => ({
+              minHeight: 55,
+              paddingVertical: 14,
+              backgroundColor: "#F0F4E9",
+              borderRadius: 17,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 18,
+              opacity: pressed ? 0.8 : 1,
+            })}
+          >
+            <Txt style={{ color: "#1C4F3D", fontWeight: "700", flex: 1 }}>
+              {due.length ? "Start a quick session" : "Add something to learn"}
+            </Txt>
+            <Icon name="arrow-forward" color="#1C4F3D" size={21} />
+          </Pressable>
+          <Txt style={{ color: "#BCCFBD", fontSize: 12, textAlign: "center" }}>
+            One hidden label at a time · At your pace
+          </Txt>
+        </View>
+        <View style={{ flexDirection: "row", marginTop: 22, gap: 10 }}>
+          <View
+            style={{
+              flex: 1,
+              padding: 16,
+              borderRadius: 20,
+              backgroundColor: c.soft,
+            }}
+          >
+            <Txt
+              style={{
+                fontSize: 23,
+                fontWeight: "600",
+                fontVariant: ["tabular-nums"],
+              }}
+            >
+              {today}
+            </Txt>
+            <Txt muted style={{ fontSize: 12 }}>
+              reviewed today
+            </Txt>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              padding: 16,
+              borderRadius: 20,
+              backgroundColor: c.soft,
+            }}
+          >
+            <Txt
+              style={{
+                fontSize: 23,
+                fontWeight: "600",
+                fontVariant: ["tabular-nums"],
+              }}
+            >
+              {diagrams.filter((d) => d.status === "ready").length}
+            </Txt>
+            <Txt muted style={{ fontSize: 12 }}>
+              pictures to explore
+            </Txt>
+          </View>
+        </View>
+        <Section
+          title="Your collections"
+          action="View all"
+          onPress={() => navigation.navigate("Library")}
+        />
+        {decks.slice(0, 3).map((deck) => (
+          <DeckRow key={deck.id} deck={deck} navigation={navigation} />
+        ))}
+        {!decks.length && (
+          <Empty
+            title="A blank canvas"
+            detail="Bring a diagram you want to understand."
+          >
+            <Button
+              title="Add images"
+              onPress={() => navigation.navigate("Import", {})}
+            />
+          </Empty>
         )}
         <Pressable
           accessibilityRole="button"
-          onPress={() =>
-            due.length
-              ? navigation.navigate("Study", {})
-              : navigation.navigate("Import", {})
-          }
-          style={({ pressed }) => ({
-            minHeight: 55,
-            paddingVertical: 14,
-            backgroundColor: "#F0F4E9",
-            borderRadius: 17,
+          onPress={() => navigation.navigate("Import", {})}
+          style={{
+            marginTop: 26,
+            padding: 20,
+            borderRadius: 22,
+            borderWidth: 1,
+            borderStyle: "dashed",
+            borderColor: c.line,
             flexDirection: "row",
+            gap: 14,
             alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 18,
-            opacity: pressed ? 0.8 : 1,
-          })}
+          }}
         >
-          <Txt style={{ color: "#1C4F3D", fontWeight: "700", flex: 1 }}>
-            {due.length ? "Start a quick session" : "Add something to learn"}
-          </Txt>
-          <Icon name="arrow-forward" color="#1C4F3D" size={21} />
+          <Icon name="add-circle-outline" size={27} color={c.accent} />
+          <View style={{ flex: 1 }}>
+            <Txt style={{ fontWeight: "600" }}>Turn pictures into practice</Txt>
+            <Txt muted style={{ fontSize: 13 }}>
+              Add a whole chapter in one go.
+            </Txt>
+          </View>
+          <Icon name="arrow-forward" size={18} />
         </Pressable>
-        <Txt style={{ color: "#BCCFBD", fontSize: 12, textAlign: "center" }}>
-          One hidden label at a time · At your pace
-        </Txt>
-      </View>
-      <View style={{ flexDirection: "row", marginTop: 22, gap: 10 }}>
-        <View
-          style={{
-            flex: 1,
-            padding: 16,
-            borderRadius: 20,
-            backgroundColor: c.soft,
-          }}
-        >
-          <Txt
-            style={{
-              fontSize: 23,
-              fontWeight: "600",
-              fontVariant: ["tabular-nums"],
-            }}
-          >
-            {today}
-          </Txt>
-          <Txt muted style={{ fontSize: 12 }}>
-            reviewed today
-          </Txt>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            padding: 16,
-            borderRadius: 20,
-            backgroundColor: c.soft,
-          }}
-        >
-          <Txt
-            style={{
-              fontSize: 23,
-              fontWeight: "600",
-              fontVariant: ["tabular-nums"],
-            }}
-          >
-            {diagrams.filter((d) => d.status === "ready").length}
-          </Txt>
-          <Txt muted style={{ fontSize: 12 }}>
-            pictures to explore
-          </Txt>
-        </View>
-      </View>
-      <Section
-        title="Your collections"
-        action="View all"
-        onPress={() => navigation.navigate("Library")}
-      />
-      {decks.slice(0, 3).map((deck) => (
-        <DeckRow key={deck.id} deck={deck} navigation={navigation} />
-      ))}
-      {!decks.length && (
-        <Empty
-          title="A blank canvas"
-          detail="Bring a diagram you want to understand."
-        >
-          <Button
-            title="Add images"
-            onPress={() => navigation.navigate("Import", {})}
-          />
-        </Empty>
-      )}
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => navigation.navigate("Import", {})}
-        style={{
-          marginTop: 26,
-          padding: 20,
-          borderRadius: 22,
-          borderWidth: 1,
-          borderStyle: "dashed",
-          borderColor: c.line,
-          flexDirection: "row",
-          gap: 14,
-          alignItems: "center",
-        }}
-      >
-        <Icon name="add-circle-outline" size={27} color={c.accent} />
-        <View style={{ flex: 1 }}>
-          <Txt style={{ fontWeight: "600" }}>Turn pictures into practice</Txt>
-          <Txt muted style={{ fontSize: 13 }}>
-            Add a whole chapter in one go.
-          </Txt>
-        </View>
-        <Icon name="arrow-forward" size={18} />
-      </Pressable>
-    </ScrollView>
+      </ScrollView>
+    </SafeScreen>
   );
 }
 export function LibraryScreen({ navigation }: any) {
@@ -429,11 +430,16 @@ export function DeckScreen({ route, navigation }: any) {
           <Eyebrow>COLLECTION</Eyebrow>
           <Txt style={common.title}>{deck.title}</Txt>
           <Txt muted>
-            {diagrams.length} diagrams · {labels} labels · {due.length} ready to
+            {diagrams.length} {diagrams.length === 1 ? "diagram" : "diagrams"} ·{" "}
+            {labels} {labels === 1 ? "label" : "labels"} · {due.length} ready to
             review
           </Txt>
           <Button
-            title={due.length ? `Study ${due.length} labels` : "All caught up"}
+            title={
+              due.length
+                ? `Study ${due.length} ${due.length === 1 ? "label" : "labels"}`
+                : "All caught up"
+            }
             icon="play-outline"
             disabled={!due.length}
             onPress={() => navigation.navigate("Study", { deckId: deck.id })}
@@ -553,6 +559,7 @@ export function NewDeckScreen({ route, navigation }: any) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
       contentInsetAdjustmentBehavior="automatic"
       style={{ backgroundColor: c.bg }}
       contentContainerStyle={[common.page, { gap: 20 }]}

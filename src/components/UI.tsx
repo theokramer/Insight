@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useColors } from "../theme";
@@ -17,16 +18,39 @@ export function Txt({
   ...props
 }: React.ComponentProps<typeof Text> & { muted?: boolean }) {
   const c = useColors();
+  const metrics = StyleSheet.flatten(style);
+  const fontSize = metrics?.fontSize ?? 16;
   return (
     <Text
       {...props}
       style={[
-        { color: muted ? c.muted : c.ink, fontSize: 16, lineHeight: 23 },
+        {
+          color: muted ? c.muted : c.ink,
+          fontSize,
+          lineHeight: metrics?.lineHeight ?? Math.ceil(fontSize * 1.4),
+        },
         style,
       ]}
     >
       {children}
     </Text>
+  );
+}
+export function SafeScreen({
+  children,
+  bottom = false,
+}: {
+  children: React.ReactNode;
+  bottom?: boolean;
+}) {
+  const c = useColors();
+  return (
+    <SafeAreaView
+      edges={bottom ? ["top", "bottom"] : ["top"]}
+      style={{ flex: 1, backgroundColor: c.bg }}
+    >
+      {children}
+    </SafeAreaView>
   );
 }
 export function Icon({
@@ -39,7 +63,14 @@ export function Icon({
   color?: string;
 }) {
   const c = useColors();
-  return <Ionicons name={name} size={size} color={color || c.ink} />;
+  return (
+    <Ionicons
+      name={name}
+      size={size}
+      color={color || c.ink}
+      allowFontScaling={false}
+    />
+  );
 }
 export function Button({
   title,
@@ -78,6 +109,8 @@ export function Button({
           justifyContent: "center",
           gap: 10,
           paddingHorizontal: 22,
+          paddingVertical: 14,
+          borderCurve: "continuous",
           opacity: disabled ? 0.4 : pressed ? 0.8 : 1,
         },
         style,
@@ -88,7 +121,14 @@ export function Button({
       ) : icon ? (
         <Icon name={icon} size={21} color={secondary ? c.ink : c.bg} />
       ) : null}
-      <Txt style={{ fontWeight: "600", color: secondary ? c.ink : c.bg }}>
+      <Txt
+        style={{
+          fontWeight: "600",
+          color: secondary ? c.ink : c.bg,
+          flexShrink: 1,
+          textAlign: "center",
+        }}
+      >
         {title}
       </Txt>
     </Pressable>
@@ -155,6 +195,8 @@ export function Section({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap",
         marginTop: 28,
         marginBottom: 14,
       }}
@@ -162,18 +204,23 @@ export function Section({
       <Txt style={{ fontSize: 22, fontWeight: "600", letterSpacing: -0.7 }}>
         {title}
       </Txt>
-      {action && (
-        <Pressable
-          accessibilityRole="button"
-          onPress={onPress}
-          hitSlop={10}
-          style={{ minHeight: 44, justifyContent: "center" }}
-        >
+      {action &&
+        (onPress ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={onPress}
+            hitSlop={10}
+            style={{ minHeight: 44, justifyContent: "center" }}
+          >
+            <Txt muted style={{ fontSize: 14 }}>
+              {action}
+            </Txt>
+          </Pressable>
+        ) : (
           <Txt muted style={{ fontSize: 14 }}>
             {action}
           </Txt>
-        </Pressable>
-      )}
+        ))}
     </View>
   );
 }

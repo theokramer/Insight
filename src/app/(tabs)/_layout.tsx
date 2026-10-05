@@ -1,10 +1,12 @@
 import React from "react";
 import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Tabs, router } from "expo-router";
 import { useColors } from "../../theme";
 import { Icon } from "../../components/UI";
 export default function TabLayout() {
   const c = useColors();
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -15,8 +17,16 @@ export default function TabLayout() {
           backgroundColor: c.bg,
           borderTopColor: c.line,
           paddingTop: 8,
+          height: 64 + insets.bottom,
+          paddingBottom: insets.bottom,
         },
-        tabBarLabelStyle: { fontSize: 10, fontWeight: "600", marginTop: 3 },
+        tabBarIconStyle: { width: 38, height: 36 },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          lineHeight: 14,
+          fontWeight: "600",
+          marginTop: 3,
+        },
         tabBarHideOnKeyboard: true,
       }}
     >
@@ -43,8 +53,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <View
               style={{
-                width: 37,
-                height: 37,
+                width: 34,
+                height: 34,
                 borderRadius: 12,
                 backgroundColor: c.accent,
                 alignItems: "center",

@@ -3,7 +3,7 @@ export const light = {
   bg: "#F7F8F3",
   surface: "#FFFFFF",
   ink: "#172E29",
-  muted: "#74817B",
+  muted: "#5D6B64",
   line: "#E3E8DF",
   accent: "#17634D",
   soft: "#E6EFE6",

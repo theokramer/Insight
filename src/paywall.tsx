@@ -15,6 +15,8 @@ import {
   useSubscription,
 } from "./subscriptions";
 import { token } from "./services";
+import { useStore } from "./store";
+import { authorizeImageSharing } from "./analysis-consent";
 import {
   performProAction,
   type AccessIssue,
@@ -126,6 +128,32 @@ export function useProAction() {
     pending.current = true;
     reported.current = false;
     try {
+      if (placement === "generate_occlusions" && action) {
+        const allowed = await authorizeImageSharing({
+          allowed: () => !!useStore.getState().analysisConsent,
+          save: () => useStore.getState().setAnalysisConsent(true),
+          ask: () =>
+            new Promise<boolean>((resolve) =>
+              Alert.alert(
+                "Allow image analysis?",
+                "Images you choose to analyze, their detected text, and text positions will be sent through Insight to OpenAI to find labels. OpenAI's API retention policies apply. You can turn this off in Settings and use manual masks anytime.",
+                [
+                  {
+                    text: "Use manual masks",
+                    style: "cancel",
+                    onPress: () => resolve(false),
+                  },
+                  {
+                    text: "Allow image analysis",
+                    onPress: () => resolve(true),
+                  },
+                ],
+                { cancelable: true, onDismiss: () => resolve(false) },
+              ),
+            ),
+        });
+        if (!allowed) return;
+      }
       await performProAction(placement, action, {
         development: __DEV__,
         previewToken: token,

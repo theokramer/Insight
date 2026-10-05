@@ -8,11 +8,18 @@ import {
   Linking,
   Platform,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useStore } from "../store";
 import { useColors } from "../theme";
 import { token, setToken, runQueue } from "../services";
-import { Button, Txt, Icon, Eyebrow, Section, common } from "../components/UI";
+import {
+  Button,
+  Txt,
+  Icon,
+  Eyebrow,
+  Section,
+  SafeScreen,
+  common,
+} from "../components/UI";
 import { useSubscription } from "../subscriptions";
 import { useProAction } from "../paywall";
 export function SettingsScreen({ navigation }: any) {
@@ -24,6 +31,7 @@ export function SettingsScreen({ navigation }: any) {
     [saving, setSaving] = useState(false);
   const proAction = useProAction();
   const pro = useSubscription((s) => s.active);
+  const analysisConsent = useStore((s) => s.analysisConsent);
   useEffect(() => {
     if (__DEV__)
       token()
@@ -38,6 +46,7 @@ export function SettingsScreen({ navigation }: any) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
       contentInsetAdjustmentBehavior="automatic"
       style={{ backgroundColor: c.bg }}
       contentContainerStyle={[common.page, { gap: 18 }]}
@@ -93,6 +102,18 @@ export function SettingsScreen({ navigation }: any) {
         <Txt>Privacy & your data</Txt>
         <Icon name="chevron-forward" size={17} />
       </Pressable>
+      <Txt muted style={{ fontSize: 13 }}>
+        {analysisConsent
+          ? "OpenAI image analysis is allowed for images you choose."
+          : "OpenAI image analysis needs your permission. You’ll be asked before the next analysis."}
+      </Txt>
+      {analysisConsent && (
+        <Button
+          title="Turn off image sharing"
+          secondary
+          onPress={() => useStore.getState().setAnalysisConsent(false)}
+        />
+      )}
       {__DEV__ && (
         <>
           <Section title="Developer connection" />
@@ -247,8 +268,7 @@ export function PrivacyScreen() {
   );
 }
 export function ActivityScreen() {
-  const c = useColors(),
-    insets = useSafeAreaInsets();
+  const c = useColors();
   const reviews = useStore((s) => s.reviews),
     diagrams = useStore((s) => s.diagrams);
   const days = Array.from({ length: 7 }, (_, i) => {
@@ -269,109 +289,122 @@ export function ActivityScreen() {
     .flatMap((d) => d.masks)
     .filter((m) => m.interval >= 21).length;
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: c.bg }}
-      contentContainerStyle={[
-        common.page,
-        { paddingTop: insets.top + 23, gap: 19 },
-      ]}
-    >
-      <Eyebrow>SMALL MOMENTS ADD UP</Eyebrow>
-      <Txt style={common.title}>Look how far{"\n"}you’ve come.</Txt>
-      <Txt muted>Every return to a picture builds understanding.</Txt>
-      <View
-        style={{
-          padding: 23,
-          backgroundColor: c.surface,
-          borderRadius: 26,
-          borderWidth: 1,
-          borderColor: c.line,
-          gap: 18,
-        }}
+    <SafeScreen>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={{ backgroundColor: c.bg }}
+        contentContainerStyle={[common.page, { paddingTop: 23, gap: 19 }]}
       >
-        <Txt style={{ fontWeight: "600" }}>Your last seven days</Txt>
+        <Eyebrow>SMALL MOMENTS ADD UP</Eyebrow>
+        <Txt style={common.title}>Look how far{"\n"}you’ve come.</Txt>
+        <Txt muted>Every return to a picture builds understanding.</Txt>
         <View
-          accessibilityLabel={days
-            .map((d) => `${d.label}: ${d.count} reviews`)
-            .join(", ")}
           style={{
-            height: 154,
-            flexDirection: "row",
-            gap: 15,
-            alignItems: "flex-end",
+            padding: 23,
+            backgroundColor: c.surface,
+            borderRadius: 26,
+            borderWidth: 1,
+            borderColor: c.line,
+            gap: 18,
           }}
         >
-          {days.map((d, i) => (
-            <View key={i} style={{ flex: 1, alignItems: "center", gap: 9 }}>
-              <Txt muted style={{ fontSize: 10 }}>
-                {d.count || ""}
-              </Txt>
-              <View
-                style={{
-                  width: "100%",
-                  height: Math.max(4, (d.count / max) * 100),
-                  backgroundColor: i === 6 ? c.accent : c.soft,
-                  borderRadius: 8,
-                }}
-              />
-              <Txt muted style={{ fontSize: 12 }}>
-                {d.label}
-              </Txt>
-            </View>
-          ))}
+          <Txt style={{ fontWeight: "600" }}>Your last seven days</Txt>
+          <View
+            accessibilityLabel={days
+              .map((d) => `${d.label}: ${d.count} reviews`)
+              .join(", ")}
+            style={{
+              height: 154,
+              flexDirection: "row",
+              gap: 15,
+              alignItems: "flex-end",
+            }}
+          >
+            {days.map((d, i) => (
+              <View key={i} style={{ flex: 1, alignItems: "center", gap: 9 }}>
+                <Txt muted style={{ fontSize: 10 }}>
+                  {d.count || ""}
+                </Txt>
+                <View
+                  style={{
+                    width: "100%",
+                    height: Math.max(4, (d.count / max) * 100),
+                    backgroundColor: i === 6 ? c.accent : c.soft,
+                    borderRadius: 8,
+                  }}
+                />
+                <Txt muted style={{ fontSize: 12 }}>
+                  {d.label}
+                </Txt>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
-      <View style={{ flexDirection: "row", gap: 12 }}>
+        <View style={{ flexDirection: "row", gap: 12 }}>
+          <View
+            style={{
+              flex: 1,
+              padding: 20,
+              backgroundColor: c.soft,
+              borderRadius: 22,
+            }}
+          >
+            <Txt
+              style={{
+                fontSize: 30,
+                fontWeight: "600",
+                fontVariant: ["tabular-nums"],
+              }}
+            >
+              {total}
+            </Txt>
+            <Txt muted style={{ fontSize: 13 }}>
+              total reviews
+            </Txt>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              padding: 20,
+              backgroundColor: c.soft,
+              borderRadius: 22,
+            }}
+          >
+            <Txt
+              style={{
+                fontSize: 30,
+                fontWeight: "600",
+                fontVariant: ["tabular-nums"],
+              }}
+            >
+              {total ? `${Math.round((recalled / total) * 100)}%` : "—"}
+            </Txt>
+            <Txt muted style={{ fontSize: 13 }}>
+              recalled
+            </Txt>
+          </View>
+        </View>
         <View
           style={{
-            flex: 1,
-            padding: 20,
-            backgroundColor: c.soft,
+            padding: 22,
             borderRadius: 22,
+            borderWidth: 1,
+            borderColor: c.line,
+            gap: 10,
           }}
         >
-          <Txt style={{ fontSize: 30, fontWeight: "600" }}>{total}</Txt>
-          <Txt muted style={{ fontSize: 13 }}>
-            total reviews
+          <Icon name="leaf-outline" size={30} color={c.accent} />
+          <Txt style={{ fontWeight: "600" }}>
+            {mature
+              ? `${mature} labels are taking root.`
+              : "Give it time to take root."}
+          </Txt>
+          <Txt muted style={{ fontSize: 14 }}>
+            Labels with review intervals of three weeks or longer show here.
+            Keep returning, a little at a time.
           </Txt>
         </View>
-        <View
-          style={{
-            flex: 1,
-            padding: 20,
-            backgroundColor: c.soft,
-            borderRadius: 22,
-          }}
-        >
-          <Txt style={{ fontSize: 30, fontWeight: "600" }}>
-            {total ? `${Math.round((recalled / total) * 100)}%` : "—"}
-          </Txt>
-          <Txt muted style={{ fontSize: 13 }}>
-            recalled
-          </Txt>
-        </View>
-      </View>
-      <View
-        style={{
-          padding: 22,
-          borderRadius: 22,
-          borderWidth: 1,
-          borderColor: c.line,
-          gap: 10,
-        }}
-      >
-        <Icon name="leaf-outline" size={30} color={c.accent} />
-        <Txt style={{ fontWeight: "600" }}>
-          {mature
-            ? `${mature} labels are taking root.`
-            : "Give it time to take root."}
-        </Txt>
-        <Txt muted style={{ fontSize: 14 }}>
-          Labels with review intervals of three weeks or longer show here. Keep
-          returning, a little at a time.
-        </Txt>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeScreen>
   );
 }

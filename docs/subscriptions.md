@@ -29,7 +29,7 @@ Superwall's V2 duplicate endpoint returned HTTP 500 (`Failed to store snapshot`)
 ## Remaining launch configuration
 
 1. Supply published Privacy Policy and Terms URLs and wire their actions in each editor.
-2. Create and connect actual App Store / Google Play products. The connected Apple team currently has no App Store Connect record for `de.tk.Insight`; Superwall product metadata alone does not create store subscriptions.
+2. Create and connect actual App Store / Google Play products. The restored Schaubilder record is Apple ID `6503291588`, bundle `de.tk.Insight`, renamed Insight – Image Flashcards. Build 1.0.0 (20261004) is uploaded. Superwall product metadata alone does not create store subscriptions.
 3. Finish RevenueCat app configuration, attach matching products to the actual Insight entitlement, and set its platform public SDK keys in the build environment.
 4. Configure the production Worker's own RevenueCat server secret and project/entitlement IDs.
 5. Test purchase, cancellation, pending purchase, restore, expiration, and access rejection using sandbox store accounts.
@@ -41,3 +41,16 @@ The editable iPhone design snapshot is in `paywall-design.json`; `paywall-previe
 - https://superwall.com/editor/#/applications/57184/paywalls/275644/latest
 
 The app registers placements only for explicit GPT creation/retry or upgrade intent. Studying and manual masks remain free. A campaign holdout or failed presentation cannot grant paid GPT access: the feature callback refreshes RevenueCat access, and the backend verifies it again.
+
+## October 4 iPhone paywall update
+
+The iPhone paywall 275640 was edited and published through the Superwall dashboard. The editor relay could not be reached from this execution environment, so native dashboard controls were used. The existing Android paywall was not changed in this pass.
+
+- New headline: “Turn pictures into lasting knowledge.”
+- Clearer batch-creation and explanation benefits; benefit text 15px and prices 20px.
+- New primary action: “Unlock Insight Pro,” 18px, retaining the existing purchase behavior.
+- Root spacing distributes the available vertical space on taller phones, with compact minimum gaps. Safe-area-aware top and bottom padding protects controls near notches and home indicators.
+- The complete iPhone SE preview fits plan cards, the purchase button, renewal copy, and footer labels. Weekly and yearly radio choices were both verified to update the corresponding billed amount and period. No store transaction was attempted.
+- Publish confirmation reported the existing campaign allocation as 0%; campaign traffic was not activated. Store purchases and legal link wiring still need launch configuration.
+
+`paywall-design.json` is the earlier structural snapshot. The current dashboard preview screenshot is saved beside the source deliverables as `Insight-paywall-improved.png`.

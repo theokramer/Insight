@@ -38,7 +38,7 @@ npx expo run:android
 
 The supplied Android development APK needs Metro running: `npx expo start --dev-client --lan`, then connect the installed app to that development server.
 
-`eas.json` includes native development, internal preview, and production build profiles. App Store / Play signing and submission still require the owner's store setup.
+`eas.json` includes native development, internal preview, and production build profiles. iOS 1.0.0 (20261004) is uploaded to the restored Schaubilder App Store Connect record, Apple ID 6503291588, and shows Ready to Submit in TestFlight. Store checkout setup and App Review submission remain pending; Android store submission is not yet performed.
 
 ## GPT backend
 
@@ -53,7 +53,7 @@ The protected development Worker is deployed at `https://insight-preview.meeting
 
 Production configuration is in `server/wrangler.jsonc`. Set `REVENUECAT_PROJECT_ID`, the actual RevenueCat entitlement ID, and the server-only `REVENUECAT_SECRET_KEY` before deploying production. The Worker verifies this project's active entitlement, bounds request size and model output, accepts only image input, rejects caller-selected models/tools, and applies a distributed rate limit. The app automatically pauses and resumes on rate-limit responses.
 
-Images are resized to a maximum dimension of 2,000 pixels and stored locally. Only explicitly analyzed images and detected text positions are sent through the Worker to OpenAI. Responses use `store: false`; OpenAI's applicable API retention still applies. There is no cloud library sync in this version. The original UIKit CoreData library is not automatically migrated; an existing-user migration needs to be added before replacing a previously installed legacy release.
+Imported images are stored locally at up to 3,200 pixels; images sent for analysis are resized to at most 2,000 pixels. Only explicitly analyzed images and detected text positions are sent through the Worker to OpenAI. Responses use `store: false`; OpenAI's applicable API retention still applies. There is no cloud library sync in this version. The original UIKit CoreData library is not automatically migrated; an existing-user migration needs to be added before replacing a previously installed legacy release.
 
 ## Subscription configuration
 
