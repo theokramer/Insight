@@ -51,6 +51,6 @@ The iPhone paywall 275640 was edited and published through the Superwall dashboa
 - New primary action: “Unlock Insight Pro,” 18px, retaining the existing purchase behavior.
 - Root spacing distributes the available vertical space on taller phones, with compact minimum gaps. Safe-area-aware top and bottom padding protects controls near notches and home indicators.
 - The complete iPhone SE preview fits plan cards, the purchase button, renewal copy, and footer labels. Weekly and yearly radio choices were both verified to update the corresponding billed amount and period. No store transaction was attempted.
-- Publish confirmation reported the existing campaign allocation as 0%; campaign traffic was not activated. Store purchases and legal link wiring still need launch configuration.
+- Publish confirmation reported the existing campaign allocation as 0%; campaign traffic was not activated. Store purchases still need launch configuration. The iPhone Privacy and Terms actions were subsequently published using GitHub Pages URLs; see legal-hosting.md.
 
 `paywall-design.json` is the earlier structural snapshot. The current dashboard preview screenshot is saved beside the source deliverables as `Insight-paywall-improved.png`.
