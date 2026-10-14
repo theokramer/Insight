@@ -1,6 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { handleRequest, sanitize, type Env } from "../src/app.ts";
+import {
+  handleRequest,
+  sanitize,
+  analysisPrompt,
+  type Env,
+} from "../src/app.ts";
 const env: Env = {
   OPENAI_API_KEY: "server-only",
   PRIVATE_ACCESS_TOKEN: "private-test",
@@ -296,5 +301,172 @@ test("the same OCR candidate cannot produce duplicate cards; repeated labels kee
   assert.deepEqual(
     result.masks.map((m) => m.x),
     [0.1, 0.7],
+  );
+});
+
+const proposal = (label: string, ids: string[]) => ({
+  label,
+  explanation: "A learning concept",
+  candidate_ids: ids,
+  x: 0,
+  y: 0,
+  width: 1,
+  height: 1,
+});
+test("side-by-side OCR fragments can form one complete technical name", () => {
+  const candidates = [
+    {
+      id: "ocr_0",
+      label: "Posterior",
+      x: 0.1,
+      y: 0.2,
+      width: 0.09,
+      height: 0.02,
+    },
+    {
+      id: "ocr_1",
+      label: "pituitary",
+      x: 0.2,
+      y: 0.2,
+      width: 0.08,
+      height: 0.02,
+    },
+    { id: "ocr_2", label: "gland", x: 0.29, y: 0.2, width: 0.06, height: 0.02 },
+  ];
+  const result = sanitize(
+    {
+      title: "Endocrine system",
+      masks: [
+        proposal("Posterior pituitary gland", ["ocr_0", "ocr_1", "ocr_2"]),
+      ],
+    },
+    candidates,
+    { granularity: 2, focus: "Endocrinology" },
+    2000,
+    1000,
+  );
+  assert.equal(result.masks.length, 1);
+  assert.equal(result.masks[0].label, "Posterior pituitary gland");
+  assert.ok(Math.abs(result.masks[0].width - 0.25) < 1e-8);
+});
+test("whole-label mode expands an accidental word selection; word mode uses tight word geometry", () => {
+  const candidates = [
+    {
+      id: "ocr_0",
+      label: "Sodium channel",
+      x: 0.1,
+      y: 0.2,
+      width: 0.25,
+      height: 0.02,
+    },
+    {
+      id: "ocr_0_w0",
+      parentId: "ocr_0",
+      label: "Sodium",
+      x: 0.1,
+      y: 0.2,
+      width: 0.1,
+      height: 0.02,
+    },
+    {
+      id: "ocr_0_w1",
+      parentId: "ocr_0",
+      label: "channel",
+      x: 0.22,
+      y: 0.2,
+      width: 0.13,
+      height: 0.02,
+    },
+  ];
+  const data = {
+    title: "Neuron",
+    masks: [
+      proposal("Sodium", ["ocr_0_w0"]),
+      proposal("channel", ["ocr_0_w1"]),
+    ],
+  };
+  const whole = sanitize(data, candidates);
+  assert.equal(whole.masks.length, 1);
+  assert.equal(whole.masks[0].label, "Sodium channel");
+  assert.ok(Math.abs(whole.masks[0].width - 0.25) < 1e-8);
+  const words = sanitize(data, candidates, { granularity: 5, focus: "" });
+  assert.equal(words.masks.length, 2);
+  assert.ok(Math.abs(words.masks[0].width - 0.1) < 1e-8);
+});
+test("pixel aspect ratio prevents grouping distant horizontal terms on a panoramic diagram", () => {
+  const candidates = [
+    { id: "ocr_0", label: "Axon", x: 0.1, y: 0.2, width: 0.04, height: 0.02 },
+    {
+      id: "ocr_1",
+      label: "Nucleus",
+      x: 0.18,
+      y: 0.2,
+      width: 0.06,
+      height: 0.02,
+    },
+  ];
+  const result = sanitize(
+    { title: "Neuron", masks: [proposal("Axon Nucleus", ["ocr_0", "ocr_1"])] },
+    candidates,
+    { granularity: 2, focus: "" },
+    3000,
+    500,
+  );
+  assert.equal(result.masks.length, 0);
+});
+test("analysis request passes bounded context and word IDs while preserving server-controlled model", async () => {
+  let upstream: any;
+  const response = await handleRequest(
+    req({
+      image: "data:image/png;base64,aGVsbG8=",
+      options: { granularity: 5, focus: "Cranial nerves" },
+      candidates: [
+        {
+          label: "Optic nerve",
+          x: 0.1,
+          y: 0.2,
+          width: 0.2,
+          height: 0.03,
+          words: [
+            { label: "Optic", x: 0.1, y: 0.2, width: 0.08, height: 0.03 },
+            { label: "nerve", x: 0.2, y: 0.2, width: 0.1, height: 0.03 },
+          ],
+        },
+      ],
+    }),
+    env,
+    async (_url, init) => {
+      upstream = JSON.parse(init!.body as string);
+      return new Response(
+        JSON.stringify({
+          status: "completed",
+          output: [
+            {
+              content: [
+                {
+                  type: "output_text",
+                  text: JSON.stringify({
+                    title: "Nerves",
+                    masks: [proposal("Optic", ["ocr_0_w0"])],
+                  }),
+                },
+              ],
+            },
+          ],
+        }),
+      );
+    },
+  );
+  assert.equal(response.status, 200);
+  assert.match(upstream.instructions, /Detail level 5\/5/);
+  assert.match(upstream.input[0].content[0].text, /Cranial nerves/);
+  assert.match(upstream.input[0].content[0].text, /ocr_0_w1/);
+  assert.equal(upstream.model, "gpt-4.1");
+  assert.ok(
+    Math.abs(((await response.json()) as any).masks[0].width - 0.08) < 1e-8,
+  );
+  assert.match(
+    analysisPrompt({ granularity: 2, focus: "" }),
+    /Posterior pituitary gland/,
   );
 });

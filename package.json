@@ -4,6 +4,7 @@
   "main": "index.ts",
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
+    "@react-native-community/slider": "5.0.1",
     "@react-navigation/bottom-tabs": "~7.4.0",
     "@react-navigation/native": "~7.1.8",
     "@react-navigation/native-stack": "~7.3.16",
@@ -53,7 +54,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "backend:dev": "npm --prefix server run dev",
     "backend:test": "npm --prefix server test",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "release:check": "node --env-file-if-exists=.env.local scripts/release-check.mjs"
   },
   "private": true
 }

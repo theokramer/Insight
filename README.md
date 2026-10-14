@@ -7,10 +7,11 @@ A native iPhone and Android app for learning complicated diagrams through image 
 - Warm cream and forest green interface, automatic dark mode, native navigation, haptic feedback, and large phone controls.
 - Batch photo import, camera capture, images from Files, and native PDF rendering. Up to 50 images/pages per import; successful imports survive unreadable files.
 - Local Apple Vision / Android ML Kit text detection, followed by GPT label selection and short explanations. Matching labels use measured OCR boxes rather than estimated positions.
+- Context-aware grouping keeps multiword labels together. Choose five card-detail levels, from key ideas to individual words, add an optional learning focus, and regenerate proposals for an image.
 - Move, resize, draw, remove, and rename masks; review the next proposed image with one action.
 - Offline library and per-label spaced repetition, reveal-before-rating study sessions, pinch and double-tap zoom, and real review history.
 - Cloudflare Worker keeps the OpenAI key on the server and verifies Insight subscriptions using the same proxy pattern as Meeting Notes.
-- Custom Superwall paywalls are saved for iPhone and Android, with RevenueCat handling store purchases, restores, and entitlement verification. Plan selection and billing copy are verified in editor previews. Campaign activation, legal URLs, and store product configuration remain pending.
+- Custom Superwall paywalls are saved for iPhone and Android, with RevenueCat handling store purchases, restores, and entitlement verification. Plan selection and billing copy are verified in editor previews. The iPhone campaign is active, legal actions are published, and both Apple subscription products are Ready to Submit. Native sandbox checkout remains to be verified.
 
 This is a complete replacement of the original UIKit project. The original iPhone bundle identifier is preserved (`de.tk.Insight`); Android uses `de.tk.insight`.
 
@@ -38,7 +39,7 @@ npx expo run:android
 
 The supplied Android development APK needs Metro running: `npx expo start --dev-client --lan`, then connect the installed app to that development server.
 
-`eas.json` includes native development, internal preview, and production build profiles. iOS 1.0.0 (20261004) is uploaded to the restored Schaubilder App Store Connect record, Apple ID 6503291588, and shows Ready to Submit in TestFlight. Store checkout setup and App Review submission remain pending; Android store submission is not yet performed.
+`eas.json` includes native development, internal preview, and production build profiles. iOS 1.0.0 (20261014) is uploaded and valid in the restored Schaubilder record, Apple ID 6503291588. The owner confirmed a successful TestFlight purchase and GPT analysis. The next candidate, build 20261015, adds context-aware grouping and card-detail controls; it must be verified before App Review submission. Android store submission is not yet performed.
 
 ## GPT backend
 
@@ -49,11 +50,11 @@ cp server/.dev.vars.example server/.dev.vars
 npm run backend:dev
 ```
 
-The protected development Worker is deployed at `https://insight-preview.meeting-notes-tk.workers.dev`. Its OpenAI key and private preview token are encrypted Worker secrets. Development Settings accepts the preview token into the device's secure storage; the token is never a public build variable. Production builds ignore this token and require a verified subscription.
+The production Worker uses the existing hostname `https://insight-preview.meeting-notes-tk.workers.dev`. Despite its historical preview name, it now requires RevenueCat-verified Insight Pro access. Its OpenAI and RevenueCat keys are encrypted Worker secrets. The old private preview token no longer grants access. Private-token development is confined to the local Wrangler environment; production builds never read preview credentials or persisted development backend overrides.
 
-Production configuration is in `server/wrangler.jsonc`. Set `REVENUECAT_PROJECT_ID`, the actual RevenueCat entitlement ID, and the server-only `REVENUECAT_SECRET_KEY` before deploying production. The Worker verifies this project's active entitlement, bounds request size and model output, accepts only image input, rejects caller-selected models/tools, and applies a distributed rate limit. The app automatically pauses and resumes on rate-limit responses.
+Production configuration is in `server/wrangler.jsonc`. Project `55ee54de`, REST entitlement `entl7a5dfe0ff9`, and the read-only server credential are configured. The client entitlement lookup remains `insight_pro`. The Worker verifies this project's active entitlement, bounds request size and model output, accepts only image input, rejects caller-selected models/tools, and applies a distributed rate limit. The app automatically pauses and resumes on rate-limit responses.
 
-Imported images are stored locally at up to 3,200 pixels; images sent for analysis are resized to at most 2,000 pixels. Only explicitly analyzed images and detected text positions are sent through the Worker to OpenAI. Responses use `store: false`; OpenAI's applicable API retention still applies. There is no cloud library sync in this version. The original UIKit CoreData library is not automatically migrated; an existing-user migration needs to be added before replacing a previously installed legacy release.
+Imported images are stored locally at up to 3,200 pixels; images sent for analysis are resized to at most 2,000 pixels. Only explicitly analyzed images and detected text positions are sent through the Worker to OpenAI. Responses use `store: false`; OpenAI's applicable API retention still applies. There is no cloud library sync in this version. The original UIKit CoreData library is not automatically migrated. App Store history showed only Prepare for Submission, with no earlier public release; legacy development/TestFlight libraries are not migrated.
 
 ## Subscription configuration
 
@@ -66,6 +67,7 @@ npm run lint
 npm run typecheck
 npm test
 npm run backend:test
+npm run release:check
 npm --prefix server run typecheck
 npx expo export --platform ios --platform android
 ```

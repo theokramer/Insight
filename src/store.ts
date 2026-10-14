@@ -5,7 +5,14 @@ import * as FS from "expo-file-system/legacy";
 import { currentImageUri } from "./image-location";
 import { Deck, Diagram, Rating, ReviewLog, schedule } from "./model";
 import { seedDecks, seedDiagrams } from "./seeds";
+import {
+  AnalysisOptions,
+  analysisOptions,
+  DEFAULT_ANALYSIS,
+} from "./analysis-options";
 type State = {
+  analysisPreferences: AnalysisOptions;
+  setAnalysisPreferences: (options: AnalysisOptions) => void;
   decks: Deck[];
   diagrams: Diagram[];
   reviews: ReviewLog[];
@@ -26,6 +33,9 @@ type State = {
 export const useStore = create<State>()(
   persist(
     (set) => ({
+      analysisPreferences: DEFAULT_ANALYSIS,
+      setAnalysisPreferences: (options) =>
+        set({ analysisPreferences: analysisOptions(options) }),
       decks: seedDecks,
       diagrams: seedDiagrams,
       reviews: [],

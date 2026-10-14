@@ -28,6 +28,8 @@ import {
 } from "../components/UI";
 import { runQueue, deleteImage } from "../services";
 import { useProAction } from "../paywall";
+import { AnalysisControls } from "../components/AnalysisControls";
+import { analysisOptions } from "../analysis-options";
 function EditableMask({
   mask,
   selected,
@@ -261,6 +263,7 @@ function DrawCanvas({
 export function EditorScreen({ route, navigation }: any) {
   const c = useColors();
   const proAction = useProAction();
+  const preferences = useStore((s) => s.analysisPreferences);
   const original = useStore((s) =>
     s.diagrams.find((d) => d.id === route.params.diagramId),
   );
@@ -270,6 +273,12 @@ export function EditorScreen({ route, navigation }: any) {
     [dirty, setDirty] = useState(false);
   const [title, setTitle] = useState(original?.title || "");
   const [saving, setSaving] = useState(false);
+  const [options, setOptions] = useState(() =>
+    analysisOptions(
+      useStore.getState().diagrams.find((d) => d.id === route.params.diagramId)
+        ?.analysisOptions || preferences,
+    ),
+  );
   useEffect(() => {
     if (original && !dirty) {
       setMasks(original.masks);
@@ -363,7 +372,7 @@ export function EditorScreen({ route, navigation }: any) {
           color: c.ink,
         }}
       />
-      {(original.status === "failed" || original.status === "imported") && (
+      {!!original.uri && (
         <View
           style={{
             padding: 16,
@@ -374,35 +383,72 @@ export function EditorScreen({ route, navigation }: any) {
         >
           <Txt style={{ fontSize: 14 }}>
             {original.error ||
-              "Find labels automatically, then review each proposed mask."}
+              "Choose how much to hide. GPT uses the diagram’s context to propose complete learning units."}
           </Txt>
+          <AnalysisControls
+            value={options}
+            onChange={setOptions}
+            disabled={
+              original.status === "processing" || original.status === "queued"
+            }
+          />
           <Button
             title={
-              original.status === "failed"
-                ? "Retry GPT analysis"
-                : "Find labels with GPT"
+              original.status === "processing" || original.status === "queued"
+                ? "Finding labels…"
+                : original.masks.length
+                  ? "Regenerate masks"
+                  : original.status === "failed"
+                    ? "Retry GPT analysis"
+                    : "Find labels with GPT"
             }
             secondary
-            disabled={dirty}
-            onPress={() =>
-              proAction("generate_occlusions", () => {
-                useStore
-                  .getState()
-                  .updateDiagram(original.id, { status: "queued" });
-                void runQueue();
-              })
+            disabled={
+              dirty ||
+              original.status === "processing" ||
+              original.status === "queued"
             }
+            onPress={() => {
+              const begin = () =>
+                proAction("generate_occlusions", () => {
+                  useStore
+                    .getState()
+                    .updateDiagram(original.id, {
+                      status: "queued",
+                      error: undefined,
+                      analysisOptions: { ...options },
+                      analysisRestoreStatus:
+                        original.status === "ready" ||
+                        original.status === "review"
+                          ? original.status
+                          : undefined,
+                    });
+                  void runQueue();
+                });
+              if (original.masks.length)
+                Alert.alert(
+                  "Regenerate masks?",
+                  "If analysis succeeds, these masks and their review progress will be replaced by new proposals. Your image stays saved.",
+                  [
+                    { text: "Cancel", style: "cancel" },
+                    { text: "Regenerate", onPress: begin },
+                  ],
+                );
+              else begin();
+            }}
           />
           {dirty && (
             <Txt muted style={{ fontSize: 12 }}>
               Save your manual changes before retrying GPT.
             </Txt>
           )}
-          <Button
-            title="Connect GPT"
-            secondary
-            onPress={() => navigation.navigate("Settings")}
-          />
+          {__DEV__ && (
+            <Button
+              title="Connect GPT"
+              secondary
+              onPress={() => navigation.navigate("Settings")}
+            />
+          )}
         </View>
       )}
       <DrawCanvas

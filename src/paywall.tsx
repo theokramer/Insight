@@ -136,7 +136,7 @@ export function useProAction() {
             new Promise<boolean>((resolve) =>
               Alert.alert(
                 "Allow image analysis?",
-                "Images you choose to analyze, their detected text, and text positions will be sent through Insight to OpenAI to find labels. OpenAI's API retention policies apply. You can turn this off in Settings and use manual masks anytime.",
+                "Images you choose to analyze, their detected text and positions, and any learning focus you enter will be sent through Insight to OpenAI to find labels. OpenAI's API retention policies apply. You can turn this off in Settings and use manual masks anytime.",
                 [
                   {
                     text: "Use manual masks",

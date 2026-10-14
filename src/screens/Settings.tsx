@@ -20,8 +20,13 @@ import {
   SafeScreen,
   common,
 } from "../components/UI";
-import { useSubscription } from "../subscriptions";
+import {
+  initializePurchases,
+  restore,
+  useSubscription,
+} from "../subscriptions";
 import { useProAction } from "../paywall";
+import { AnalysisControls } from "../components/AnalysisControls";
 export function SettingsScreen({ navigation }: any) {
   const c = useColors();
   const backend = useStore((s) => s.backendUrl);
@@ -31,7 +36,9 @@ export function SettingsScreen({ navigation }: any) {
     [saving, setSaving] = useState(false);
   const proAction = useProAction();
   const pro = useSubscription((s) => s.active);
+  const [restoring, setRestoring] = useState(false);
   const analysisConsent = useStore((s) => s.analysisConsent);
+  const analysisPreferences = useStore((s) => s.analysisPreferences);
   useEffect(() => {
     if (__DEV__)
       token()
@@ -83,6 +90,42 @@ export function SettingsScreen({ navigation }: any) {
           }
         />
       </View>
+      <Button
+        title="Restore purchases"
+        secondary
+        loading={restoring}
+        onPress={async () => {
+          setRestoring(true);
+          try {
+            await initializePurchases();
+            const active = await restore();
+            Alert.alert(
+              active ? "Insight Pro restored" : "No active subscription found",
+              active
+                ? "Your GPT features are ready to use."
+                : "Use the Apple or Google account that purchased Insight Pro, then try again.",
+            );
+          } catch {
+            Alert.alert(
+              "Couldn’t restore purchases",
+              "Please check your connection and try again.",
+            );
+          } finally {
+            setRestoring(false);
+          }
+        }}
+      />
+      {process.env.EXPO_PUBLIC_TERMS_URL && (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => Linking.openURL(process.env.EXPO_PUBLIC_TERMS_URL!)}
+          style={{ minHeight: 48, justifyContent: "center" }}
+        >
+          <Txt muted>Terms of use</Txt>
+        </Pressable>
+      )}
+      <Section title="Your default cards" />
+      <AnalysisControls value={analysisPreferences} onChange={useStore.getState().setAnalysisPreferences} />
       <Section title="Your library stays with you" />
       <Txt muted>
         Images, masks, and study progress are saved on this device. Studying and
@@ -240,7 +283,8 @@ export function PrivacyScreen() {
       </Txt>
       <Txt style={{ fontWeight: "600" }}>When you use GPT</Txt>
       <Txt muted>
-        The image you choose to analyze, plus detected text and its positions,
+        The image you choose to analyze, detected text and its positions, and
+        any learning focus you enter,
         goes to the Insight backend and OpenAI to propose labels and
         explanations. The backend requests that responses are not stored.
         OpenAI’s applicable API data retention policies still apply. Studying

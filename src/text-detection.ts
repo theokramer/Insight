@@ -4,6 +4,7 @@ export type TextBox = {
   y: number;
   width: number;
   height: number;
+  words?: Omit<TextBox, "words">[];
 };
 export type RawText = TextBox & { confidence?: number; words?: TextBox[] };
 const valid = (b: TextBox) =>
@@ -70,7 +71,9 @@ export function prepareText(
       groups[groups.length - 1].push(word);
     }
     const parts =
-      groups.length > 1 ? groups.filter((g) => g.length).map(union) : [line];
+      groups.length > 1
+        ? groups.filter((g) => g.length).map((g) => ({ ...union(g), words: g }))
+        : [{ ...line, words }];
     for (const b of parts) {
       if (
         boxes.some(
@@ -85,6 +88,17 @@ export function prepareText(
         y: b.y,
         width: b.width,
         height: b.height,
+        ...(b.words?.length
+          ? {
+              words: b.words.map(({ label, x, y, width, height }) => ({
+                label,
+                x,
+                y,
+                width,
+                height,
+              })),
+            }
+          : {}),
       });
     }
   }

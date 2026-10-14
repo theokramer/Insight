@@ -12,9 +12,11 @@ import { Button, Txt, Icon, Eyebrow, common, Section } from "../components/UI";
 import { pickPhotos, pickFiles, runQueue } from "../services";
 import { useProAction } from "../paywall";
 import { DiagramImage } from "../components/DiagramCanvas";
+import { AnalysisControls } from "../components/AnalysisControls";
 export function ImportScreen({ route, navigation }: any) {
   const c = useColors();
   const proAction = useProAction();
+  const analysisPreferences = useStore((s) => s.analysisPreferences);
   const decks = useStore((s) => s.decks),
     diagrams = useStore((s) => s.diagrams);
   const [deckId, setDeck] = useState(route.params?.deckId || decks[0]?.id);
@@ -184,22 +186,32 @@ export function ImportScreen({ route, navigation }: any) {
           {images.some(
             (d) => d.status === "imported" || d.status === "failed",
           ) && (
-            <Button
-              title="Find labels with GPT"
-              icon="scan-outline"
-              onPress={() =>
-                proAction("generate_occlusions", () => {
-                  for (const d of images.filter(
-                    (d) => d.status === "imported" || d.status === "failed",
-                  ))
-                    useStore.getState().updateDiagram(d.id, {
-                      status: "queued",
-                      error: undefined,
-                    });
-                  void runQueue();
-                })
-              }
-            />
+            <View style={{ gap: 14 }}>
+              <AnalysisControls
+                value={analysisPreferences}
+                onChange={useStore.getState().setAnalysisPreferences}
+                disabled={working}
+              />
+              <Button
+                title="Find labels with GPT"
+                icon="scan-outline"
+                onPress={() =>
+                  proAction("generate_occlusions", () => {
+                    for (const d of images.filter(
+                      (d) => d.status === "imported" || d.status === "failed",
+                    ))
+                      useStore.getState().updateDiagram(d.id, {
+                        status: "queued",
+                        error: undefined,
+                        analysisOptions: {
+                          ...useStore.getState().analysisPreferences,
+                        },
+                      });
+                    void runQueue();
+                  })
+                }
+              />
+            </View>
           )}
           {working && (
             <View style={common.row}>

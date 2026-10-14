@@ -29,6 +29,14 @@ test("distant labels split, but multiword technical names stay together", () => 
     ["Myelin sheath", "Nucleus"],
   );
   assert.ok(output[0].x + output[0].width < 0.25);
+  assert.deepEqual(
+    output[0].words?.map((w) => w.label),
+    ["Myelin", "sheath"],
+  );
+  assert.deepEqual(
+    output[1].words?.map((w) => w.label),
+    ["Nucleus"],
+  );
 });
 test("rotation duplicates disappear while repeated labels at different positions survive", () => {
   const output = prepareText(

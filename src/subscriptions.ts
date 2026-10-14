@@ -18,11 +18,17 @@ export const useSubscription = create<{
   active: false,
   resolved: false,
   setInfo: (info) =>
-    set({ active: !!info.entitlements.active[ENTITLEMENT], resolved: true }),
+    set({
+      active: !!info.entitlements.active[ENTITLEMENT],
+      resolved: true,
+      error: undefined,
+    }),
 }));
 let initialization: Promise<void> | undefined;
 export function initializePurchases(): Promise<void> {
-  return (initialization ||= configurePurchases());
+  return (initialization ||= configurePurchases().finally(() => {
+    if (!useSubscription.getState().configured) initialization = undefined;
+  }));
 }
 async function configurePurchases() {
   const key =
@@ -36,11 +42,21 @@ async function configurePurchases() {
     Purchases.addCustomerInfoUpdateListener((info) =>
       useSubscription.getState().setInfo(info),
     );
-    await refreshSubscription();
   } catch {
     useSubscription.setState({
       configured: false,
       error: "Subscriptions could not connect. Please try again.",
+    });
+    return;
+  }
+  try {
+    await refreshSubscription();
+  } catch {
+    // The SDK is configured even when an offline launch cannot fetch access.
+    // Keep it ready so the next purchase, restore, or Pro action can reconnect.
+    useSubscription.setState({
+      resolved: true,
+      error: "Could not check your subscription. Please check your connection.",
     });
   }
 }

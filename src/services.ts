@@ -10,6 +10,8 @@ import { subscriberId } from "./subscriptions";
 import { prepareText, type RawText } from "./text-detection";
 import { AnalysisError, requestAnalysis } from "./analysis-request";
 import { currentImageUri } from "./image-location";
+import { backendAddress } from "./backend-address";
+import { analysisOptions } from "./analysis-options";
 const native = requireOptionalNativeModule("InsightVision") as {
   renderPDF(
     uri: string,
@@ -209,16 +211,11 @@ export async function analyze(diagram: Diagram) {
     throw new Error("Allow image analysis before sending pictures to OpenAI.");
   const uri = currentImageUri(diagram.uri, FS.documentDirectory);
   if (!uri) throw new Error("This example already has masks.");
-  const url = useStore.getState().backendUrl.replace(/\/$/, "");
-  if (
-    !/^https:\/\//.test(url) &&
-    !/^http:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(
-      url,
-    )
-  )
-    throw new Error(
-      "Use an HTTPS backend address, or a local development address.",
-    );
+  const url = backendAddress(
+    __DEV__,
+    process.env.EXPO_PUBLIC_BACKEND_URL,
+    useStore.getState().backendUrl,
+  );
   const access = __DEV__ ? await token() : null;
   const userId = access ? null : await subscriberId();
   if (!native)
@@ -266,6 +263,9 @@ export async function analyze(diagram: Diagram) {
     {
       image: `data:image/jpeg;base64,${base64}`,
       candidates,
+      imageWidth: diagram.width,
+      imageHeight: diagram.height,
+      options: analysisOptions(diagram.analysisOptions),
     },
   );
   const masks = data.masks
@@ -291,6 +291,7 @@ export async function analyze(diagram: Diagram) {
     masks,
     status: "review" as const,
     error: undefined,
+    analysisRestoreStatus: undefined,
   };
 }
 let running = false;
@@ -309,6 +310,10 @@ export async function runQueue() {
         .updateDiagram(next.id, { status: "processing", error: undefined });
       try {
         const result = await analyze(next);
+        if (next.masks.length && !result.masks.length)
+          throw new Error(
+            "No new labels found. Your previous cards are still saved. Try a different detail level or learning focus.",
+          );
         useStore.getState().updateDiagram(next.id, result);
       } catch (e) {
         if (e instanceof AnalysisError && e.status === 429) {
@@ -322,7 +327,8 @@ export async function runQueue() {
           break;
         }
         useStore.getState().updateDiagram(next.id, {
-          status: "failed",
+          status: next.analysisRestoreStatus || "failed",
+          analysisRestoreStatus: undefined,
           error:
             e instanceof Error ? e.message : "Analysis failed. Please retry.",
         });

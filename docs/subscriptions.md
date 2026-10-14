@@ -17,23 +17,24 @@ Superwall presents the paywall. RevenueCat performs purchases and restores and s
 - Android paywall: `275644`, the same design with Play products.
 - iPhone campaign: `110937`; `generate_occlusions` and `upgrade_tapped` placements attached.
 - Android campaign: `110938`; both placements attached.
-- Prepared paywall treatments: iPhone `653342`, Android `653343`. Both have 0% traffic; the original holdout remains 100% until launch setup is complete.
+- Prepared paywall treatments: iPhone `653342`, Android `653343`. The iPhone treatment has 100% traffic and its holdout 0%; Android remains inactive with its original holdout.
 - RevenueCat Insight project: `55ee54de` (separate from Risenote), created with weekly and yearly offering drafts.
 
 ## Paywall design completed
 
 After browser sign-in, both paywalls were built and saved through the live Superwall editor. The design uses cream, forest green, a custom occluded neuron illustration, native single-choice plan cards, store-product Liquid prices, a strong purchase button, a close control, and restore. Interactive previews on both platforms verified that weekly/yearly selection changes the radio state, product index, and billing disclosure together. The compact layout fits the iPhone SE preview with legal controls visible. No existing Meeting Notes resource was changed.
 
-Superwall's V2 duplicate endpoint returned HTTP 500 (`Failed to store snapshot`); the dashboard's own copy workflow successfully created the Android version. Paywall snapshots are published for preview, but campaign treatments are intentionally inactive. Privacy and Terms labels still need the owner's actual published URLs before they can be wired. Real purchases were not attempted.
+Superwall's V2 duplicate endpoint returned HTTP 500 (`Failed to store snapshot`); the dashboard's own copy workflow successfully created the Android version. Both paywall snapshots are published. The iPhone treatment is active at 100%; Android remains inactive. The iPhone Privacy and Terms actions are now published; the Android actions still need wiring. Real purchases remain unverified.
 
-## Remaining launch configuration
+## Current iPhone release configuration — October 14, 2026
 
-1. Supply published Privacy Policy and Terms URLs and wire their actions in each editor.
-2. Create and connect actual App Store / Google Play products. The restored Schaubilder record is Apple ID `6503291588`, bundle `de.tk.Insight`, renamed Insight – Image Flashcards. Build 1.0.0 (20261004) is uploaded. Superwall product metadata alone does not create store subscriptions.
-3. Finish RevenueCat app configuration, attach matching products to the actual Insight entitlement, and set its platform public SDK keys in the build environment.
-4. Configure the production Worker's own RevenueCat server secret and project/entitlement IDs.
-5. Test purchase, cancellation, pending purchase, restore, expiration, and access rejection using sandbox store accounts.
-6. Set each campaign treatment to 100% and confirm native presentation on `generate_occlusions` and `upgrade_tapped` before release.
+- RevenueCat App Store app `app7b28d373d7` uses valid existing Apple purchase and App Store Connect credentials. Its public iOS SDK key is saved in the ignored build environment.
+- Apple subscriptions `6819157820` (weekly) and `6819158930` (yearly), in group `22441435`, use USD 7.99/week and 34.99/year with localized prices. Both are level 1, have review screenshots, and report `READY_TO_SUBMIT`.
+- RevenueCat products `prod3b61d23839` and `prodacf08b7ed2` grant `insight_pro` (REST ID `entl7a5dfe0ff9`) and are attached to the default offering's weekly/yearly packages. Simulated Test Store products no longer grant production Pro access.
+- The iPhone paywall's Privacy and Terms actions use the published GitHub Pages URLs. Treatment `653342` receives 100%; holdout `653315` receives 0%.
+- The existing `insight-preview.meeting-notes-tk.workers.dev` Worker now runs production RevenueCat verification with a read-only customer credential. It rejects unpaid requests and ignores the old private preview token.
+- App Store privacy disclosures are published. Build 20261014 is uploaded, valid, attached to the manual-release draft, and available in the existing internal TestFlight group. The owner confirmed successful purchase and GPT label creation. Native restore with no subscription correctly reports no active access; a successful paid restore and expiration still need verification. Build 20261015 adds the requested granularity controls and must replace the current candidate before App Review submission.
+- Android store setup and legal-action wiring remain pending; this release pass targets the existing iPhone listing.
 
 The editable iPhone design snapshot is in `paywall-design.json`; `paywall-preview.jpg` shows the Android editor's standard phone rendering. Live editor links:
 
@@ -54,3 +55,7 @@ The iPhone paywall 275640 was edited and published through the Superwall dashboa
 - Publish confirmation reported the existing campaign allocation as 0%; campaign traffic was not activated. Store purchases still need launch configuration. The iPhone Privacy and Terms actions were subsequently published using GitHub Pages URLs; see legal-hosting.md.
 
 `paywall-design.json` is the earlier structural snapshot. The current dashboard preview screenshot is saved beside the source deliverables as `Insight-paywall-improved.png`.
+
+## October 14 native paywall verification
+
+The current published iPhone paywall was verified in a fresh release installation with store prices USD 34.99/year and 7.99/week. The header uses safe-area CSS variables with a spacing fallback for older SDK webviews; the CTA stays on one line. Both subscription review screenshots now show the current native paywall. The App Store download price is free; Pro remains a paid subscription.

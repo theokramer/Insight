@@ -23,6 +23,8 @@ export type Diagram = {
   masks: Mask[];
   status: "imported" | "queued" | "processing" | "review" | "ready" | "failed";
   error?: string;
+  analysisOptions?: import("./analysis-options").AnalysisOptions;
+  analysisRestoreStatus?: "ready" | "review";
 };
 export type Deck = {
   id: string;
