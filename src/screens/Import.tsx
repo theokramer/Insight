@@ -13,10 +13,11 @@ import { pickPhotos, pickFiles, runQueue } from "../services";
 import { useProAction } from "../paywall";
 import { DiagramImage } from "../components/DiagramCanvas";
 import { AnalysisControls } from "../components/AnalysisControls";
+import { useAnalysisPreferences } from "../use-analysis-preferences";
 export function ImportScreen({ route, navigation }: any) {
   const c = useColors();
   const proAction = useProAction();
-  const analysisPreferences = useStore((s) => s.analysisPreferences);
+  const preferences = useAnalysisPreferences();
   const decks = useStore((s) => s.decks),
     diagrams = useStore((s) => s.diagrams);
   const [deckId, setDeck] = useState(route.params?.deckId || decks[0]?.id);
@@ -64,6 +65,7 @@ export function ImportScreen({ route, navigation }: any) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
       contentInsetAdjustmentBehavior="automatic"
       style={{ backgroundColor: c.bg }}
       contentContainerStyle={[common.page, { gap: 18 }]}
@@ -188,8 +190,8 @@ export function ImportScreen({ route, navigation }: any) {
           ) && (
             <View style={{ gap: 14 }}>
               <AnalysisControls
-                value={analysisPreferences}
-                onChange={useStore.getState().setAnalysisPreferences}
+                value={preferences.options}
+                onChange={preferences.change}
                 disabled={working}
               />
               <Button
@@ -197,15 +199,14 @@ export function ImportScreen({ route, navigation }: any) {
                 icon="scan-outline"
                 onPress={() =>
                   proAction("generate_occlusions", () => {
+                    preferences.commit();
                     for (const d of images.filter(
                       (d) => d.status === "imported" || d.status === "failed",
                     ))
                       useStore.getState().updateDiagram(d.id, {
                         status: "queued",
                         error: undefined,
-                        analysisOptions: {
-                          ...useStore.getState().analysisPreferences,
-                        },
+                        analysisOptions: { ...preferences.options },
                       });
                     void runQueue();
                   })

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, TextInput } from "react-native";
 import Slider from "@react-native-community/slider";
 import * as Haptics from "expo-haptics";
@@ -21,7 +21,7 @@ export function AnalysisControls({
 }) {
   const c = useColors();
   const normalized = analysisOptions(value);
-  const [level, setLevel] = useState(normalized.granularity);
+  const level = normalized.granularity;
   const detail = DETAIL_LEVELS[level - 1];
   return (
     <View
@@ -57,12 +57,10 @@ export function AnalysisControls({
         thumbTintColor={c.accent}
         style={{ width: "100%", height: 44 }}
         onValueChange={(v) => {
-          setLevel(Math.round(v));
           onChange({ ...normalized, granularity: Math.round(v) });
         }}
         onSlidingComplete={(v) => {
           const granularity = Math.round(v);
-          setLevel(granularity);
           onChange({ ...normalized, granularity });
           void Haptics.selectionAsync();
         }}

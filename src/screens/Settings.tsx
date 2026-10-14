@@ -27,6 +27,7 @@ import {
 } from "../subscriptions";
 import { useProAction } from "../paywall";
 import { AnalysisControls } from "../components/AnalysisControls";
+import { useAnalysisPreferences } from "../use-analysis-preferences";
 export function SettingsScreen({ navigation }: any) {
   const c = useColors();
   const backend = useStore((s) => s.backendUrl);
@@ -38,7 +39,7 @@ export function SettingsScreen({ navigation }: any) {
   const pro = useSubscription((s) => s.active);
   const [restoring, setRestoring] = useState(false);
   const analysisConsent = useStore((s) => s.analysisConsent);
-  const analysisPreferences = useStore((s) => s.analysisPreferences);
+  const preferences = useAnalysisPreferences();
   useEffect(() => {
     if (__DEV__)
       token()
@@ -125,7 +126,10 @@ export function SettingsScreen({ navigation }: any) {
         </Pressable>
       )}
       <Section title="Your default cards" />
-      <AnalysisControls value={analysisPreferences} onChange={useStore.getState().setAnalysisPreferences} />
+      <AnalysisControls
+        value={preferences.options}
+        onChange={preferences.change}
+      />
       <Section title="Your library stays with you" />
       <Txt muted>
         Images, masks, and study progress are saved on this device. Studying and
@@ -284,11 +288,10 @@ export function PrivacyScreen() {
       <Txt style={{ fontWeight: "600" }}>When you use GPT</Txt>
       <Txt muted>
         The image you choose to analyze, detected text and its positions, and
-        any learning focus you enter,
-        goes to the Insight backend and OpenAI to propose labels and
-        explanations. The backend requests that responses are not stored.
-        OpenAI’s applicable API data retention policies still apply. Studying
-        and editing do not send your images to the backend.
+        any learning focus you enter, goes to the Insight backend and OpenAI to
+        propose labels and explanations. The backend requests that responses are
+        not stored. OpenAI’s applicable API data retention policies still apply.
+        Studying and editing do not send your images to the backend.
       </Txt>
       <Txt style={{ fontWeight: "600" }}>Subscriptions</Txt>
       <Txt muted>
