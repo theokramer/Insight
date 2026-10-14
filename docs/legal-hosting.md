@@ -15,3 +15,7 @@ The iPhone Superwall paywall 275640 has published Open URL actions for Privacy a
 The environment example and local development environment now use these URLs. Uploaded iOS build 20261004 predates that environment change; the remotely published paywall links can update independently, but app-level environment changes require a subsequent build.
 
 The prepared Cloudflare Worker legal routes remain available in source but have not been redeployed. A separate Sites project was registered as a fallback but is private and unpublished because its Git upload could not connect. GitHub Pages is the active public host. No images, app secrets, or private credentials were uploaded as part of the legal-page upload.
+
+## October 14 status
+
+The iPhone campaign is active at 100%, and current build 20261015 includes the published legal URLs. The existing Cloudflare Worker also serves its legal routes and now uses production subscription verification. The GitHub Pages privacy page was updated in commit `6d595d609245f5255f34919c9130f0ef017b0010` to disclose optional learning-focus text and card-detail settings. GitHub Pages remains the public legal host.

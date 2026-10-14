@@ -39,7 +39,7 @@ npx expo run:android
 
 The supplied Android development APK needs Metro running: `npx expo start --dev-client --lan`, then connect the installed app to that development server.
 
-`eas.json` includes native development, internal preview, and production build profiles. iOS 1.0.0 (20261014) is uploaded and valid in the restored Schaubilder record, Apple ID 6503291588. The owner confirmed a successful TestFlight purchase and GPT analysis. The next candidate, build 20261015, adds context-aware grouping and card-detail controls; it must be verified before App Review submission. Android store submission is not yet performed.
+`eas.json` includes native development, internal preview, and production build profiles. iOS 1.0.0 (20261014) is uploaded and valid in the restored Schaubilder record, Apple ID 6503291588. The owner confirmed a successful TestFlight purchase and GPT analysis. Build 20261015 adds context-aware grouping and card-detail controls. It is uploaded, valid, available in TestFlight, and attached to the unsubmitted App Review draft. The owner is checking the new detail controls before submission. Android store submission is not yet performed.
 
 ## GPT backend
 

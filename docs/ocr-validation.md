@@ -69,3 +69,7 @@ The first imported image initially failed because its absolute file URL referenc
 Settings and import sheets now have visible close buttons; collection, editor, and privacy screens have explicit back controls when opened from a sheet. Reviewed batches lead to studying rather than reopening the proposal editor.
 
 Fresh-import and in-app study verification are still pending: the iOS photo picker is visible, but its grid does not expose accessibility controls and coordinate input is unavailable through the current computer-control tool. A `Preview check` collection was created for this test. The user was asked to select the existing qualifications screenshot and confirm the picker. No claim of completed in-app study, app-restart persistence, full animation testing, or real checkout is made yet.
+
+## October 14 context and detail evaluation
+
+The backend now combines adjacent horizontal OCR fragments as well as wrapped lines when GPT identifies one learning unit. The live GPT fixture evaluation deliberately supplied word fragments at Whole labels detail: all 17 expected labels were recovered intact, including multiword names. The existing geometry checker also matched all 17 masks to their expected locations. Individual words produced 26 cards; Key ideas produced 15. These fixture results demonstrate the behavior without claiming universal label accuracy. Native word boxes are preserved for finer selection; per-image detail and optional learning focus are captured when queueing.
