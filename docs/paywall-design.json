@@ -1,0 +1,1917 @@
+{
+  "id": "page:page",
+  "type": "page",
+  "name": "Page 1",
+  "childCount": 1,
+  "children": [
+    {
+      "id": "node:zTxm6Ulw0lm-twIUnJJfI",
+      "type": "stack",
+      "name": "Stack",
+      "parentId": "page:page",
+      "index": "a1",
+      "childCount": 7,
+      "children": [
+        {
+          "id": "node:E77tgDV0Y_wsszzF1wR56",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a1",
+          "childCount": 2,
+          "children": [
+            {
+              "id": "node:TFQssL35T4HMEwZ7jgSFQ",
+              "type": "stack",
+              "name": "Text",
+              "parentId": "node:E77tgDV0Y_wsszzF1wR56",
+              "index": "a0",
+              "childCount": 2,
+              "children": [
+                {
+                  "id": "node:dQAW_h0FGo57CSVKivPf_",
+                  "type": "text",
+                  "name": "insight ",
+                  "parentId": "node:TFQssL35T4HMEwZ7jgSFQ",
+                  "index": "a0",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "insight",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "insight ",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "17",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#183b30"
+                      }
+                    },
+                    "css:font": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-font",
+                        "value": "System Font",
+                        "weight": "800",
+                        "style": "normal",
+                        "kind": "system"
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "node:OLEywR8G87zIB5qHZ3sHi",
+                  "type": "text",
+                  "name": "PRO",
+                  "parentId": "node:TFQssL35T4HMEwZ7jgSFQ",
+                  "index": "a1",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "PRO",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "PRO",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "12",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#44755f"
+                      }
+                    },
+                    "css:font": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-font",
+                        "value": "System Font",
+                        "weight": "800",
+                        "style": "normal",
+                        "kind": "system"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "prop:stack": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-stack",
+                    "axis": "y",
+                    "reverse": false,
+                    "crossAxisAlignment": "stretch",
+                    "mainAxisDistribution": "start",
+                    "wrap": "nowrap",
+                    "gap": "0px",
+                    "scroll": "none",
+                    "snapPosition": "center"
+                  }
+                },
+                "css:display": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-string",
+                    "value": "block",
+                    "cssEnumHint": "css-display"
+                  }
+                }
+              }
+            },
+            {
+              "id": "node:jfaTs1Rlv650VV-QekfeW",
+              "type": "stack",
+              "name": "Stack",
+              "parentId": "node:E77tgDV0Y_wsszzF1wR56",
+              "index": "a1",
+              "childCount": 1,
+              "children": [
+                {
+                  "id": "node:kJOnR4y9rz7h4xOPckTlU",
+                  "type": "text",
+                  "name": "Text",
+                  "parentId": "node:jfaTs1Rlv650VV-QekfeW",
+                  "index": "a0",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "×",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "×",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "24",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#567267"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "prop:stack": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-stack",
+                    "axis": "x",
+                    "reverse": false,
+                    "crossAxisAlignment": "center",
+                    "mainAxisDistribution": "center",
+                    "wrap": "nowrap",
+                    "gap": "0px",
+                    "scroll": "none",
+                    "snapPosition": "center"
+                  }
+                },
+                "css:width": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "44",
+                    "unit": "px"
+                  }
+                },
+                "css:height": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "44",
+                    "unit": "px"
+                  }
+                },
+                "css:backgroundColor": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#e9ece2"
+                  }
+                },
+                "css:borderTopLeftRadius;borderTopRightRadius;borderBottomRightRadius;borderBottomLeftRadius": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "22",
+                    "unit": "px"
+                  }
+                },
+                "prop:click-behavior": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-click-behavior",
+                    "animation": "none",
+                    "clickActions": [
+                      {
+                        "type": "action-execution",
+                        "id": "action:abd8c1a1",
+                        "action": {
+                          "type": "close"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "x",
+                "reverse": false,
+                "crossAxisAlignment": "center",
+                "mainAxisDistribution": "space-between",
+                "wrap": "nowrap",
+                "gap": "0px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            },
+            "css:height": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "44",
+                "unit": "px"
+              }
+            }
+          }
+        },
+        {
+          "id": "node:ATMiiJt5lJLrA91-Pjx_R",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a2",
+          "childCount": 2,
+          "children": [
+            {
+              "id": "node:-u3LFINSIvEsmEQvGNTnb",
+              "type": "text",
+              "name": "Heading",
+              "parentId": "node:ATMiiJt5lJLrA91-Pjx_R",
+              "index": "a0",
+              "childCount": 0,
+              "children": [],
+              "textContent": "See it. Hide it. Know it.",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "See it. Hide it. Know it.",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "34",
+                    "unit": "px"
+                  }
+                },
+                "css:lineHeight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "38",
+                    "unit": "px"
+                  }
+                },
+                "css:letterSpacing": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "-1",
+                    "unit": "px"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#183b30"
+                  }
+                },
+                "css:font": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-font",
+                    "value": "System Font",
+                    "weight": "800",
+                    "style": "normal",
+                    "kind": "system"
+                  }
+                }
+              }
+            },
+            {
+              "id": "node:_mFZjaTuNFCTGbnc__R1n",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:ATMiiJt5lJLrA91-Pjx_R",
+              "index": "a1",
+              "childCount": 0,
+              "children": [],
+              "textContent": "Turn a whole chapter into a little practice.",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "Turn a whole chapter into a little practice.",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "16",
+                    "unit": "px"
+                  }
+                },
+                "css:lineHeight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "22",
+                    "unit": "px"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#60736a"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "y",
+                "reverse": false,
+                "crossAxisAlignment": "stretch",
+                "mainAxisDistribution": "start",
+                "wrap": "nowrap",
+                "gap": "7px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            }
+          }
+        },
+        {
+          "id": "node:MRt1_c7HFkBnTtsNeMDyF",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a3",
+          "childCount": 2,
+          "children": [
+            {
+              "id": "node:IAkwyKwXYIkbRr9Hi5uWb",
+              "type": "svg",
+              "name": "SVG",
+              "parentId": "node:MRt1_c7HFkBnTtsNeMDyF",
+              "index": "Zz",
+              "childCount": 0,
+              "children": [],
+              "properties": {
+                "prop:svg": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-svg",
+                    "src": "https://user-content.superwalleditor.com/user-content/zlhZMhmT52jbOwb1qWevF.svg"
+                  }
+                },
+                "css:width": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "100",
+                    "unit": "%"
+                  }
+                },
+                "css:height": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "80",
+                    "unit": "px"
+                  }
+                }
+              }
+            },
+            {
+              "id": "node:wd9uv3ER_5JDgqLl9oc21",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:MRt1_c7HFkBnTtsNeMDyF",
+              "index": "a1",
+              "childCount": 0,
+              "children": [],
+              "textContent": "A picture becomes a practice session.",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "A picture becomes a practice session.",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "12",
+                    "unit": "px"
+                  }
+                },
+                "css:textAlign": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-string",
+                    "value": "center",
+                    "cssEnumHint": "css-text-align"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#44705b"
+                  }
+                },
+                "css:font": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-font",
+                    "value": "System Font",
+                    "weight": "600",
+                    "style": "normal",
+                    "kind": "system"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "y",
+                "reverse": false,
+                "crossAxisAlignment": "stretch",
+                "mainAxisDistribution": "start",
+                "wrap": "nowrap",
+                "gap": "10px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            },
+            "css:backgroundColor": {
+              "type": "literal",
+              "value": {
+                "type": "css-color",
+                "value": "#e8ede0"
+              }
+            },
+            "css:paddingTop;paddingBottom": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "12",
+                "unit": "px"
+              }
+            },
+            "css:paddingLeft;paddingRight": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "12",
+                "unit": "px"
+              }
+            },
+            "css:borderTopLeftRadius;borderTopRightRadius;borderBottomRightRadius;borderBottomLeftRadius": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "20",
+                "unit": "px"
+              }
+            },
+            "css:gap": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "8",
+                "unit": "px"
+              }
+            }
+          }
+        },
+        {
+          "id": "node:cv1_syZ7noXjKYfSzrkBq",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a4",
+          "childCount": 2,
+          "children": [
+            {
+              "id": "node:h4wVDcBSlBVdxdsPtwUnz",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:cv1_syZ7noXjKYfSzrkBq",
+              "index": "a0",
+              "childCount": 0,
+              "children": [],
+              "textContent": "✓ GPT finds labels across your images",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "✓ GPT finds labels across your images",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "14",
+                    "unit": "px"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#183b30"
+                  }
+                },
+                "css:font": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-font",
+                    "value": "System Font",
+                    "weight": "500",
+                    "style": "normal",
+                    "kind": "system"
+                  }
+                }
+              }
+            },
+            {
+              "id": "node:jkfpk2SVgqGsrJMtcZfO0",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:cv1_syZ7noXjKYfSzrkBq",
+              "index": "a1",
+              "childCount": 0,
+              "children": [],
+              "textContent": "✓  AI explanations for every label",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "✓  AI explanations for every label",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "14",
+                    "unit": "px"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#183b30"
+                  }
+                },
+                "css:font": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-font",
+                    "value": "System Font",
+                    "weight": "500",
+                    "style": "normal",
+                    "kind": "system"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "y",
+                "reverse": false,
+                "crossAxisAlignment": "stretch",
+                "mainAxisDistribution": "start",
+                "wrap": "nowrap",
+                "gap": "9px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            }
+          }
+        },
+        {
+          "id": "node:ndhpiDAH5FGsuI-xVW5gZ",
+          "type": "multiple-choice",
+          "name": "Multiple Choice",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a5",
+          "childCount": 1,
+          "children": [
+            {
+              "id": "node:DOC9Y4OwSdD4AlMFBLdQ4",
+              "type": "choice-item",
+              "name": "Choice Item",
+              "parentId": "node:ndhpiDAH5FGsuI-xVW5gZ",
+              "index": "a0",
+              "childCount": 2,
+              "children": [
+                {
+                  "id": "node:T120s1yFjSR3usQvttbl4",
+                  "type": "stack",
+                  "name": "Stack",
+                  "parentId": "node:DOC9Y4OwSdD4AlMFBLdQ4",
+                  "index": "a0",
+                  "childCount": 2,
+                  "children": [
+                    {
+                      "id": "node:LdEAJfeaICn0ielq_dkxL",
+                      "type": "text",
+                      "name": "Text",
+                      "parentId": "node:T120s1yFjSR3usQvttbl4",
+                      "index": "a0",
+                      "childCount": 0,
+                      "children": [],
+                      "textContent": "Yearly",
+                      "properties": {
+                        "prop:text": {
+                          "type": "conditional",
+                          "options": [
+                            {
+                              "query": {
+                                "combinator": "and",
+                                "rules": [
+                                  {
+                                    "id": "rule:4c5d0141",
+                                    "field": "state:self.value",
+                                    "operator": "=",
+                                    "valueSource": "value",
+                                    "value": {
+                                      "type": "variable-string",
+                                      "value": "weekly"
+                                    }
+                                  }
+                                ]
+                              },
+                              "value": {
+                                "type": "literal",
+                                "value": {
+                                  "type": "property-text",
+                                  "value": "Weekly",
+                                  "rendering": {
+                                    "type": "literal"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "query": {
+                                "combinator": "and",
+                                "rules": []
+                              },
+                              "value": {
+                                "type": "literal",
+                                "value": {
+                                  "type": "property-text",
+                                  "value": "Yearly",
+                                  "rendering": {
+                                    "type": "literal"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "css:fontSize": {
+                          "type": "literal",
+                          "value": {
+                            "type": "css-length",
+                            "value": "16",
+                            "unit": "px"
+                          }
+                        },
+                        "css:color": {
+                          "type": "literal",
+                          "value": {
+                            "type": "css-color",
+                            "value": "#183b30"
+                          }
+                        },
+                        "css:font": {
+                          "type": "literal",
+                          "value": {
+                            "type": "css-font",
+                            "value": "System Font",
+                            "weight": "700",
+                            "style": "normal",
+                            "kind": "system"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "node:bpaJwo8a8abI7YbE1wbOF",
+                      "type": "text",
+                      "name": "Text",
+                      "parentId": "node:T120s1yFjSR3usQvttbl4",
+                      "index": "a1",
+                      "childCount": 0,
+                      "children": [],
+                      "textContent": "Best value · Billed yearly",
+                      "properties": {
+                        "prop:text": {
+                          "type": "conditional",
+                          "options": [
+                            {
+                              "query": {
+                                "combinator": "and",
+                                "rules": [
+                                  {
+                                    "id": "rule:2c4e7842",
+                                    "field": "state:self.value",
+                                    "operator": "=",
+                                    "valueSource": "value",
+                                    "value": {
+                                      "type": "variable-string",
+                                      "value": "weekly"
+                                    }
+                                  }
+                                ]
+                              },
+                              "value": {
+                                "type": "literal",
+                                "value": {
+                                  "type": "property-text",
+                                  "value": "A week at your pace",
+                                  "rendering": {
+                                    "type": "literal"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "query": {
+                                "combinator": "and",
+                                "rules": []
+                              },
+                              "value": {
+                                "type": "literal",
+                                "value": {
+                                  "type": "property-text",
+                                  "value": "Best value · Billed yearly",
+                                  "rendering": {
+                                    "type": "literal"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "css:fontSize": {
+                          "type": "literal",
+                          "value": {
+                            "type": "css-length",
+                            "value": "12",
+                            "unit": "px"
+                          }
+                        },
+                        "css:color": {
+                          "type": "literal",
+                          "value": {
+                            "type": "css-color",
+                            "value": "#60736a"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "prop:stack": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-stack",
+                        "axis": "y",
+                        "reverse": false,
+                        "crossAxisAlignment": "stretch",
+                        "mainAxisDistribution": "start",
+                        "wrap": "nowrap",
+                        "gap": "3px",
+                        "scroll": "none",
+                        "snapPosition": "center"
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "node:u0rJuKdEIQcaEH6C81wkE",
+                  "type": "text",
+                  "name": "Text",
+                  "parentId": "node:DOC9Y4OwSdD4AlMFBLdQ4",
+                  "index": "a1",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "$34.99 / year",
+                  "properties": {
+                    "prop:text": {
+                      "type": "conditional",
+                      "options": [
+                        {
+                          "query": {
+                            "combinator": "and",
+                            "rules": [
+                              {
+                                "id": "rule:ad9fb978",
+                                "field": "state:self.value",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-string",
+                                  "value": "weekly"
+                                }
+                              }
+                            ]
+                          },
+                          "value": {
+                            "type": "literal",
+                            "value": {
+                              "type": "property-text",
+                              "value": "{{ products.weekly.price }} / week",
+                              "rendering": {
+                                "type": "liquid",
+                                "requiredStateIds": [
+                                  "state:products.weekly.price"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "query": {
+                            "combinator": "and",
+                            "rules": []
+                          },
+                          "value": {
+                            "type": "literal",
+                            "value": {
+                              "type": "property-text",
+                              "value": "{{ products.yearly.price }} / year",
+                              "rendering": {
+                                "type": "liquid",
+                                "requiredStateIds": [
+                                  "state:products.yearly.price"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "18",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#183b30"
+                      }
+                    },
+                    "css:font": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-font",
+                        "value": "System Font",
+                        "weight": "700",
+                        "style": "normal",
+                        "kind": "system"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "prop:stack": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-stack",
+                    "axis": "x",
+                    "reverse": false,
+                    "crossAxisAlignment": "center",
+                    "mainAxisDistribution": "space-between",
+                    "wrap": "nowrap",
+                    "gap": "8px",
+                    "scroll": "none",
+                    "snapPosition": "center"
+                  }
+                },
+                "prop:click-behavior": {
+                  "type": "conditional",
+                  "options": [
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": [
+                          {
+                            "id": "rule:b691e701",
+                            "field": "state:self.value",
+                            "operator": "=",
+                            "valueSource": "value",
+                            "value": {
+                              "type": "variable-string",
+                              "value": "weekly"
+                            }
+                          }
+                        ]
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "property-click-behavior",
+                          "animation": "none",
+                          "hapticFeedback": "selection",
+                          "clickActions": [
+                            {
+                              "type": "action-execution",
+                              "id": "action:0978dec1",
+                              "action": {
+                                "type": "select-choice"
+                              }
+                            },
+                            {
+                              "type": "action-execution",
+                              "id": "action:74061081",
+                              "action": {
+                                "type": "set-product-index",
+                                "index": 1
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": []
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "property-click-behavior",
+                          "animation": "none",
+                          "hapticFeedback": "selection",
+                          "clickActions": [
+                            {
+                              "type": "action-execution",
+                              "id": "action:be014f04",
+                              "action": {
+                                "type": "select-choice"
+                              }
+                            },
+                            {
+                              "type": "action-execution",
+                              "id": "action:d624c29f",
+                              "action": {
+                                "type": "set-product-index",
+                                "index": 0
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "css:backgroundColor": {
+                  "type": "conditional",
+                  "options": [
+                    {
+                      "query": {
+                        "combinator": "or",
+                        "rules": [
+                          {
+                            "combinator": "and",
+                            "rules": [
+                              {
+                                "id": "rule:d7ae26de",
+                                "field": "state:self.index",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 0
+                                }
+                              },
+                              {
+                                "id": "rule:523280a0",
+                                "field": "state:products.selectedIndex",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "combinator": "and",
+                            "rules": [
+                              {
+                                "id": "rule:1c099f24",
+                                "field": "state:self.index",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 1
+                                }
+                              },
+                              {
+                                "id": "rule:81ed9342",
+                                "field": "state:products.selectedIndex",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 1
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "css-color",
+                          "value": "#e4eddc"
+                        }
+                      }
+                    },
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": []
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "css-color",
+                          "value": "#ffffff"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "css:width": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "100",
+                    "unit": "%"
+                  }
+                },
+                "css:minHeight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "66",
+                    "unit": "px"
+                  }
+                },
+                "css:paddingTop;paddingBottom": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "14",
+                    "unit": "px"
+                  }
+                },
+                "css:paddingLeft;paddingRight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "16",
+                    "unit": "px"
+                  }
+                },
+                "css:borderTopLeftRadius;borderTopRightRadius;borderBottomRightRadius;borderBottomLeftRadius": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "16",
+                    "unit": "px"
+                  }
+                },
+                "css:borderTopWidth;borderRightWidth;borderBottomWidth;borderLeftWidth": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "2",
+                    "unit": "px"
+                  }
+                },
+                "css:borderColor": {
+                  "type": "conditional",
+                  "options": [
+                    {
+                      "query": {
+                        "combinator": "or",
+                        "rules": [
+                          {
+                            "combinator": "and",
+                            "rules": [
+                              {
+                                "id": "rule:83b992be",
+                                "field": "state:self.index",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 0
+                                }
+                              },
+                              {
+                                "id": "rule:5e89f1df",
+                                "field": "state:products.selectedIndex",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "combinator": "and",
+                            "rules": [
+                              {
+                                "id": "rule:79adcbbc",
+                                "field": "state:self.index",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 1
+                                }
+                              },
+                              {
+                                "id": "rule:6391b0ba",
+                                "field": "state:products.selectedIndex",
+                                "operator": "=",
+                                "valueSource": "value",
+                                "value": {
+                                  "type": "variable-number",
+                                  "value": 1
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "css-color",
+                          "value": "#215d45"
+                        }
+                      }
+                    },
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": []
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "css-color",
+                          "value": "#dde3d6"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "css:borderTopStyle;borderRightStyle;borderBottomStyle;borderLeftStyle": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-string",
+                    "value": "solid",
+                    "cssEnumHint": "css-border-style"
+                  }
+                },
+                "prop:custom-css": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-custom-css",
+                    "properties": [
+                      {
+                        "type": "custom-css-property",
+                        "id": "ccp-0",
+                        "property": "border-image-source",
+                        "value": "none"
+                      },
+                      {
+                        "type": "custom-css-property",
+                        "id": "ccp-1",
+                        "property": "border-image-slice",
+                        "value": "100%"
+                      },
+                      {
+                        "type": "custom-css-property",
+                        "id": "ccp-2",
+                        "property": "border-image-width",
+                        "value": "1"
+                      },
+                      {
+                        "type": "custom-css-property",
+                        "id": "ccp-3",
+                        "property": "border-image-outset",
+                        "value": "0"
+                      },
+                      {
+                        "type": "custom-css-property",
+                        "id": "ccp-4",
+                        "property": "border-image-repeat",
+                        "value": "stretch"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:multiple-choice": {
+              "type": "literal",
+              "value": {
+                "type": "property-multiple-choice",
+                "selectionMode": "single",
+                "choices": [
+                  {
+                    "id": "choice-1",
+                    "label": "Yearly",
+                    "value": "yearly"
+                  },
+                  {
+                    "id": "choice-2",
+                    "label": "Weekly",
+                    "value": "weekly"
+                  }
+                ]
+              }
+            },
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "y",
+                "reverse": false,
+                "crossAxisAlignment": "stretch",
+                "mainAxisDistribution": "start",
+                "wrap": "nowrap",
+                "gap": "8px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            }
+          }
+        },
+        {
+          "id": "node:n0LyZY_6XGYmszobRl0ca",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a6",
+          "childCount": 1,
+          "children": [
+            {
+              "id": "node:aCTt2Ct4oNb_lu6LY9Ci1",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:n0LyZY_6XGYmszobRl0ca",
+              "index": "a0",
+              "childCount": 0,
+              "children": [],
+              "textContent": "Get Insight Pro",
+              "properties": {
+                "prop:text": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-text",
+                    "value": "Get Insight Pro",
+                    "rendering": {
+                      "type": "literal"
+                    }
+                  }
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "17",
+                    "unit": "px"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#ffffff"
+                  }
+                },
+                "css:font": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-font",
+                    "value": "System Font",
+                    "weight": "700",
+                    "style": "normal",
+                    "kind": "system"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "x",
+                "reverse": false,
+                "crossAxisAlignment": "center",
+                "mainAxisDistribution": "center",
+                "wrap": "nowrap",
+                "gap": "0px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            },
+            "css:height": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "56",
+                "unit": "px"
+              }
+            },
+            "css:backgroundColor": {
+              "type": "literal",
+              "value": {
+                "type": "css-color",
+                "value": "#215d45"
+              }
+            },
+            "css:borderTopLeftRadius;borderTopRightRadius;borderBottomRightRadius;borderBottomLeftRadius": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "18",
+                "unit": "px"
+              }
+            },
+            "prop:click-behavior": {
+              "type": "literal",
+              "value": {
+                "type": "property-click-behavior",
+                "animation": "scale-in-out",
+                "hapticFeedback": "light",
+                "clickActions": [
+                  {
+                    "type": "action-execution",
+                    "id": "action:23d9a0a4",
+                    "action": {
+                      "type": "purchase",
+                      "reference": {
+                        "type": "by-selected"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "node:fwz_Q09e_ccmhwVZYgubC",
+          "type": "stack",
+          "name": "Stack",
+          "parentId": "node:zTxm6Ulw0lm-twIUnJJfI",
+          "index": "a7",
+          "childCount": 2,
+          "children": [
+            {
+              "id": "node:Om27tv4-RcMm5vT-t4AES",
+              "type": "text",
+              "name": "Text",
+              "parentId": "node:fwz_Q09e_ccmhwVZYgubC",
+              "index": "a0",
+              "childCount": 0,
+              "children": [],
+              "textContent": "$34.99 billed yearly. Auto-renews until canceled.",
+              "properties": {
+                "prop:text": {
+                  "type": "conditional",
+                  "options": [
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": [
+                          {
+                            "id": "rule:64988d1b",
+                            "field": "state:products.selectedIndex",
+                            "operator": "=",
+                            "valueSource": "value",
+                            "value": {
+                              "type": "variable-number",
+                              "value": 1
+                            }
+                          }
+                        ]
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "property-text",
+                          "value": "{{ products.weekly.price }} billed weekly. Auto-renews until canceled.",
+                          "rendering": {
+                            "type": "liquid",
+                            "requiredStateIds": [
+                              "state:products.weekly.price"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "query": {
+                        "combinator": "and",
+                        "rules": []
+                      },
+                      "value": {
+                        "type": "literal",
+                        "value": {
+                          "type": "property-text",
+                          "value": "{{ products.yearly.price }} billed yearly. Auto-renews until canceled.",
+                          "rendering": {
+                            "type": "liquid",
+                            "requiredStateIds": [
+                              "state:products.yearly.price"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "css:fontSize": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "12",
+                    "unit": "px"
+                  }
+                },
+                "css:lineHeight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "17",
+                    "unit": "px"
+                  }
+                },
+                "css:textAlign": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-string",
+                    "value": "center",
+                    "cssEnumHint": "css-text-align"
+                  }
+                },
+                "css:color": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-color",
+                    "value": "#60736a"
+                  }
+                }
+              }
+            },
+            {
+              "id": "node:cUCWZKBtcqSOUuBjN5_1K",
+              "type": "stack",
+              "name": "Stack",
+              "parentId": "node:fwz_Q09e_ccmhwVZYgubC",
+              "index": "a1",
+              "childCount": 3,
+              "children": [
+                {
+                  "id": "node:jumKMJVb_BCth6GvazEaQ",
+                  "type": "text",
+                  "name": "Text",
+                  "parentId": "node:cUCWZKBtcqSOUuBjN5_1K",
+                  "index": "a0",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "Restore",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "Restore",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "12",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#60736a"
+                      }
+                    },
+                    "prop:click-behavior": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-click-behavior",
+                        "animation": "none",
+                        "clickActions": [
+                          {
+                            "type": "action-execution",
+                            "id": "action:43563efe",
+                            "action": {
+                              "type": "restore"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "node:Z4ikNLWxzjU_MwSU-mqCM",
+                  "type": "text",
+                  "name": "Text",
+                  "parentId": "node:cUCWZKBtcqSOUuBjN5_1K",
+                  "index": "a1",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "Privacy",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "Privacy",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "12",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#60736a"
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "node:th8Ca_1gNe2zSWBuzvVmi",
+                  "type": "text",
+                  "name": "Text",
+                  "parentId": "node:cUCWZKBtcqSOUuBjN5_1K",
+                  "index": "a2",
+                  "childCount": 0,
+                  "children": [],
+                  "textContent": "Terms",
+                  "properties": {
+                    "prop:text": {
+                      "type": "literal",
+                      "value": {
+                        "type": "property-text",
+                        "value": "Terms",
+                        "rendering": {
+                          "type": "literal"
+                        }
+                      }
+                    },
+                    "css:fontSize": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-length",
+                        "value": "12",
+                        "unit": "px"
+                      }
+                    },
+                    "css:color": {
+                      "type": "literal",
+                      "value": {
+                        "type": "css-color",
+                        "value": "#60736a"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "prop:stack": {
+                  "type": "literal",
+                  "value": {
+                    "type": "property-stack",
+                    "axis": "x",
+                    "reverse": false,
+                    "crossAxisAlignment": "center",
+                    "mainAxisDistribution": "space-between",
+                    "wrap": "nowrap",
+                    "gap": "0px",
+                    "scroll": "none",
+                    "snapPosition": "center"
+                  }
+                },
+                "css:width": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "100",
+                    "unit": "%"
+                  }
+                },
+                "css:minHeight": {
+                  "type": "literal",
+                  "value": {
+                    "type": "css-length",
+                    "value": "44",
+                    "unit": "px"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "prop:stack": {
+              "type": "literal",
+              "value": {
+                "type": "property-stack",
+                "axis": "y",
+                "reverse": false,
+                "crossAxisAlignment": "stretch",
+                "mainAxisDistribution": "start",
+                "wrap": "nowrap",
+                "gap": "7px",
+                "scroll": "none",
+                "snapPosition": "center"
+              }
+            },
+            "css:width": {
+              "type": "literal",
+              "value": {
+                "type": "css-length",
+                "value": "100",
+                "unit": "%"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "prop:stack": {
+          "type": "literal",
+          "value": {
+            "type": "property-stack",
+            "axis": "y",
+            "reverse": false,
+            "crossAxisAlignment": "stretch",
+            "mainAxisDistribution": "start",
+            "wrap": "nowrap",
+            "gap": "14px",
+            "scroll": "none",
+            "snapPosition": "center"
+          }
+        },
+        "css:width": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "100",
+            "unit": "%"
+          }
+        },
+        "css:minHeight": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "100",
+            "unit": "vh"
+          }
+        },
+        "css:paddingTop": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "48",
+            "unit": "px"
+          }
+        },
+        "css:paddingBottom": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "24",
+            "unit": "px"
+          }
+        },
+        "css:backgroundColor": {
+          "type": "literal",
+          "value": {
+            "type": "css-color",
+            "value": "#f6f5ed"
+          }
+        },
+        "css:paddingLeft;paddingRight": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "24",
+            "unit": "px"
+          }
+        },
+        "css:gap": {
+          "type": "literal",
+          "value": {
+            "type": "css-length",
+            "value": "10",
+            "unit": "px"
+          }
+        }
+      }
+    }
+  ]
+}

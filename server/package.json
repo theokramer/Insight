@@ -1,0 +1,17 @@
+{
+  "name": "insight-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --env local --port 8787",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "wrangler": "^4.131.1",
+    "@cloudflare/workers-types": "^5.20260911.1",
+    "typescript": "^6.0.3"
+  }
+}
